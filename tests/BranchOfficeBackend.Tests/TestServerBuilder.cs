@@ -23,7 +23,7 @@ namespace BranchOfficeBackend.Tests
                 .ConfigureWebHostBuilder();                
         }
 
-        public TestServerBuilder With<T>(Action<ContainerBuilder> extraConfig) where T: class
+        public TestServerBuilder With(Action<ContainerBuilder> extraConfig) 
         {
             if (extraConfig == null)
             {

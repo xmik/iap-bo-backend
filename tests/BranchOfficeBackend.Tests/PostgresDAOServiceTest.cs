@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 
@@ -40,6 +41,17 @@ namespace BranchOfficeBackend.Tests
             var dao = new PostgresDataAccessObjectService(dbContext);
             var employees = dao.ListEmployees();
             Assert.Empty(employees);
+        }
+
+        [Fact]
+        public async Task ShouldReturnAllEmployeesWhenSomeInDB()
+        {
+            await dbContext.Employees.AddAsync(new Employee{ Name = "Ola Dwa", Email = "ola2@gmail.com" });
+            await dbContext.SaveChangesAsync();
+
+            var dao = new PostgresDataAccessObjectService(dbContext);
+            var employees = dao.ListEmployees();
+            Assert.Equal(1, employees.Count);
         }
     }
 }

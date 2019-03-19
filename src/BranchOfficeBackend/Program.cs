@@ -19,7 +19,7 @@ namespace BranchOfficeBackend
                 employees.Add(new Employee { Name = "Jan Kowalski", Email = "jan@gmail.com", Project =  projects[0] });
                 employees.Add(new Employee { Name = "Krzysztof Nowak", Email = "krzy@gmail.com", Project =  projects[0] });
                 employees.Add(new Employee { Name = "Ala Jeden", Email = "ala1@gmail.com", Project =  projects[1] });
-                employees.Add(new Employee { Name = "Old Dwa", Email = "ola2@gmail.com" });
+                employees.Add(new Employee { Name = "Ola Dwa", Email = "ola2@gmail.com" });
                 
             List<EmployeeHours> employeeHours = new List<EmployeeHours>();
                 employeeHours.Add(new EmployeeHours { Value = 15, TimePeriod = new TimeSpan(), Employee = employees[0], Project = employees[0].Project });
