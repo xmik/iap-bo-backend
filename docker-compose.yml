@@ -1,0 +1,11 @@
+version: '2.2'
+services:
+  default:
+    init: true
+    links:
+      - db:db
+  db:
+    init: true
+    image: postgres:11.2-alpine
+    environment:
+      - POSTGRES_PASSWORD=my_pw

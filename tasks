@@ -1,0 +1,26 @@
+#!/bin/bash
+
+command="$1"
+case "${command}" in
+  build)
+      dotnet build --configuration=Release
+      exit $?
+      ;;
+  test)
+      dotnet test
+      exit $?
+      ;;
+  itest)
+      bats tests/integration/bats
+      exit $?
+      ;;
+  run)
+      dotnet run --project=./src/BranchOfficeBackend/
+      exit $?
+      ;;
+  *)
+      echo "Invalid command: '${command}'"
+      exit 1
+      ;;
+esac
+set +e
