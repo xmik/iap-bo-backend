@@ -58,4 +58,8 @@ Add external packages references to the C# projects files
 ```
 dotnet add src/BranchOfficeBackend/ package --version=2.1.2 Npgsql.EntityFrameworkCore.PostgreSQL
 dotnet add src/BranchOfficeBackend/ package Microsoft.EntityFrameworkCore.Design
+dotnet add src/BranchOfficeBackend/ package --version=4.4.0 Autofac.Extensions.DependencyInjection
+dotnet add src/BranchOfficeBackend/ package --version=4.1.0 Carter
+dotnet add src/BranchOfficeBackend/ package --version=2.2.0 Microsoft.AspNetCore.Hosting
+dotnet add src/BranchOfficeBackend/ package --version=2.2.0 Microsoft.AspNetCore.Server.Kestrel
 ```

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 
 namespace BranchOfficeBackend
@@ -27,7 +28,8 @@ namespace BranchOfficeBackend
                 employeeHours.Add(new EmployeeHours { Value = 2, TimePeriod = new TimeSpan(), Employee = employees[2], Project = employees[2].Project });
 
             Console.WriteLine("Updating database!");
-            using (var db = new BranchOfficeDbContext())
+            
+            using (var db = new BranchOfficeDbContext(null))
             {                
                 // this will remove all rows from all tables, but newly added entities
                 // will have new IDs, higher than IDs of those deleted rows
@@ -65,12 +67,24 @@ namespace BranchOfficeBackend
                 }
             }
         }
+
+        static void RunAPIServer()
+        {
+            var host = new WebHostBuilder()
+                .UseKestrel()
+                .ConfigureWebHostBuilder()
+                .Build();
+
+            host.Run();
+        }
+
         static void Main(string[] args)
         {
             // TODO: run this only if testing. In production, synchronize wih HeadQuarters.
             GenerateTestData();
 
             // run API SERVER here
+            RunAPIServer();
         }
     }
 }
