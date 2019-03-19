@@ -29,13 +29,10 @@ namespace BranchOfficeBackend
 
             Console.WriteLine("Updating database!");
             
-            using (var db = new BranchOfficeDbContext(null))
-            {                
-                // this will remove all rows from all tables, but newly added entities
-                // will have new IDs, higher than IDs of those deleted rows
-                db.Database.ExecuteSqlCommand("DELETE FROM \"EmployeeHoursCollection\"");
-                db.Database.ExecuteSqlCommand("DELETE FROM \"Employees\"");
-                db.Database.ExecuteSqlCommand("DELETE FROM \"Projects\"");
+            using (var db = new BranchOfficeDbContext())
+            {           
+                db.Database.EnsureDeleted();
+                db.Database.Migrate();
 
                 db.Projects.AddRange(projects);
                 var count = db.SaveChanges();

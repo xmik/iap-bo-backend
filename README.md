@@ -21,6 +21,11 @@ Run the C# server:
 ./tasks run
 ```
 
+Endpoints examples:
+```
+curl -i  localhost:8080/employee/list
+```
+
 
 ## Dependencies and docs
 * dotnet-sdk-2.1, [here](https://dotnet.microsoft.com/learn/dotnet/hello-world-tutorial/install) are instructions how to install or use [Dojo](https://github.com/ai-traders/dojo).
