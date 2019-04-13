@@ -1,0 +1,24 @@
+format_version: 3
+pipelines:
+  "iap-bo-backend":
+    group: edu
+    label_template: "${git[:8]}"
+    materials:
+      git:
+        type: configrepo
+    stages:
+      - build_and_test:
+          # TODO: in the future split those stages, use gocd artifacts, see stc-poloniex config
+          clean_workspace: true
+          jobs:
+            build:
+              elastic_profile_id: w.c2.m2048.e10
+              tasks:
+                - exec:
+                    command: dojo
+                    arguments:
+                      - "./tasks build"
+                - exec:
+                    command: dojo
+                    arguments:
+                      - "./tasks utest"

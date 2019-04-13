@@ -4,8 +4,9 @@ A school project for Internet Application Programming.
 Branch office backend, written in C#.
 
 ## Usage
-Compile code:
+Compile code (this will also install all the dependencies):
 ```
+./tasks generate_nuget_config
 ./tasks build
 ```
 

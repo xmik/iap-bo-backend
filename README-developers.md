@@ -3,14 +3,16 @@
 ## Development
 Compile all C# projects (this will also install all the dependencies):
 ```
+./tasks generate_nuget_config
+
 ./tasks build
 # OR:
 dotnet build
 ```
 
-Run C# tests:
+Run C# unit tests:
 ```
-./tasks test
+./tasks utest
 # OR:
 dotnet test
 ```
