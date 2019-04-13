@@ -2,10 +2,16 @@ using System.Collections.Generic;
 
 namespace BranchOfficeBackend
 {
-    public interface IEmployeeRepository
+    /// <summary>
+    /// Translates DAL objects onto API Server (Web) objects.
+    /// (Because e.g. Employee object in db may be different than
+    /// the Employee object returned by API Server).
+    /// The translation is kept here in order to obey Single Responsibility Rule.
+    /// </summary>
+    public interface IWebObjectService
     {
         /// <summary>
-        /// Throws exception on any problem
+        /// Lists all employees.Throws exception on any problem
         /// </summary>
         /// <returns></returns>
         List<WebEmployee> GetAllEmployees();

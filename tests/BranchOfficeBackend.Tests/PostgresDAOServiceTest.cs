@@ -6,25 +6,17 @@ using Xunit;
 namespace BranchOfficeBackend.Tests
 {
     [Collection("do-not-run-in-parallel")]
+    /// <summary>
+    /// Tests the DAO layer - connection with Postgres db
+    /// </summary>
     public class PostgresDAOServiceTest : IDisposable
     {
         private BranchOfficeDbContext dbContext;
 
         public PostgresDAOServiceTest()
         {
-            // TODO: cleanup db
-            // var builder = new DbContextOptionsBuilder<BranchOfficeDbContext>();
             dbContext = new BranchOfficeDbContext();
-            // // drop table even if other objects depend on it
-            // // this will drop any foreign key that is referencing the Employees table or any view using it
-            // // It will not drop other tables (or delete rows from them).
-            // dbContext.Database.ExecuteSqlCommand("DROP TABLE if exists \"Employees\" cascade;");
-            // dbContext.Database.ExecuteSqlCommand("DROP TABLE if exists \"Projects\" cascade;");
-            // dbContext.Database.ExecuteSqlCommand("DROP TABLE if exists \"EmployeeHoursCollection\" cascade;");
-            // dbContext.Employees.;
-            // dbContext.Database.SetInitializer();
             dbContext.Database.Migrate();
-            // dbContext.SaveChanges();
         }
 
         public void Dispose()
@@ -41,7 +33,7 @@ namespace BranchOfficeBackend.Tests
         public void ShouldReturnEmptyListWhenDBIsEmpty()
         {
             var dao = new PostgresDataAccessObjectService(dbContext);
-            var employees = dao.ListEmployees();
+            var employees = dao.GetAllEmployees();
             Assert.Empty(employees);
         }
 
@@ -52,7 +44,7 @@ namespace BranchOfficeBackend.Tests
             await dbContext.SaveChangesAsync();
 
             var dao = new PostgresDataAccessObjectService(dbContext);
-            var employees = dao.ListEmployees();
+            var employees = dao.GetAllEmployees();
             Assert.Equal(1, employees.Count);
         }
     }

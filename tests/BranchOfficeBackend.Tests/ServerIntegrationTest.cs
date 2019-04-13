@@ -10,6 +10,10 @@ namespace BranchOfficeBackend.Tests
     // https://xunit.net/docs/running-tests-in-parallel
     // https://xunit.net/docs/shared-context.html#collection-fixture
     [Collection("do-not-run-in-parallel")]
+    /// <summary>
+    /// Tests together: API Server modules classes (e.g.null EmployeesAPIModule), DAO layer classes and
+    /// classes responsible for DAO to Web objects translation
+    /// </summary>
     public class ServerIntegrationTest : IDisposable
     {
         private BranchOfficeDbContext dbContext;

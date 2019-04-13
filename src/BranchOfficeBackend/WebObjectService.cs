@@ -3,10 +3,10 @@ using System.Linq;
 
 namespace BranchOfficeBackend
 {
-    public class EmployeeRepository : IEmployeeRepository
+    public class WebObjectService : IWebObjectService
     {
         private readonly IDataAccessObjectService daoService;
-        public EmployeeRepository(IDataAccessObjectService daoService)
+        public WebObjectService(IDataAccessObjectService daoService)
         {
             this.daoService = daoService;
         }
@@ -23,7 +23,7 @@ namespace BranchOfficeBackend
 
         public List<WebEmployee> GetAllEmployees()
         {
-            var dbEmployees = daoService.ListEmployees();
+            var dbEmployees = daoService.GetAllEmployees();
             return dbEmployees.Select(e => new WebEmployee(e)).ToList();
         }
     }

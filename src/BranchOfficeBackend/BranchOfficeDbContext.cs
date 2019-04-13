@@ -4,15 +4,16 @@ using System;
 
 namespace BranchOfficeBackend
 {
+    /// <summary>
+    /// Represents the database schema, contains e.g. db tables.
+    /// </summary>
     public class BranchOfficeDbContext : DbContext
     {
         public BranchOfficeDbContext(DbContextOptions<BranchOfficeDbContext> options)
             : base(options)
-        {
-
-        }
+        {}
         public BranchOfficeDbContext()
-        {        }
+        {}
 
         public DbSet<EmployeeHours> EmployeeHoursCollection { get; set; }
 

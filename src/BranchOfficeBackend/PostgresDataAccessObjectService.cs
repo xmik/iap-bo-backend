@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -15,14 +16,14 @@ namespace BranchOfficeBackend
             this.dbContext = dbContext;
         }
 
-        public List<Employee> ListEmployees()
+        public List<Employee> GetAllEmployees()
         {
             return dbContext.Employees.ToList();
         }
 
         public void RemoveEmployees(int id)
         {
-
+            throw new NotImplementedException();
         }
     }
 }

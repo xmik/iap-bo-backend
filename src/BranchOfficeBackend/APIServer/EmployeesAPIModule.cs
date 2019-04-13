@@ -9,7 +9,7 @@ namespace BranchOfficeBackend
     // for other routing building solutions
     public class EmployeesAPIModule : CarterModule
     {
-        public EmployeesAPIModule(IEmployeeRepository service)
+        public EmployeesAPIModule(IWebObjectService service)
         {
             Get("/employee/list", async(req, res, routeData) => {
                 var list = service.GetAllEmployees();
