@@ -5,6 +5,7 @@ using Xunit;
 
 namespace BranchOfficeBackend.Tests
 {
+    [Collection("do-not-run-in-parallel")]
     public class PostgresDAOServiceTest : IDisposable
     {
         private BranchOfficeDbContext dbContext;
@@ -32,6 +33,7 @@ namespace BranchOfficeBackend.Tests
             {
                 dbContext.Database.EnsureDeleted();
                 dbContext.Dispose();
+                dbContext = null;
             }
         }
 

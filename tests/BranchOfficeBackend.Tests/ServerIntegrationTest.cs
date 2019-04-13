@@ -7,6 +7,9 @@ using Newtonsoft.Json.Linq;
 
 namespace BranchOfficeBackend.Tests
 {
+    // https://xunit.net/docs/running-tests-in-parallel
+    // https://xunit.net/docs/shared-context.html#collection-fixture
+    [Collection("do-not-run-in-parallel")]
     public class ServerIntegrationTest : IDisposable
     {
         private BranchOfficeDbContext dbContext;
