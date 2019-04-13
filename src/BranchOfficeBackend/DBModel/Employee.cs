@@ -2,10 +2,13 @@ using System;
 
 namespace BranchOfficeBackend
 {
+    /// <summary>
+    /// Accessible from a db
+    /// </summary>
     public class Employee
     {
         // TODO: can we create a constructor so that Project entity gets assigned from Employee entity?
-        // will the ORM autoincrement the id? 
+        // will the ORM autoincrement the id?
 
         public int EmployeeId { get; set; }
         public string Name { get; set; }

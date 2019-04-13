@@ -2,9 +2,11 @@ using Carter;
 using Carter.ModelBinding;
 using Carter.Request;
 using Carter.Response;
-    
+
 namespace BranchOfficeBackend
 {
+    // read also: https://stormpath.com/blog/routing-in-asp-net-core
+    // for other routing building solutions
     public class EmployeesAPIModule : CarterModule
     {
         public EmployeesAPIModule(IEmployeeRepository service)

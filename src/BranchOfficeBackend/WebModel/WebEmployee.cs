@@ -10,7 +10,7 @@ namespace BranchOfficeBackend
         /// </summary>
         public WebEmployee()
         {
-            
+
         }
         public WebEmployee(Employee e)
         {

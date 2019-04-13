@@ -16,11 +16,13 @@ namespace BranchOfficeBackend
 {
     public class MyAssemblyCatalog : DependencyContextAssemblyCatalog {
         public override IReadOnlyCollection<Assembly> GetAssemblies() {
-            var assemblies = new [] { typeof(EmployeesAPIModule).Assembly }; 
+            var assemblies = new [] { typeof(EmployeesAPIModule).Assembly };
             return assemblies;
         }
     }
 
+    // the Startup class defines the services and middleware pipeline for an ASP.NET Core application
+    // https://www.stevejgordon.co.uk/aspnet-core-anatomy-how-does-usestartup-work
     public class Startup
     {
         public Startup(IHostingEnvironment env)
@@ -60,7 +62,7 @@ namespace BranchOfficeBackend
         // here if you need to resolve things from the container.
         public static void Configure(IApplicationBuilder app)
         {
-            app.UseCarter();            
+            app.UseCarter();
         }
     }
 }

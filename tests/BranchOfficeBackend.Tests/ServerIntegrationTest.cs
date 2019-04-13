@@ -30,7 +30,7 @@ namespace BranchOfficeBackend.Tests
         }
 
          /// <summary>
-        /// Test that API server returns 1 employee JSON list when 
+        /// Test that API server returns 1 employee JSON list when
         /// we added 1 employee to db.
         /// </summary>
         /// <returns></returns>
@@ -42,7 +42,7 @@ namespace BranchOfficeBackend.Tests
 
             using(var testServer = new TestServerBuilder()
                 .With(b => b.RegisterModule<BranchOfficeAutofacModule>())
-                .Build()) 
+                .Build())
             {
                 var client = testServer.CreateClient();
                 var result = await client.GetStringAsync("/employee/list");

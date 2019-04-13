@@ -13,8 +13,8 @@ namespace BranchOfficeBackend
         public PostgresDataAccessObjectService(BranchOfficeDbContext dbContext)
         {
             this.dbContext = dbContext;
-        }        
-        
+        }
+
         public List<Employee> ListEmployees()
         {
             return dbContext.Employees.ToList();
@@ -22,7 +22,7 @@ namespace BranchOfficeBackend
 
         public void RemoveEmployees(int id)
         {
-            
+
         }
     }
 }
