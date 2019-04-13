@@ -12,10 +12,7 @@ namespace BranchOfficeBackend
 
         }
         public BranchOfficeDbContext()
-        {
-
-        }
-        public DbSet<Project> Projects { get; set; }
+        {        }
 
         public DbSet<EmployeeHours> EmployeeHoursCollection { get; set; }
 
