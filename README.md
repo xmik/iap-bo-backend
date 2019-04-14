@@ -22,10 +22,15 @@ Run the C# server:
 ./tasks run
 ```
 
+## API Server endpoints
+
 Endpoints examples:
 ```
-curl -i  localhost:8080/employee/list
+curl -i  localhost:8080/employees/list
 ```
+
+The API Server specification is kept in files: `swagger-branch-office.yaml` and `swagger-headquarters.yaml`. 
+In order to render it as a pretty http website, copy each of those files output onto: https://editor.swagger.io/
 
 
 ## Dependencies and docs

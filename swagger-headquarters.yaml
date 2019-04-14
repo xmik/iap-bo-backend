@@ -1,0 +1,263 @@
+swagger: "2.0"
+info:
+  description: "This is a Headquarters Backend server. The database is on port: 5432"
+  version: "0.1.0"
+  title: "Headquarters Server"
+host: "localhost:8000"
+basePath: "/api"
+tags:
+- name: "branch_offices"
+  description: "Concerns BranchOffice objects"
+  externalDocs:
+    description: "Find out more"
+    url: "https://github.com/MagFry/ProjectLanguage"
+- name: "employees"
+  description: "Concerns Employee objects"
+  externalDocs:
+    description: "Find out more"
+    url: "https://github.com/MagFry/ProjectLanguage"
+- name: "salaries"
+  description: "Concerns Salary objects"
+  externalDocs:
+    description: "Find out more"
+    url: "https://github.com/MagFry/ProjectLanguage"
+schemes:
+- "https"
+- "http"
+paths:
+  /branch_offices/list:
+    get:
+      tags:
+      - "branch_offices"
+      summary: "Gets a collection of BranchOffice objects"
+      description: "Gets a collection of BranchOffice objects"
+      operationId: "getBranchOffices"
+      produces:
+      - "application/xml"
+      - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/BranchOffice"
+  /employees/list:
+    get:
+      tags:
+      - "employees"
+      summary: "Gets a collection of Employees objects"
+      description: "Gets a collection of Employees objects"
+      operationId: "getEmployees"
+      produces:
+      - "application/xml"
+      - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Employee"
+  /employees:
+    post:
+      tags:
+      - "employees"
+      summary: "Adds a new Employee object"
+      description: "Adds a new Employee object. Can be performed only by manager."
+      operationId: "addEmployee"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "name"
+        in: "path"
+        description: "Employee Name"
+        required: true
+        type: "string"
+        format: "string"
+      - name: "email"
+        in: "path"
+        description: "Employee Email address"
+        required: true
+        type: "string"
+        format: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        405:
+          description: "Could not create new employee"
+  /employees/{employeeId}:
+    get:
+      tags:
+      - "employees"
+      summary: "Gets one Employees object"
+      description: "Gets one Employees object"
+      operationId: "getEmployee"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "employeeId"
+        in: "path"
+        description: "ID of Employee to return"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/Employee"
+        404:
+          description: "Employee not found"
+    delete:
+      tags:
+      - "employees"
+      summary: "Deletes an Employee object"
+      description: ""
+      operationId: "deleteEmployee"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "employeeId"
+        in: "path"
+        description: "Employee ID"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "successful operation"
+        404:
+          description: "Employee not found"
+    put:
+      tags:
+      - "employees"
+      summary: "Updates an existing Employee object"
+      description: "Updates an existing Employee object"
+      operationId: "updateEmployee"
+      consumes:
+      - "application/json"
+      - "application/xml"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "employeeId"
+        in: "path"
+        description: "Employee ID"
+        required: true
+        type: "integer"
+        format: "int64"
+      - in: "body"
+        name: "body"
+        description: "Employee object"
+        required: true
+        schema:
+          $ref: "#/definitions/Employee"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        404:
+          description: "Employee not found"
+  /salaries/list:
+    get:
+      tags:
+      - "salaries"
+      summary: "Gets a collection of Salary objects for an Employee"
+      description: "Gets a collection of Salary objects for an Employee"
+      operationId: "findSalaryCollectionByEmployee"
+      produces:
+      - "application/xml"
+      - "application/json"
+      parameters:
+      - name: "employeeId"
+        in: "path"
+        description: "Employee ID"
+        required: true
+        type: "integer"
+        format: "int64"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Salary"
+        404:
+          description: "Employee not found"
+definitions:
+  BranchOffice:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+        default: 1
+      # TODO
+    xml:
+      name: "Employee"
+  Employee:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+        default: 1
+      name:
+        type: "string"
+        example: "Jan Kowalski"
+      email:
+        type: "string"
+        example: "kowalski@gmail.com"
+      isManager:
+        type: "boolean"
+        default: false
+    xml:
+      name: "Employee"
+  Salary:
+    type: "object"
+    properties:
+      id:
+        type: "integer"
+        format: "int64"
+        default: 1
+      value:
+        type: "number"
+        format: "float"
+        default: 1000
+      TimePeriod:
+        type: "string"
+        format: "string"
+        default: "12.04.2019-19.04.2019"
+      EmployeeId:
+        type: "integer"
+        format: "int64"
+        default: 1
+    xml:
+      name: "Employee"
+  ApiResponse:
+    type: "object"
+    properties:
+      code:
+        type: "integer"
+        format: "int64"
+      type:
+        type: "string"
+      message:
+        type: "string"
+externalDocs:
+  description: "Find out more about the project"
+  url: "https://github.com/MagFry/ProjectLanguage"
