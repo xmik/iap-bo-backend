@@ -36,6 +36,11 @@ EOF
       dotnet run --project=./src/BranchOfficeBackend/
       exit $?
       ;;
+  generate_hq_api_client)
+      # this generates HQ API client in C#, but the code is very long and complicated
+      dojo -c Dojofile.swagger "nswag run /runtime:NetCore20"
+      exit $?
+      ;;
   *)
       echo "Invalid command: '${command}'"
       exit 1
