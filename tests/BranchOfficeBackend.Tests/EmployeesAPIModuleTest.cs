@@ -30,7 +30,7 @@ namespace BranchOfficeBackend.Tests
                 .Build())
             {
                 var client = testServer.CreateClient();
-                var result = await client.GetStringAsync("/employee/list");
+                var result = await client.GetStringAsync("/api/employees/list");
                 var items = JArray.Parse(result);
                 Assert.Equal(2, items.Count);
             }

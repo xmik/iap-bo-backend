@@ -11,7 +11,7 @@ namespace BranchOfficeBackend
     {
         public EmployeesAPIModule(IWebObjectService service)
         {
-            Get("/employee/list", async(req, res, routeData) => {
+            Get("/api/employees/list", async(req, res, routeData) => {
                 var list = service.GetAllEmployees();
                 // generates suitable response, by default in JSON
                 await res.Negotiate(list);

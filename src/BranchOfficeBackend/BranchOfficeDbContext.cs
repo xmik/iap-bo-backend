@@ -15,8 +15,10 @@ namespace BranchOfficeBackend
         public BranchOfficeDbContext()
         {}
 
+        // db table: EmployeeHoursCollection
         public DbSet<EmployeeHours> EmployeeHoursCollection { get; set; }
 
+        // db table: Employees
         public DbSet<Employee> Employees { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -27,6 +29,4 @@ namespace BranchOfficeBackend
             optionsBuilder.UseNpgsql("Host=db;Database=mydb;Username=postgres;Password=my_pw");
         }
     }
-
-
 }
