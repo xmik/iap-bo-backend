@@ -51,7 +51,7 @@ namespace BranchOfficeBackend.Tests
                 var client = testServer.CreateClient();
                 var result = await client.GetStringAsync("/api/employees/list");
                 var items = JArray.Parse(result);
-                Assert.Equal(1, items.Count);
+                Assert.Single(items);
             }
         }
 

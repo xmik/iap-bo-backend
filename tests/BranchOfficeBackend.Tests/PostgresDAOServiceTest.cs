@@ -45,7 +45,7 @@ namespace BranchOfficeBackend.Tests
 
             var dao = new PostgresDataAccessObjectService(dbContext);
             var employees = dao.GetAllEmployees();
-            Assert.Equal(1, employees.Count);
+            Assert.Single(employees);
         }
     }
 }
