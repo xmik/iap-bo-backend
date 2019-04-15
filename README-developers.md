@@ -64,4 +64,5 @@ dotnet add src/BranchOfficeBackend/ package --version=4.4.0 Autofac.Extensions.D
 dotnet add src/BranchOfficeBackend/ package --version=4.1.0 Carter
 dotnet add src/BranchOfficeBackend/ package --version=2.2.0 Microsoft.AspNetCore.Hosting
 dotnet add src/BranchOfficeBackend/ package --version=2.2.0 Microsoft.AspNetCore.Server.Kestrel
+dotnet add tests/BranchOfficeBackend.Tests/ package RichardSzalay.MockHttp --version 5.0.0
 ```
