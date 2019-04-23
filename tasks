@@ -21,7 +21,18 @@ EOF
   # add:
   # <add key="nuget.org" value="https://api.nuget.org/v3/index.json" protocolVersion="3" />
   # to ~/.nuget/.../NuGet.config
-      dotnet build --configuration=Release
+      dotnet publish --configuration=Release --output=./bin/Release/netcoreapp2.1
+      exit $?
+      ;;
+  docker_build)
+      rm -rf docker/binaries
+      cp -r src/BranchOfficeBackend/bin/Release/netcoreapp2.1 docker/binaries
+      cd docker
+      docker build -t iap-bo-backend:0.1.0 .
+      # run the docker image interactively:
+      # docker run -ti -p 8080:8080 iap-bo-backend:0.1.0 -c /bin/bash
+      # run the docker image in the background (daemonize):
+      # docker run -d -p 8080:8080 iap-bo-backend:0.1.0
       exit $?
       ;;
   utest)
