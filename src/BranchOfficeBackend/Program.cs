@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,6 +8,8 @@ namespace BranchOfficeBackend
 {
     class Program
     {
+        private static CancellationTokenSource cts;
+
         /// <summary>
         /// Generate test data and save into database
         /// </summary>
@@ -64,13 +67,47 @@ namespace BranchOfficeBackend
             host.Run();
         }
 
+        static void SynchronizeWithHQServerLoop()
+        {
+            int frequency_seconds = 5;
+            while(true)
+            {   
+                if (cts.Token.IsCancellationRequested) 
+                {
+                    Console.WriteLine("Ctrl+C caught when synchronizing with HQ, exit");
+                    return;
+                }
+                Console.WriteLine("Synchronizing with HQ (every {0} seconds)", frequency_seconds.ToString());
+                // TODO: main action
+                Thread.Sleep(frequency_seconds*1000);
+            }
+        }
+
         static void Main(string[] args)
         {
+            cts = new CancellationTokenSource();
+            Console.CancelKeyPress += Console_CancelKeyPress;
+
             // TODO: run this only if testing. In production, synchronize wih HeadQuarters.
             GenerateTestData();
 
+            // run this in the background (in another thread)
+            Thread t = new Thread (SynchronizeWithHQServerLoop);
+            t.Start();
+
             // run API SERVER here
-            RunAPIServer();
+            RunAPIServer();          
+
+            t.Join();
+            Console.WriteLine("Good bye!");
         }
+
+        private static void Console_CancelKeyPress (object sender, ConsoleCancelEventArgs e)
+		{
+			if (!cts.IsCancellationRequested) {
+				cts.Cancel ();
+				e.Cancel = true;
+			}
+		}
     }
 }
