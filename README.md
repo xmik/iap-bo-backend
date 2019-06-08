@@ -6,7 +6,6 @@ Branch office backend, written in C#.
 ## Usage
 Compile code (this will also install all the dependencies):
 ```
-./tasks generate_nuget_config
 ./tasks build
 ```
 
