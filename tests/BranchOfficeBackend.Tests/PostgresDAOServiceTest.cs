@@ -16,6 +16,7 @@ namespace BranchOfficeBackend.Tests
         public PostgresDAOServiceTest()
         {
             dbContext = new BranchOfficeDbContext();
+            dbContext.Database.EnsureDeleted();
             dbContext.Database.Migrate();
         }
 
