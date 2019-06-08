@@ -12,7 +12,8 @@ pipelines:
           clean_workspace: true
           jobs:
             build:
-              elastic_profile_id: w.c2.m2048.e10
+              resources:
+                - "docker"
               tasks:
                 - exec:
                     command: dojo
