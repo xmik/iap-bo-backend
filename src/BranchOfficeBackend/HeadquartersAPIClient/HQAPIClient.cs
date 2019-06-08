@@ -48,13 +48,8 @@ namespace BranchOfficeBackend
             return urlBuilder.ToString();
         }
 
-        // http://blog.stephencleary.com/2012/02/async-and-await.html
-        public async Task<HQBranchOffice> GetBranchOffice(int branchOfficeId)
-        {
-            string url = this.BuildUrl("/api/branch_offices/" + branchOfficeId);
+        private async Task<string> commonRequestOperation(string url) {
             string json;
-            // get response json
-            // TODO: maybe extract this code to a method
             using (var request_ = new System.Net.Http.HttpRequestMessage())
             {
                 request_.Method = new System.Net.Http.HttpMethod("GET");
@@ -66,6 +61,14 @@ namespace BranchOfficeBackend
                 response.EnsureSuccessStatusCode();
                 json = await response.Content.ReadAsStringAsync();
             }
+            return json;
+        }
+
+        // http://blog.stephencleary.com/2012/02/async-and-await.html
+        public async Task<HQBranchOffice> GetBranchOffice(int branchOfficeId)
+        {
+            string url = this.BuildUrl("/api/branch_offices/" + branchOfficeId);
+            string json = await commonRequestOperation(url);
             // deserialize the json response into C# objects
             HQBranchOffice result = Newtonsoft.Json.JsonConvert.DeserializeObject<
                 HQBranchOffice>(json);
@@ -76,19 +79,7 @@ namespace BranchOfficeBackend
         public async Task<List<HQBranchOffice>> ListBranchOffices()
         {
             string url = this.BuildUrl("/api/branch_offices");
-            string json;
-            // get response json
-            using (var request_ = new System.Net.Http.HttpRequestMessage())
-            {
-                request_.Method = new System.Net.Http.HttpMethod("GET");
-                // already set above:
-                // request_.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-                request_.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
-
-                var response = await _client.SendAsync(request_);
-                response.EnsureSuccessStatusCode();
-                json = await response.Content.ReadAsStringAsync();
-            }
+            string json = await commonRequestOperation(url);
             // deserialize the json response into C# objects
             Dictionary<string, List<HQBranchOffice>> result = Newtonsoft.Json.JsonConvert.DeserializeObject<
                     Dictionary<string, List<HQBranchOffice>>>(json);
@@ -98,20 +89,7 @@ namespace BranchOfficeBackend
         public async Task<HQEmployee> GetEmployee(int employeeId)
         {
             string url = this.BuildUrl("/api/employees/" + employeeId);
-            string json;
-            // get response json
-            // TODO: maybe extract this code to a method
-            using (var request_ = new System.Net.Http.HttpRequestMessage())
-            {
-                request_.Method = new System.Net.Http.HttpMethod("GET");
-                // already set above:
-                // request_.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-                request_.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
-
-                var response = await _client.SendAsync(request_);
-                response.EnsureSuccessStatusCode();
-                json = await response.Content.ReadAsStringAsync();
-            }
+            string json = await commonRequestOperation(url);
             // deserialize the json response into C# objects
             HQEmployee result = Newtonsoft.Json.JsonConvert.DeserializeObject<
                 HQEmployee>(json);
@@ -120,21 +98,8 @@ namespace BranchOfficeBackend
 
         public async Task<List<HQEmployee>> ListEmployees(int branchOfficeId)
         {
-            // TODO: maybe set a parameter to get employees list for a specified branch office?
             string url = this.BuildUrl("/api/employees/list/" + branchOfficeId);
-            string json;
-            // get response json
-            using (var request_ = new System.Net.Http.HttpRequestMessage())
-            {
-                request_.Method = new System.Net.Http.HttpMethod("GET");
-                // already set above:
-                // request_.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-                request_.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
-
-                var response = await _client.SendAsync(request_);
-                response.EnsureSuccessStatusCode();
-                json = await response.Content.ReadAsStringAsync();
-            }
+            string json = await commonRequestOperation(url);
             // deserialize the json response into C# objects
             Dictionary<string, List<HQEmployee>> result = Newtonsoft.Json.JsonConvert.DeserializeObject<
                     Dictionary<string, List<HQEmployee>>>(json);
@@ -144,19 +109,7 @@ namespace BranchOfficeBackend
         public async Task<List<HQSalary>> ListSalariesForEmployee(int employeeId)
         {
             string url = this.BuildUrl("/api/salaries/list/"+ employeeId);
-            string json;
-            // get response json
-            using (var request_ = new System.Net.Http.HttpRequestMessage())
-            {
-                request_.Method = new System.Net.Http.HttpMethod("GET");
-                // already set above:
-                // request_.Headers.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-                request_.RequestUri = new System.Uri(url, System.UriKind.RelativeOrAbsolute);
-
-                var response = await _client.SendAsync(request_);
-                response.EnsureSuccessStatusCode();
-                json = await response.Content.ReadAsStringAsync();
-            }
+            string json = await commonRequestOperation(url);
             // deserialize the json response into C# objects
             Dictionary<string, List<HQSalary>> result = Newtonsoft.Json.JsonConvert.DeserializeObject<
                     Dictionary<string, List<HQSalary>>>(json);
