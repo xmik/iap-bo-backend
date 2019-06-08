@@ -37,7 +37,7 @@ namespace BranchOfficeBackend.Tests
             // Setup a respond for the user api (including a wildcard in the URL)
             var mockedRequest = mockHttp.When(baseUrl + "/api/branch_offices/*")
                     .Respond("application/json",
-                    "{'name' : 'BranchOffice1'}"); // Respond with JSON
+                    "{'id': 1, 'name' : 'BranchOffice1'}"); // Respond with JSON
 
             // Inject the handler or client into your application code
             var client = mockHttp.ToHttpClient();
@@ -48,6 +48,7 @@ namespace BranchOfficeBackend.Tests
                 // https://github.com/richardszalay/mockhttp#verifying-matches
                 Assert.Equal(1, mockHttp.GetMatchCount(mockedRequest));
                 Assert.Equal("BranchOffice1", branchOffice.Name);
+                Assert.Equal(1, branchOffice.ID);
             }
         }
 
@@ -65,7 +66,7 @@ namespace BranchOfficeBackend.Tests
             // Setup a respond for the user api (including a wildcard in the URL)
             var mockedRequest = mockHttp.When(baseUrl + "/api/branch_offices")
                     .Respond("application/json",
-                    "{ 'branch_offices': [ {'name' : 'BranchOffice1'}, {'name' : 'BranchOffice999'} ] }"); // Respond with JSON
+                    "{ 'branch_offices': [ {'id' : 1, 'name' : 'BranchOffice1'}, {'id' : 2, 'name' : 'BranchOffice2'} ] }"); // Respond with JSON
 
             // Inject the handler or client into your application code
             var client = mockHttp.ToHttpClient();
@@ -76,8 +77,10 @@ namespace BranchOfficeBackend.Tests
                 // https://github.com/richardszalay/mockhttp#verifying-matches
                 Assert.Equal(1, mockHttp.GetMatchCount(mockedRequest));
                 Assert.Equal(2, branchOffices.Count);
+                Assert.Equal(1, branchOffices[0].ID);
+                Assert.Equal(2, branchOffices[1].ID);
                 Assert.Equal("BranchOffice1", branchOffices[0].Name);
-                Assert.Equal("BranchOffice999", branchOffices[1].Name);
+                Assert.Equal("BranchOffice2", branchOffices[1].Name);
             }
         }
 
@@ -126,7 +129,8 @@ namespace BranchOfficeBackend.Tests
             // Setup a respond for the user api (including a wildcard in the URL)
             var mockedRequest = mockHttp.When(baseUrl + "/api/employees/list/*")
                     .Respond("application/json",
-                    "{ 'employees': [ {'id' : 1}, {'id' : 123} ] }"); // Respond with JSON
+                    "{ 'employees': [ {'name' : 'Jan Kow', 'id': 1, 'email': 'jank@gmail.com', 'isManager': false },"+
+                    " {'name' : 'Teresa Kow', 'id': 123, 'email': 'teresak@gmail.com', 'isManager': true } ] }"); // Respond with JSON
 
             // Inject the handler or client into your application code
             var client = mockHttp.ToHttpClient();
@@ -139,6 +143,8 @@ namespace BranchOfficeBackend.Tests
                 Assert.Equal(2, employees.Count);
                 Assert.Equal(1, employees[0].ID);
                 Assert.Equal(123, employees[1].ID);
+                Assert.Equal(false, employees[0].IsManager);
+                Assert.Equal(true, employees[1].IsManager);
             }
         }
 
