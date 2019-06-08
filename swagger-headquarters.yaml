@@ -52,6 +52,13 @@ paths:
       produces:
       - "application/xml"
       - "application/json"
+      parameters:
+      - name: "branchOfficeId"
+        in: "path"
+        description: "Branch Office ID"
+        required: true
+        type: "integer"
+        format: "int64"
       responses:
         200:
           description: "successful operation"
