@@ -25,7 +25,7 @@ schemes:
 - "https"
 - "http"
 paths:
-  /branch_offices/list:
+  /api/branch_offices/list:
     get:
       tags:
       - "branch_offices"
@@ -42,7 +42,7 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/BranchOffice"
-  /employees/list:
+  /api/employees/list:
     get:
       tags:
       - "employees"
@@ -59,7 +59,7 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/Employee"
-  /employees:
+  /api/employees:
     post:
       tags:
       - "employees"
@@ -92,7 +92,7 @@ paths:
             $ref: "#/definitions/ApiResponse"
         405:
           description: "Could not create new employee"
-  /employees/{employeeId}:
+  /api/employees/{employeeId}:
     get:
       tags:
       - "employees"
@@ -172,7 +172,7 @@ paths:
             $ref: "#/definitions/ApiResponse"
         404:
           description: "Employee not found"
-  /salaries/list:
+  /api/salaries/list:
     get:
       tags:
       - "salaries"

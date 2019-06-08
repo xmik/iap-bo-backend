@@ -30,7 +30,7 @@ schemes:
 - "https"
 - "http"
 paths:
-  /employees/list:
+  /api/employees/list:
     get:
       tags:
       - "employees"
@@ -47,7 +47,7 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/Employee"
-  /employees/{employeeId}:
+  /api/employees/{employeeId}:
     get:
       tags:
       - "employees"
@@ -74,7 +74,7 @@ paths:
             $ref: "#/definitions/Employee"
         404:
           description: "Employee not found"
-  /employee_hours/list:
+  /api/employee_hours/list:
     get:
       tags:
       - "employee_hours"
@@ -100,7 +100,7 @@ paths:
               $ref: "#/definitions/EmployeeHours"
         404:
           description: "Employee not found"
-  /employee_hours:
+  /api/employee_hours:
     post:
       tags:
       - "employee_hours"
@@ -143,7 +143,7 @@ paths:
           description: "Employee not found"
       security:
         - branch_office_auth: []
-  /employee_hours/{employeeHoursId}:
+  /api/employee_hours/{employeeHoursId}:
     get:
       tags:
       - "employee_hours"
@@ -235,7 +235,7 @@ paths:
           description: "EmployeeHours not found"
       security:
         - branch_office_auth: []
-  /salaries/list:
+  /api/salaries/list:
     get:
       tags:
       - "salaries"
@@ -265,7 +265,7 @@ paths:
           description: "Employee not found"
       security:
         - branch_office_auth: []
-  /user:
+  /api/user:
     post:
       tags:
       - "user"
@@ -288,7 +288,7 @@ paths:
           description: "Employee with a particular email not found"
         405:
           description: "User already with a particular login already exists"
-  /user/login:
+  /api/user/login:
     get:
       tags:
       - "user"
@@ -325,7 +325,7 @@ paths:
               description: "date in UTC when token expires"
         400:
           description: "Invalid username/password supplied"
-  /user/logout:
+  /api/user/logout:
     get:
       tags:
       - "user"
@@ -343,7 +343,7 @@ paths:
           description: "Unauthorized"
       security:
         - branch_office_auth: []
-  /user/{username}:
+  /api/user/{username}:
     put:
       tags:
       - "user"
