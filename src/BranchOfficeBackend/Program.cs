@@ -9,6 +9,7 @@ namespace BranchOfficeBackend
     class Program
     {
         private static CancellationTokenSource cts;
+        private static HQAPIClient hqApiClient;
 
         /// <summary>
         /// Generate test data and save into database
@@ -91,14 +92,26 @@ namespace BranchOfficeBackend
             // TODO: run this only if testing. In production, synchronize wih HeadQuarters.
             GenerateTestData();
 
-            // run this in the background (in another thread)
-            Thread t = new Thread (SynchronizeWithHQServerLoop);
-            t.Start();
+            // run BO Api Server in the background (in another thread),
+            // so that it can be running before we synchronize with HQ Api Server
+            // and so HQ Server does not have to wait for Branch Office Server
+            Thread boApiServerThread = new Thread (RunAPIServer);
+            boApiServerThread.Start();
 
-            // run API SERVER here
-            RunAPIServer();          
+            string hqApiUrl = "http://localhost:8000";
+            hqApiClient = new HQAPIClient(hqApiUrl);
+            // TODO: check connection
 
-            t.Join();
+            // run Synchronization with HQ Api Server in the background (in another thread)
+            Thread hqApiClientThread = new Thread (SynchronizeWithHQServerLoop);
+            hqApiClientThread.Start();
+
+            hqApiClientThread.Join();
+            boApiServerThread.Interrupt();
+            boApiServerThread.Join();
+            if (hqApiClient != null) {
+                hqApiClient.Dispose();
+            }
             Console.WriteLine("Good bye!");
         }
 
