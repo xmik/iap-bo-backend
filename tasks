@@ -3,9 +3,7 @@
 command="$1"
 case "${command}" in
   build)
-  # add:
-  # <add key="nuget.org" value="https://api.nuget.org/v3/index.json" protocolVersion="3" />
-  # to ~/.nuget/.../NuGet.config
+      rm -rf ./bin/Release/netcoreapp2.1/*
       dotnet publish --configuration=Release --output=./bin/Release/netcoreapp2.1
       exit $?
       ;;
@@ -21,7 +19,7 @@ case "${command}" in
       exit $?
       ;;
   utest)
-      dotnet test
+      dotnet test --configuration=Release --no-build ./tests/BranchOfficeBackend.Tests -v=normal
       exit $?
       ;;
   itest)
