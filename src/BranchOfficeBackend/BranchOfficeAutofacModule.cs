@@ -11,6 +11,9 @@ namespace BranchOfficeBackend
                 new BranchOfficeDbContext()
             ).As<BranchOfficeDbContext>().SingleInstance();
             builder.RegisterType<ConfigurationService>().As<IConfigurationService>();
+            builder.RegisterType<HQAPIClient>().As<IHQAPIClient>();
+            builder.RegisterType<SynchronizatorService>().
+                As<ISynchronizatorService>().SingleInstance();
         }
     }
 }
