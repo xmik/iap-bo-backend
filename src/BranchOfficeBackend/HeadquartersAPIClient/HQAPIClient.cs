@@ -11,23 +11,22 @@ namespace BranchOfficeBackend
     {
         // TODO: maybe make it static https://docs.microsoft.com/en-us/aspnet/web-api/overview/advanced/calling-a-web-api-from-a-net-client#create-and-initialize-httpclient
         private HttpClient _client;
+        private IConfigurationService _confServ;
         private string _baseUrl;
 
         // https://docs.microsoft.com/en-us/aspnet/web-api/overview/advanced/calling-a-web-api-from-a-net-client
-        public HQAPIClient(string baseUrl, HttpClient httpClient)
+        public HQAPIClient(IConfigurationService confServ, HttpClient httpClient)
         {
-            _baseUrl = baseUrl;
+            _confServ = confServ;
             _client = httpClient;
-            _client.BaseAddress = new Uri(baseUrl);
             _client.DefaultRequestHeaders.Accept.Clear();
             _client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/json"));
         }
-        public HQAPIClient(string baseUrl)
+        public HQAPIClient(IConfigurationService confServ)
         {
-            _baseUrl = baseUrl;
+            _confServ = confServ;
             _client = new HttpClient();
-            _client.BaseAddress = new Uri(baseUrl);
             _client.DefaultRequestHeaders.Accept.Clear();
             _client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue("application/json"));
@@ -43,6 +42,10 @@ namespace BranchOfficeBackend
 
         public string BuildUrl(string requestUrl)
         {
+            if (_baseUrl == null) {
+                _baseUrl = _confServ.GetHQServerUrl();
+                _client.BaseAddress = new Uri(_baseUrl);
+            }
             var urlBuilder = new System.Text.StringBuilder();
             urlBuilder.Append(_baseUrl != null ? _baseUrl.TrimEnd('/') : "").Append(requestUrl);
             return urlBuilder.ToString();
@@ -115,7 +118,5 @@ namespace BranchOfficeBackend
                     Dictionary<string, List<HQSalary>>>(json);
             return result["salaries"];            
         }
-
-
     }
 }
