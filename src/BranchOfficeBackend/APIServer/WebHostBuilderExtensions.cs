@@ -13,8 +13,6 @@ namespace BranchOfficeBackend
             return builder.UseContentRoot(Directory.GetCurrentDirectory())                
                 .ConfigureServices(services => {
                     services.AddAutofac();
-                    services.AddAuthentication(BasicAuthenticationDefaults.AuthenticationScheme)
-                        .AddBasicAuthentication<DatabaseBasicCredentialVerifier>();
                 })
                 .UseStartup<Startup>()
                 .UseUrls("http://0.0.0.0:8080");

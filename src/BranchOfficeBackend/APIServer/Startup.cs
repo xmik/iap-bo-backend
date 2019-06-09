@@ -44,8 +44,6 @@ namespace BranchOfficeBackend
 
         public static void ConfigureServices(IServiceCollection services)
         {
-            services.AddAuthentication(BasicAuthenticationDefaults.AuthenticationScheme)
-                        .AddBasicAuthentication<DatabaseBasicCredentialVerifier>();
             // Add services to the collection. Don't build or return
             // any IServiceProvider or the ConfigureContainer method
             // won't get called.
