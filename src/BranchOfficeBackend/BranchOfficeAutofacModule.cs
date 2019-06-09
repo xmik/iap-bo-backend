@@ -14,6 +14,7 @@ namespace BranchOfficeBackend
             builder.RegisterType<HQAPIClient>().As<IHQAPIClient>();
             builder.RegisterType<SynchronizatorService>().
                 As<ISynchronizatorService>().SingleInstance();
+            builder.RegisterType<UserRepository>().As<IUserRepository>();
         }
     }
 }
