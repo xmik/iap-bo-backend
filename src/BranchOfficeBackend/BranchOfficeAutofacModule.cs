@@ -10,6 +10,7 @@ namespace BranchOfficeBackend
             builder.Register(c =>
                 new BranchOfficeDbContext()
             ).As<BranchOfficeDbContext>().SingleInstance();
+            builder.RegisterType<ConfigurationService>().As<IConfigurationService>();
         }
     }
 }
