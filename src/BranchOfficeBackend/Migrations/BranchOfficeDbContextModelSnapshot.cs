@@ -48,7 +48,7 @@ namespace BranchOfficeBackend.Migrations
 
                     b.Property<string>("TimePeriod");
 
-                    b.Property<double>("Value");
+                    b.Property<float>("Value");
 
                     b.HasKey("EmployeeHoursId");
 

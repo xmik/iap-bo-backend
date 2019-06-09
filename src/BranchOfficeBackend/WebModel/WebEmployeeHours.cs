@@ -15,14 +15,14 @@ namespace BranchOfficeBackend
         {
             this.Value = e.Value;
             this.TimePeriod = e.TimePeriod.ToString();
-            this.EmployeeHoursId = e.EmployeeHoursId;
+            this.Id = e.EmployeeHoursId;
             this.EmployeeId = e.EmployeeId;
             this.HoursCount = e.HoursCount;
         }
 
-        public double Value { get; set; }
+        public float Value { get; set; }
         public string TimePeriod { get; set; }
-        public int EmployeeHoursId { get; set; }
+        public int Id { get; set; }
         public int EmployeeId { get; set; }
         public int HoursCount { get; set; }
     }

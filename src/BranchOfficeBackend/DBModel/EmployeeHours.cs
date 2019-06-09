@@ -9,7 +9,7 @@ namespace BranchOfficeBackend
         // https://stackoverflow.com/questions/48225989/the-entity-type-requires-a-primary-key-to-be-defined
         [Key]
         public int EmployeeHoursId { get; set; }
-        public double Value { get; set; }
+        public float Value { get; set; }
         public string TimePeriod { get; set; }
         /// <summary>
         /// How many hours an employee worked within a given TimePeriod

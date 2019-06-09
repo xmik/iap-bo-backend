@@ -425,19 +425,23 @@ definitions:
       Id:
         type: "integer"
         format: "int64"
-        default: 1
+        default: 0
       Value:
         type: "number"
         format: "float"
-        default: 8
+        default: 0
       TimePeriod:
         type: "string"
         format: "string"
-        default: "12.04.2019-12.04.2019"
+        default: ""
       EmployeeId:
         type: "integer"
         format: "int64"
-        default: 1
+        default: 0
+      HoursCount:
+        type: "integer"
+        format: "int64"
+        default: 0
   Salary:
     type: "object"
     properties:

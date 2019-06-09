@@ -14,7 +14,7 @@ namespace BranchOfficeBackend.Migrations
                 {
                     EmployeeHoursId = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    Value = table.Column<double>(nullable: false),
+                    Value = table.Column<float>(nullable: false),
                     TimePeriod = table.Column<string>(nullable: true),
                     HoursCount = table.Column<int>(nullable: false),
                     EmployeeId = table.Column<int>(nullable: false)
