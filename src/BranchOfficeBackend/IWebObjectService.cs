@@ -30,5 +30,7 @@ namespace BranchOfficeBackend
         /// <param name="employeeId"></param>
         void DeleteEmployee(int employeeId);
 
+        List<WebEmployeeHours> GetAllEmployeeHours(int employeeId);
+        WebEmployeeHours GetOneEmployeeHours(int employeeHoursId);
     }
 }

@@ -85,7 +85,7 @@ paths:
             $ref: "#/definitions/Employee"
         404:
           description: "Employee not found"
-  /api/employee_hours/list:
+  /api/employee_hours/list/{employeeId}:
     get:
       tags:
       - "employee_hours"
