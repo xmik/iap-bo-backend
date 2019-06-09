@@ -16,10 +16,12 @@ namespace BranchOfficeBackend
         {
             this.Name = e.Name;
             this.Email = e.Email;
+            this.ID = e.EmployeeId;
             // TODo more fiels
         }
 
         public string Name { get; set; }
         public string Email { get; set; }
+        public int ID { get; set; }
     }
 }

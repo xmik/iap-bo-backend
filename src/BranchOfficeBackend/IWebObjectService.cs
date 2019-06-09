@@ -16,6 +16,8 @@ namespace BranchOfficeBackend
         /// <returns></returns>
         List<WebEmployee> GetAllEmployees();
 
+        WebEmployee GetEmployee(int employeeId);
+
         /// <summary>
         /// Adds employee if the employee object is valid, throws exception otherwise.
         /// </summary>

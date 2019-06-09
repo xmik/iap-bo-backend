@@ -21,6 +21,13 @@ namespace BranchOfficeBackend
             return dbContext.Employees.ToList();
         }
 
+        public Employee GetEmployee(int id)
+        {
+            var employees = dbContext.Employees.ToList();
+            var oneEmp = employees.Where(obj => obj.EmployeeId == id);
+            return (Employee)(oneEmp.FirstOrDefault());
+        }
+
         public void RemoveEmployees(int id)
         {
             throw new NotImplementedException();

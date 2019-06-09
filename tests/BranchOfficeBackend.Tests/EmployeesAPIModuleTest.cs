@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Threading.Tasks;
 using BranchOfficeBackend;
 using Newtonsoft.Json.Linq;
@@ -18,7 +19,7 @@ namespace BranchOfficeBackend.Tests
         /// </summary>
         /// <returns></returns>
         [Fact]
-        public async Task ShouldReturnJsonListOfEmployees()
+        public async Task ShouldReturnJsonListOfEmployees_WhenNoError()
         {
             var mock = new Moq.Mock<IWebObjectService>();
             mock.Setup(m => m.GetAllEmployees()).Returns(new System.Collections.Generic.List<WebEmployee>() {
@@ -30,9 +31,53 @@ namespace BranchOfficeBackend.Tests
                 .Build())
             {
                 var client = testServer.CreateClient();
-                var result = await client.GetStringAsync("/api/employees/list");
-                var items = JArray.Parse(result);
-                Assert.Equal(2, items.Count);
+                var response = await client.GetAsync("/api/employees/list");
+                Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);    
+                var jsonString = await response.Content.ReadAsStringAsync();
+                var items = JArray.Parse(jsonString);
+                Assert.Equal(2, items.Count);                            
+            }
+        }
+
+        [Fact]
+        public async Task ShouldNotReturnJsonEmployee_WhenNotExists()
+        {
+            var mock = new Moq.Mock<IWebObjectService>();
+            mock.Setup(m => m.GetEmployee(33)).Returns(
+                new WebEmployee() { Name = "John", ID = 33 }
+            );
+            using(var testServer = new TestServerBuilder()
+                .WithMock<IWebObjectService>(typeof(IWebObjectService), mock)
+                .Build())
+            {
+                var client = testServer.CreateClient();
+                var response = await client.GetAsync("/api/employees/100");
+                Assert.Equal(System.Net.HttpStatusCode.NotFound, response.StatusCode);      
+            }
+        }
+
+        [Fact]
+        public async Task ShouldReturnJsonEmployee_WhenExists()
+        {
+            var mock = new Moq.Mock<IWebObjectService>();
+            mock.Setup(m => m.GetEmployee(33)).Returns(
+                new WebEmployee() { Name = "John", ID = 33 }
+            );
+            using(var testServer = new TestServerBuilder()
+                .WithMock<IWebObjectService>(typeof(IWebObjectService), mock)
+                .Build())
+            {
+                var client = testServer.CreateClient();
+                var response = await client.GetAsync("/api/employees/33");
+                Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);  
+                var jsonString = await response.Content.ReadAsStringAsync();
+                var actual = JObject.Parse(jsonString);
+                var expected = new JObject{
+                    {"name", "John"},
+                    {"id", 33 }
+                }; 
+                Debug.WriteLine(actual);
+                Assert.True(JToken.DeepEquals(expected, actual));                               
             }
         }
     }

@@ -66,3 +66,8 @@ dotnet add src/BranchOfficeBackend/ package --version=2.2.0 Microsoft.AspNetCore
 dotnet add src/BranchOfficeBackend/ package --version=2.2.0 Microsoft.AspNetCore.Server.Kestrel
 dotnet add tests/BranchOfficeBackend.Tests/ package RichardSzalay.MockHttp --version 5.0.0
 ```
+
+
+## nice docs
+* https://www.newtonsoft.com/json/help/html/DeepEquals.htm
+* https://mindbyte.nl/http-apis/2018/09/21/Use-Carter-to-create-a-simple-HTTP-API.html

@@ -30,7 +30,7 @@ namespace BranchOfficeBackend
         }
 
 // TODO: test frequency
-        private async Task SynchronizationLoopTimer()
+        public async Task SynchronizationLoopTimer()
         {
             int frequency_seconds = this.confService.GetSynchronizationFrequency();
             while(true)

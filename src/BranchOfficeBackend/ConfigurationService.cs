@@ -4,7 +4,7 @@ namespace BranchOfficeBackend
 {
     public class ConfigurationService : IConfigurationService
     {
-        private string serverUrl;
+        private string hqServerUrl;
         private int branchOfficeId;
         private int synchroFreqSeconds;
         private bool startSynchro;
@@ -28,9 +28,9 @@ namespace BranchOfficeBackend
             if (serverUrlFromEnv == null || serverUrlFromEnv == "")
             {
                 Console.WriteLine("{0} not set, setting default value: {1}", serverUrlEnv, defaultServerUrl);
-                this.serverUrl = defaultServerUrl;
+                this.hqServerUrl = defaultServerUrl;
             } else {
-                this.serverUrl = serverUrlFromEnv;
+                this.hqServerUrl = serverUrlFromEnv;
             }
 
             bool defaultStartSynchro = true;
@@ -66,12 +66,12 @@ namespace BranchOfficeBackend
 
         public string GetHQServerUrl()
         {
-            return this.serverUrl;
+            return this.hqServerUrl;
         }
 
         public void SetHQServerUrl(string serverUrl)
         {
-            this.serverUrl = serverUrl;
+            this.hqServerUrl = serverUrl;
         }
 
         public bool GetStartSynchronizationLoopWithHQ()
