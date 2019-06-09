@@ -44,10 +44,25 @@ $ docker exec -ti # ...
 postgres-container$ psql -h localhost -U postgres
 # list databases
 postgres=# \list
-postgres=# \connect postgres
+postgres=# \connect mydb
+# You are now connected to database "mydb" as user "postgres".
 # list tables
-postgres=# \dt
-# no tables
+mydb=# \dt
+                  List of relations
+ Schema |          Name           | Type  |  Owner   
+--------+-------------------------+-------+----------
+ public | EmployeeHoursCollection | table | postgres
+ public | Employees               | table | postgres
+ public | __EFMigrationsHistory   | table | postgres
+(3 rows)
+mydb=# SELECT * FROM "Employees";
+ EmployeeId |      Name       |     Email      |     DateOfBirth     | IsManager
+------------+-----------------+----------------+---------------------+-----------
+          1 | Jan Kowalski    | jan@gmail.com  | 0001-01-01 00:00:00 | f
+          2 | Krzysztof Nowak | krzy@gmail.com | 0001-01-01 00:00:00 | f
+          3 | Ala Jeden       | ala1@gmail.com | 0001-01-01 00:00:00 | f
+          4 | Ola Dwa         | ola2@gmail.com | 0001-01-01 00:00:00 | f
+(4 rows)
 ```
 
 After running the C# application:
@@ -56,7 +71,12 @@ After running the C# application:
 ./tasks run
 ```
 
-TODO: show some data afterwards
+Warning: the primary keys in PostgreSQL tables (e.g. EmployeeId, EmployeeHoursId)
+ must start from 1. If you insert 2 rows with Ids: 0 and 1, this will result in
+ in conflict, because the row with Id 0 will have Id 1. Error then will be:
+```
+Unhandled Exception: Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while updating the entries. See the inner exception for details. ---> Npgsql.PostgresException: 23505: duplicate key value violates unique constraint "PK_EmployeeHoursCollection"
+```
 
 ### Install Bats on Linux
 ```
