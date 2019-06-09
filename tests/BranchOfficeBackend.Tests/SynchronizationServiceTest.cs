@@ -1,14 +1,15 @@
 using System;
 using System.Threading.Tasks;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace BranchOfficeBackend.Tests
 {
     public class SynchronizationServiceTest
     {
-        public SynchronizationServiceTest()
-        {
-            
+        public SynchronizationServiceTest (ITestOutputHelper testOutputHelper) 
+        { 
+            LoggingHelpers.Configure(testOutputHelper);
         }
 
         [Fact(Timeout = 500)]
@@ -20,7 +21,7 @@ namespace BranchOfficeBackend.Tests
             var ss = new SynchronizatorService(hqApiClient.Object, cs, dao.Object);
             await ss.Synchronize();
             hqApiClient.Verify(m => m.ListEmployees(0), Moq.Times.Once);
-            // ListEmployees did not suceed, so no new http requests are handled
+            // ListEmployees did not succeed, so no new http requests are handled
             hqApiClient.Verify(m => m.ListSalariesForEmployee(0), Moq.Times.Never);
             ss.Dispose();
         }
@@ -38,7 +39,7 @@ namespace BranchOfficeBackend.Tests
             await ss.Synchronize();
             hqApiClient.Verify(m => m.ListEmployees(0), Moq.Times.Exactly(4));
             // ListEmployees did not suceed, so no new http requests are handled
-            hqApiClient.Verify(m => m.ListSalariesForEmployee(0), Moq.Times.Never);
+            hqApiClient.Verify(m => m.ListSalariesForEmployee(0), Moq.Times.Never());
             ss.Dispose();
         }
 

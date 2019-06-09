@@ -8,6 +8,7 @@ namespace BranchOfficeBackend
     // to be treated as a Singleton class, Autofac provides that
     public class SynchronizatorService : ISynchronizatorService, IDisposable
     {
+        private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(SynchronizatorService)); 
         private readonly IHQAPIClient hqApiClient;
         private readonly IConfigurationService confService;
         private readonly IDataAccessObjectService daoService;
@@ -35,17 +36,17 @@ namespace BranchOfficeBackend
             int frequency_seconds = this.confService.GetSynchronizationFrequency();
             while(true)
             {   
-                try {                    
+                try {         
                     if (cts.Token.IsCancellationRequested) 
                     {
-                        Console.WriteLine("Synchronization service disposed, exit");
+                        _log.Info("Synchronization service disposed, exit");
                         return;
                     }
-                    Console.WriteLine("Synchronizing with HQ (every {0} seconds)", frequency_seconds.ToString());
+                    _log.InfoFormat("Synchronizing with HQ (every {0} seconds)", frequency_seconds.ToString());
                     await Synchronize();
                     await Task.Delay(frequency_seconds*1000);
                 } catch (Exception ex) {
-                    Console.WriteLine("Ignoring exception in synchronization loop: {0}", ex);
+                    _log.Error("Ignoring exception in synchronization loop", ex);
                 }
             }
         }
@@ -60,11 +61,12 @@ namespace BranchOfficeBackend
                 try {
                     lock (this.locker) {
                         if (synchronizing) {
-                            Console.WriteLine("Already synchronizing in this moment. Synchronization skipped");
+                            _log.Warn("Already synchronizing in this moment. Synchronization skipped");
                             return;
                         }
                         synchronizing = true;
                     }
+                    _log.Info("Starting synchronization");
 
                     List<HQEmployee> employees = await hqApiClient.ListEmployees(
                         this.confService.GetBranchOfficeId());
@@ -77,7 +79,7 @@ namespace BranchOfficeBackend
                         }
                     }
                 } catch (System.Net.Http.HttpRequestException ex) {
-                    Console.WriteLine("Synchronizing with HQ failed (is the HQ server running?). Ex: {0}", ex);
+                    _log.Error("Synchronizing with HQ failed (is the HQ server running?).", ex);
                 } finally {
                     synchronizing = false;
                 }

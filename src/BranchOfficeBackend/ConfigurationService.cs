@@ -4,6 +4,7 @@ namespace BranchOfficeBackend
 {
     public class ConfigurationService : IConfigurationService
     {
+        private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(ConfigurationService)); 
         private string hqServerUrl;
         private int branchOfficeId;
         private int synchroFreqSeconds;
@@ -16,7 +17,7 @@ namespace BranchOfficeBackend
             string boidFromEnv = Environment.GetEnvironmentVariable(boidEnv);
             if (boidFromEnv == null || boidFromEnv == "")
             {
-                Console.WriteLine("{0} not set, setting default value: {1}", boidEnv, defaultBoid);
+                _log.DebugFormat("{0} not set, setting default value: {1}", boidEnv, defaultBoid);
                 this.branchOfficeId = defaultBoid;
             } else {
                 this.branchOfficeId = Int32.Parse(boidFromEnv);
@@ -27,7 +28,7 @@ namespace BranchOfficeBackend
             string serverUrlFromEnv = Environment.GetEnvironmentVariable(serverUrlEnv);
             if (serverUrlFromEnv == null || serverUrlFromEnv == "")
             {
-                Console.WriteLine("{0} not set, setting default value: {1}", serverUrlEnv, defaultServerUrl);
+                _log.DebugFormat("{0} not set, setting default value: {1}", serverUrlEnv, defaultServerUrl);
                 this.hqServerUrl = defaultServerUrl;
             } else {
                 this.hqServerUrl = serverUrlFromEnv;
@@ -38,7 +39,7 @@ namespace BranchOfficeBackend
             string synchroFromEnv = Environment.GetEnvironmentVariable(synchroEnv);
             if (synchroFromEnv == null || synchroFromEnv == "")
             {
-                Console.WriteLine("{0} not set, setting default value: {1}", synchroEnv, defaultStartSynchro);
+                _log.DebugFormat("{0} not set, setting default value: {1}", synchroEnv, defaultStartSynchro);
                 this.startSynchro = defaultStartSynchro;
             } else {
                 this.startSynchro = Boolean.Parse(synchroFromEnv);
@@ -49,7 +50,7 @@ namespace BranchOfficeBackend
             string synchroFreqFromEnv = Environment.GetEnvironmentVariable(synchroFreqEnv);
             if (synchroFreqFromEnv == null || synchroFreqFromEnv == "")
             {
-                Console.WriteLine("{0} not set, setting default value: {1}", synchroFreqEnv, defaultSynchroFreq);
+                _log.DebugFormat("{0} not set, setting default value: {1}", synchroFreqEnv, defaultSynchroFreq);
                 this.synchroFreqSeconds = defaultSynchroFreq;
             } else {
                 this.synchroFreqSeconds = Int32.Parse(synchroFreqFromEnv);
