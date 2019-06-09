@@ -22,6 +22,27 @@ Run integration tests with [Bats](https://github.com/sstephenson/bats):
 ./tasks itest
 ```
 
+### DB
+When you change db schema (e.g. add a column to a table), destroy the current db
+ docker container, start new, an then create/update db schema:
+```
+dotnet ef dbcontext info --startup-project=src/BranchOfficeBackend/ --project=src/BranchOfficeBackend/
+dotnet ef migrations add InitialCreate --startup-project=src/BranchOfficeBackend/ --project=src/BranchOfficeBackend/
+dotnet ef database update --startup-project=src/BranchOfficeBackend/ --project=src/BranchOfficeBackend/
+```
+
+Login into the postgres container and check current state of tables:
+```
+$ docker exec -ti # ...
+postgres-container$ psql -h localhost -U postgres
+# list databases
+postgres=# \list
+postgres=# \connect postgres
+# list tables
+postgres=# \dt
+# no tables
+```
+
 ### Install Bats on Linux
 ```
 git clone --depth 1 https://github.com/sstephenson/bats.git /opt/bats

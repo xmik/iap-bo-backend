@@ -17,11 +17,13 @@ namespace BranchOfficeBackend
             this.Name = e.Name;
             this.Email = e.Email;
             this.ID = e.EmployeeId;
+            this.IsManager = e.IsManager;
             // TODo more fiels
         }
 
         public string Name { get; set; }
         public string Email { get; set; }
         public int ID { get; set; }
+        public bool IsManager { get; set; }
     }
 }

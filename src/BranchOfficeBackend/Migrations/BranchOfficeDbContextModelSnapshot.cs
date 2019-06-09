@@ -28,13 +28,11 @@ namespace BranchOfficeBackend.Migrations
 
                     b.Property<string>("Email");
 
+                    b.Property<bool>("IsManager");
+
                     b.Property<string>("Name");
 
-                    b.Property<int?>("ProjectId");
-
                     b.HasKey("EmployeeId");
-
-                    b.HasIndex("ProjectId");
 
                     b.ToTable("Employees");
                 });
@@ -46,8 +44,6 @@ namespace BranchOfficeBackend.Migrations
 
                     b.Property<int?>("EmployeeId");
 
-                    b.Property<int?>("ProjectId");
-
                     b.Property<TimeSpan>("TimePeriod");
 
                     b.Property<double>("Value");
@@ -56,28 +52,7 @@ namespace BranchOfficeBackend.Migrations
 
                     b.HasIndex("EmployeeId");
 
-                    b.HasIndex("ProjectId");
-
                     b.ToTable("EmployeeHoursCollection");
-                });
-
-            modelBuilder.Entity("BranchOfficeBackend.Project", b =>
-                {
-                    b.Property<int>("ProjectId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Name");
-
-                    b.HasKey("ProjectId");
-
-                    b.ToTable("Projects");
-                });
-
-            modelBuilder.Entity("BranchOfficeBackend.Employee", b =>
-                {
-                    b.HasOne("BranchOfficeBackend.Project", "Project")
-                        .WithMany()
-                        .HasForeignKey("ProjectId");
                 });
 
             modelBuilder.Entity("BranchOfficeBackend.EmployeeHours", b =>
@@ -85,10 +60,6 @@ namespace BranchOfficeBackend.Migrations
                     b.HasOne("BranchOfficeBackend.Employee", "Employee")
                         .WithMany()
                         .HasForeignKey("EmployeeId");
-
-                    b.HasOne("BranchOfficeBackend.Project", "Project")
-                        .WithMany()
-                        .HasForeignKey("ProjectId");
                 });
 #pragma warning restore 612, 618
         }

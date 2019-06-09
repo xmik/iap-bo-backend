@@ -9,13 +9,6 @@ Compile code (this will also install all the dependencies):
 ./tasks build
 ```
 
-Create/update db schema:
-```
-dotnet ef dbcontext info --startup-project=src/BranchOfficeBackend/ --project=src/BranchOfficeBackend/
-dotnet ef migrations add InitialCreate --startup-project=src/BranchOfficeBackend/ --project=src/BranchOfficeBackend/
-dotnet ef database update --startup-project=src/BranchOfficeBackend/ --project=src/BranchOfficeBackend/
-```
-
 Run the C# server:
 ```
 ./tasks run

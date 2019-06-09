@@ -72,9 +72,11 @@ namespace BranchOfficeBackend.Tests
                 Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);  
                 var jsonString = await response.Content.ReadAsStringAsync();
                 var actual = JObject.Parse(jsonString);
+                Debug.WriteLine(actual);
                 var expected = new JObject{
                     {"name", "John"},
-                    {"id", 33 }
+                    {"id", 33 },
+                    {"isManager", false }
                 }; 
                 Debug.WriteLine(actual);
                 Assert.True(JToken.DeepEquals(expected, actual));                               
