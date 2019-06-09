@@ -2,12 +2,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Security.Claims;
+using System.Security.Principal;
+using System.Text;
+using System.Threading.Tasks;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using Bazinga.AspNetCore.Authentication.Basic;
 using Carter;
 using FluentValidation;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -38,6 +44,8 @@ namespace BranchOfficeBackend
 
         public static void ConfigureServices(IServiceCollection services)
         {
+            services.AddAuthentication(BasicAuthenticationDefaults.AuthenticationScheme)
+                        .AddBasicAuthentication<DatabaseBasicCredentialVerifier>();
             // Add services to the collection. Don't build or return
             // any IServiceProvider or the ConfigureContainer method
             // won't get called.
@@ -62,7 +70,60 @@ namespace BranchOfficeBackend
         // here if you need to resolve things from the container.
         public static void Configure(IApplicationBuilder app)
         {
-            app.UseCarter();
+            app.UseCarter(new CarterOptions(ctx => AuthenticateBeforeHook(ctx, 
+                app.ApplicationServices.GetService<IUserRepository>())));
+        }
+
+        // https://tools.ietf.org/html/rfc2617#section-2
+        private static (string userid, string password) DecodeUserIdAndPassword(string encodedAuth)
+        {
+            var userpass = Encoding.UTF8.GetString(Convert.FromBase64String(encodedAuth));
+
+            var separator = userpass.IndexOf(':');
+            if (separator == -1) throw new InvalidOperationException("Invalid Authorization header: Missing separator character ':'. See RFC2617.");
+
+            return (userpass.Substring(0, separator), userpass.Substring(separator + 1));
+        }
+
+        private static async Task<bool> AuthenticateBeforeHook(HttpContext context, IUserRepository userRepository)
+        {
+            string auth = context.Request.Headers["Authorization"];
+            if (string.IsNullOrEmpty(auth))
+            {
+                return true;
+            }
+
+            string encodedAuth = null;
+            if (auth.StartsWith("Basic ", StringComparison.OrdinalIgnoreCase))
+            {
+                encodedAuth = auth.Substring("Basic ".Length).Trim();
+            }
+
+            if (string.IsNullOrEmpty(encodedAuth))
+            {
+                return true;
+            }
+
+            var userpass = DecodeUserIdAndPassword(encodedAuth);
+
+            if (!await userRepository.IsValidAsync(userpass.userid, userpass.password))
+            {
+                return true;
+            }
+
+            List<Claim> claims = new List<Claim>();
+            claims.Add(new Claim(ClaimTypes.Email, userpass.userid, ClaimValueTypes.String));
+
+            if (await userRepository.IsManager(userpass.userid)) {
+                claims.Add(new Claim(ClaimTypes.Role, "Manager"));
+            }
+            else {
+                claims.Add(new Claim(ClaimTypes.Role, "Non-Manager"));
+            }
+            var principal = new ClaimsPrincipal(new ClaimsIdentity(claims, "Basic"));
+
+            context.User = principal;
+            return true;
         }
     }
 }

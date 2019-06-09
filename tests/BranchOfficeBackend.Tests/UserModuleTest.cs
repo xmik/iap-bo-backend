@@ -61,5 +61,55 @@ namespace BranchOfficeBackend.Tests
                 Assert.Equal(System.Net.HttpStatusCode.Conflict, response.StatusCode);
             }
         }
+
+        [Fact]
+        public async Task ShouldDeleteUserInRepositoryWhenRequestedByManager()
+        {
+            var mock = new Moq.Mock<IUserRepository>();
+            mock.Setup(m => m.DeleteUser(It.IsAny<string>())).Returns(Task.CompletedTask);
+            mock.Setup(m => m.IsValidAsync("ewa@example.com", "pass")).ReturnsAsync(true);
+            mock.Setup(m => m.IsManager("ewa@example.com")).ReturnsAsync(true);
+            using(var testServer = new TestServerBuilder()
+                .WithMock<IUserRepository>(typeof(IUserRepository), mock)
+                .Build())
+            {
+                var client = testServer.CreateClient();
+                client.AddBasicAuthHeader("ewa@example.com", "pass");
+                var response = await client.DeleteAsync("/api/user/ewa@example.com");
+                Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
+            }
+        }
+
+        [Fact]
+        public async Task DeleteUserShouldRespond401WhenNoAuth()
+        {
+            var mock = new Moq.Mock<IUserRepository>();
+            using(var testServer = new TestServerBuilder()
+                .WithMock<IUserRepository>(typeof(IUserRepository), mock)
+                .Build())
+            {
+                var client = testServer.CreateClient();
+                var response = await client.DeleteAsync("/api/user/ewa@example.com");
+                Assert.Equal(System.Net.HttpStatusCode.Unauthorized, response.StatusCode);
+            }
+        }
+
+        [Fact]
+        public async Task DeleteUserShouldRespond403WhenNotAManager()
+        {
+            var mock = new Moq.Mock<IUserRepository>();
+            mock.Setup(m => m.DeleteUser(It.IsAny<string>())).Returns(Task.CompletedTask);
+            mock.Setup(m => m.IsValidAsync("ewa@example.com", "pass")).ReturnsAsync(true);
+            mock.Setup(m => m.IsManager("ewa@example.com")).ReturnsAsync(false);
+            using(var testServer = new TestServerBuilder()
+                .WithMock<IUserRepository>(typeof(IUserRepository), mock)
+                .Build())
+            {
+                var client = testServer.CreateClient();
+                client.AddBasicAuthHeader("ewa@example.com", "pass");
+                var response = await client.DeleteAsync("/api/user/ewa@example.com");
+                Assert.Equal(System.Net.HttpStatusCode.Forbidden, response.StatusCode);
+            }
+        }
     }
 }

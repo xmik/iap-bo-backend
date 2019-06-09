@@ -1,4 +1,6 @@
+using System;
 using System.Diagnostics;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using BranchOfficeBackend;
 using Newtonsoft.Json.Linq;
@@ -32,12 +34,13 @@ namespace BranchOfficeBackend.Tests
             {
                 var client = testServer.CreateClient();
                 var response = await client.GetAsync("/api/employees/list");
-                Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);    
+                Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);
                 var jsonString = await response.Content.ReadAsStringAsync();
                 var items = JArray.Parse(jsonString);
-                Assert.Equal(2, items.Count);                            
+                Assert.Equal(2, items.Count);
             }
         }
+
 
         [Fact]
         public async Task ShouldNotReturnJsonEmployee_WhenNotExists()

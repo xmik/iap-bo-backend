@@ -380,7 +380,7 @@ paths:
       tags:
       - "user"
       summary: "Deletes user"
-      description: "This can only be done by the logged in user."
+      description: "This can only be done by the manager or current user."
       operationId: "deleteUser"
       produces:
       - "application/json"
@@ -473,11 +473,6 @@ definitions:
   ApiResponse:
     type: "object"
     properties:
-      Code:
-        type: "integer"
-        format: "int64"
-      Type:
-        type: "string"
       Message:
         type: "string"
 externalDocs:
