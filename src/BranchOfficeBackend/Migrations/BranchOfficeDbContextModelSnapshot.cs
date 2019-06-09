@@ -44,6 +44,8 @@ namespace BranchOfficeBackend.Migrations
 
                     b.Property<int>("EmployeeId");
 
+                    b.Property<int>("HoursCount");
+
                     b.Property<string>("TimePeriod");
 
                     b.Property<double>("Value");

@@ -71,7 +71,8 @@ namespace BranchOfficeBackend.Tests
                     {"value", 15.0},
                     {"employeeHoursId", 77 },
                     {"timePeriod", "20.1.2019-26.01.2019" },
-                    {"employeeId", 0 }
+                    {"employeeId", 0 },
+                    {"hoursCount", 0}
                 }; 
                 Assert.True(JToken.DeepEquals(expected, actual));                    
             }

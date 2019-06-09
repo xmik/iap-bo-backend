@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BranchOfficeBackend.Migrations
 {
     [DbContext(typeof(BranchOfficeDbContext))]
-    [Migration("20190609155400_InitialCreate")]
+    [Migration("20190609170650_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -45,6 +45,8 @@ namespace BranchOfficeBackend.Migrations
                         .ValueGeneratedOnAdd();
 
                     b.Property<int>("EmployeeId");
+
+                    b.Property<int>("HoursCount");
 
                     b.Property<string>("TimePeriod");
 
