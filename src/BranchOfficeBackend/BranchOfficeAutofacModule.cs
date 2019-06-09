@@ -10,7 +10,8 @@ namespace BranchOfficeBackend
             builder.Register(c =>
                 new BranchOfficeDbContext()
             ).As<BranchOfficeDbContext>().SingleInstance();
-            builder.RegisterType<ConfigurationService>().As<IConfigurationService>();
+            builder.RegisterType<ConfigurationService>().As<IConfigurationService>().
+                As<IConfigurationService>().SingleInstance();
             builder.RegisterType<HQAPIClient>().As<IHQAPIClient>();
             builder.RegisterType<SynchronizatorService>().
                 As<ISynchronizatorService>().SingleInstance();
