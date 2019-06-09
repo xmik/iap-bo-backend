@@ -5,3 +5,4 @@ docker/binaries
 *.dll
 *.pdb
 *.exe
+/BranchOfficeBackend.debug.log

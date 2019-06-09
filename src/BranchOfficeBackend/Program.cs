@@ -1,7 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using log4net;
+using log4net.Config;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 
@@ -75,6 +79,7 @@ namespace BranchOfficeBackend
 
         static void Main(string[] args)
         {
+            ConfigureLogging();
             cts = new CancellationTokenSource();
             Console.CancelKeyPress += Console_CancelKeyPress;
 
@@ -93,5 +98,13 @@ namespace BranchOfficeBackend
 				e.Cancel = true;
 			}
 		}
+
+        public static void ConfigureLogging() {
+            string log4net = "log4net.xml";
+            if(File.Exists(log4net)) 
+                XmlConfigurator.Configure(LogManager.GetRepository(Assembly.GetEntryAssembly()), new System.IO.FileInfo(log4net));
+            else
+                Console.WriteLine("Failed to configure log4net. log4net.xml does not exist in {0}", Environment.CurrentDirectory);
+        }
     }
 }
