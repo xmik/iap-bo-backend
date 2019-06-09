@@ -118,7 +118,7 @@ namespace BranchOfficeBackend.Tests
         public async Task PostOneEHObj_ShouldFail_WhenAddingToDBThrowsException()
         {
             var mockDB = new Moq.Mock<IDataAccessObjectService>();
-            mockDB.Setup(m => m.AddEmployeeHours(Moq.It.IsAny<EmployeeHours>() )).Throws<ArgumentException>();
+            mockDB.Setup(m => m.AddEmployeeHours(Moq.It.IsAny<EmployeeHours>(),false )).Throws<ArgumentException>();
             using(var testServer = new TestServerBuilder()
                 .WithMock<IDataAccessObjectService>(typeof(IDataAccessObjectService), mockDB)
                 .Build())
@@ -129,7 +129,7 @@ namespace BranchOfficeBackend.Tests
                 var response = await client.PostAsync("/api/employee_hours", requestContent);
                 Assert.Equal(System.Net.HttpStatusCode.BadRequest, response.StatusCode);   
             }
-            mockDB.Verify(m => m.AddEmployeeHours(Moq.It.IsAny<EmployeeHours>() ), Moq.Times.Once);
+            mockDB.Verify(m => m.AddEmployeeHours(Moq.It.IsAny<EmployeeHours>(),false ), Moq.Times.Once);
         }
         [Fact]
         public async Task DeleteOneEHObj_ShouldReturn404_WhenNotFound()

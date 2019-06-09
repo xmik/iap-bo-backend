@@ -46,8 +46,7 @@ namespace BranchOfficeBackend
             var selectedByEmployeeHoursId = all.Where(obj => obj.EmployeeHoursId == employeeHoursId);
             return (EmployeeHours)(selectedByEmployeeHoursId.FirstOrDefault());
         }
-
-        public void AddEmployeeHours(EmployeeHours employeeHours)
+        private void VerifyEmployeeHours(EmployeeHours employeeHours)
         {
             int employeeId = employeeHours.EmployeeId;
             if (employeeId == -1)
@@ -61,15 +60,25 @@ namespace BranchOfficeBackend
             {
                 throw new ArgumentException(String.Format("Employee with Id: {0} not found", employeeId));
             }
+        }
 
-            var existingEH = this.GetAllEmployeeHours(employeeId);
-            int maxId = -1;
-            for (int i=0; i<existingEH.Count(); i++)
-            {
-                if (existingEH[i].EmployeeHoursId > maxId)
-                    maxId = existingEH[i].EmployeeHoursId;
+        public void AddEmployeeHours(EmployeeHours employeeHours, bool keepId=false)
+        {
+            VerifyEmployeeHours(employeeHours);
+            EmployeeHours employeeHoursWithId;
+
+            if (keepId) {
+                employeeHoursWithId = new EmployeeHours(employeeHours, employeeHours.EmployeeHoursId);
+            } else {
+                var existingEH = this.GetAllEmployeeHours(employeeHours.EmployeeId);
+                int maxId = -1;
+                for (int i=0; i<existingEH.Count(); i++)
+                {
+                    if (existingEH[i].EmployeeHoursId > maxId)
+                        maxId = existingEH[i].EmployeeHoursId;
+                }
+                employeeHoursWithId = new EmployeeHours(employeeHours, maxId+1);
             }
-            var employeeHoursWithId = new EmployeeHours(employeeHours, maxId+1);
             dbContext.EmployeeHoursCollection.Add(employeeHoursWithId);
             dbContext.SaveChanges();
         }
@@ -82,6 +91,21 @@ namespace BranchOfficeBackend
                 return;
             }
             dbContext.EmployeeHoursCollection.Remove(eh);
+            dbContext.SaveChanges();
+        }
+
+        public void EditEmployeeHours(EmployeeHours employeeHours)
+        {
+            EmployeeHours eh = GetOneEmployeeHours(employeeHours.EmployeeHoursId);
+            if (eh == null)
+            {
+                throw new InvalidOperationException("EmployeeHours object not found");
+            }
+            VerifyEmployeeHours(employeeHours);
+
+            this.DeleteEmployeeHours(employeeHours.EmployeeHoursId);
+            dbContext.SaveChanges();
+            this.AddEmployeeHours(employeeHours,true);
             dbContext.SaveChanges();
         }
     }

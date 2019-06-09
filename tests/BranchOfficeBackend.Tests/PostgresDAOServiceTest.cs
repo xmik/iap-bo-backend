@@ -276,5 +276,68 @@ namespace BranchOfficeBackend.Tests
             Assert.Equal(2, coll.Count);
         }
 
+        [Fact]
+        public async Task EditEmployeeHours_WhenExists()
+        {
+            await dbContext.Employees.AddAsync(new Employee{ Name = "Ola AAA", Email = "aaaa@gmail.com", EmployeeId = 4 });
+            await dbContext.EmployeeHoursCollection.AddAsync(
+                new EmployeeHours{ EmployeeHoursId = 101, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4});
+            await dbContext.EmployeeHoursCollection.AddAsync(
+                new EmployeeHours{ EmployeeHoursId = 102, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4});
+            await dbContext.SaveChangesAsync();
+
+            var dao = new PostgresDataAccessObjectService(dbContext);
+            
+            var newEH = new EmployeeHours{ EmployeeHoursId = 101, Value = 777f, TimePeriod = "02.01.2019_08.01.2022", EmployeeId = 4, HoursCount = 999};            
+            dao.EditEmployeeHours(newEH);
+            var obj = dao.GetOneEmployeeHours(101);
+            Assert.NotNull(obj);
+            Assert.Equal(101, obj.EmployeeHoursId);
+            Assert.Equal(777f, obj.Value);
+            Assert.Equal("02.01.2019_08.01.2022", obj.TimePeriod);
+            Assert.Equal(4, obj.EmployeeId);
+            Assert.Equal(999, obj.HoursCount);
+        }
+
+        [Fact]
+        public async Task EditEmployeeHours_WhenExists_ButNoEmployee()
+        {
+            await dbContext.EmployeeHoursCollection.AddAsync(
+                new EmployeeHours{ EmployeeHoursId = 101, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4});
+            await dbContext.EmployeeHoursCollection.AddAsync(
+                new EmployeeHours{ EmployeeHoursId = 102, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4});
+            await dbContext.SaveChangesAsync();
+
+            var dao = new PostgresDataAccessObjectService(dbContext);            
+            var newEH = new EmployeeHours{ EmployeeHoursId = 101, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4, HoursCount = 9};
+
+            try {
+                dao.EditEmployeeHours(newEH);
+            } catch (Exception e) {
+                Assert.Equal(typeof(ArgumentException), e.GetType());
+                Assert.Equal("Employee with Id: 4 not found", e.Message);
+            }
+        }
+
+        [Fact]
+        public async Task EditEmployeeHours_WhenNotExists()
+        {
+            await dbContext.EmployeeHoursCollection.AddAsync(
+                new EmployeeHours{ EmployeeHoursId = 101, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4});
+            await dbContext.EmployeeHoursCollection.AddAsync(
+                new EmployeeHours{ EmployeeHoursId = 102, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4});
+            await dbContext.SaveChangesAsync();
+
+            var dao = new PostgresDataAccessObjectService(dbContext);            
+            var newEH = new EmployeeHours{ EmployeeHoursId = 666, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4};
+
+            try {
+                dao.EditEmployeeHours(newEH);
+            } catch (Exception e) {
+                Assert.Equal(typeof(InvalidOperationException), e.GetType());
+                Assert.Equal("EmployeeHours object not found", e.Message);
+            }
+        }
+
     }
 }
