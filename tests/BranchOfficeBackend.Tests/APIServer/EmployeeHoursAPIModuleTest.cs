@@ -131,5 +131,54 @@ namespace BranchOfficeBackend.Tests
             }
             mockDB.Verify(m => m.AddEmployeeHours(Moq.It.IsAny<EmployeeHours>() ), Moq.Times.Once);
         }
+        [Fact]
+        public async Task DeleteOneEHObj_ShouldReturn404_WhenNotFound()
+        {
+            var mock = new Moq.Mock<IWebObjectService>();
+            mock.Setup(m => m.GetOneEmployeeHours(77)).Returns(
+                new WebEmployeeHours() { Value = 15, TimePeriod = "20.1.2019-26.01.2019", EmployeeId = 0, Id = 77 }
+            );
+            using(var testServer = new TestServerBuilder()
+                .WithMock<IWebObjectService>(typeof(IWebObjectService), mock)
+                .Build())
+            {
+                var client = testServer.CreateClient();
+                var response = await client.DeleteAsync("/api/employee_hours/1111111111111");
+                Assert.Equal(System.Net.HttpStatusCode.NotFound, response.StatusCode);
+            }
+        }
+        [Fact]
+        public async Task DeleteOneEHObj_ShouldReturn202_WhenFound()
+        {
+            var mock = new Moq.Mock<IWebObjectService>();
+            mock.Setup(m => m.GetOneEmployeeHours(77)).Returns(
+                new WebEmployeeHours() { Value = 15, TimePeriod = "20.1.2019-26.01.2019", EmployeeId = 1, Id = 77 }
+            );
+            using(var testServer = new TestServerBuilder()
+                .WithMock<IWebObjectService>(typeof(IWebObjectService), mock)
+                .Build())
+            {
+                var client = testServer.CreateClient();
+                var response = await client.DeleteAsync("/api/employee_hours/77");
+                Assert.Equal(System.Net.HttpStatusCode.Accepted, response.StatusCode);
+            }
+        }
+        [Fact]
+        public async Task DeleteOneEHObj_ShouldReturn202_WhenFound_RealWebService()
+        {
+            var mock = new Moq.Mock<IDataAccessObjectService>();
+            mock.Setup(m => m.DeleteEmployeeHours(77));
+            mock.Setup(m => m.GetOneEmployeeHours(77)).Returns(
+                    new EmployeeHours{EmployeeId = 1, EmployeeHoursId = 77, HoursCount = 12, TimePeriod = "aa", Value = 100});
+            using(var testServer = new TestServerBuilder()
+                .WithMock<IDataAccessObjectService>(typeof(IDataAccessObjectService), mock)
+                .Build())
+            {
+                var client = testServer.CreateClient();
+                var response = await client.DeleteAsync("/api/employee_hours/77");
+                Assert.Equal(System.Net.HttpStatusCode.Accepted, response.StatusCode);
+            }
+            mock.Verify(x => x.DeleteEmployeeHours(77), Moq.Times.Once);
+        }
     }
 }

@@ -49,5 +49,10 @@ namespace BranchOfficeBackend
             var eh = new EmployeeHours(employeeHours);
             daoService.AddEmployeeHours(eh);
         }
+
+        public void DeleteEmployeeHours(int employeeHoursId)
+        {
+            daoService.DeleteEmployeeHours(employeeHoursId);
+        }
     }
 }

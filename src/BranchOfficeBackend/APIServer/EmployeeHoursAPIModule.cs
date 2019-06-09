@@ -50,6 +50,19 @@ namespace BranchOfficeBackend
                 await res.Negotiate(result.ValidationResult.GetFormattedErrors());
                 return;
             });
+
+            Delete("/api/employee_hours/{employeeHoursId:int}", async(req, res, routeData) => {
+                int id = routeData.As<int>("employeeHoursId");
+                var weh = service.GetOneEmployeeHours(id);
+                if (weh == null)
+                {
+                    res.StatusCode = 404;
+                } else {
+                    res.StatusCode = 202;
+                    service.DeleteEmployeeHours(id);
+                    await res.Negotiate(weh);
+                }
+            });
         }
     }
 }
