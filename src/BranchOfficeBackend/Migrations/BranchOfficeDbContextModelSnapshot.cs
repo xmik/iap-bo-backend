@@ -42,7 +42,7 @@ namespace BranchOfficeBackend.Migrations
                     b.Property<int>("EmployeeHoursId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("EmployeeId");
+                    b.Property<int>("EmployeeId");
 
                     b.Property<string>("TimePeriod");
 
@@ -50,16 +50,7 @@ namespace BranchOfficeBackend.Migrations
 
                     b.HasKey("EmployeeHoursId");
 
-                    b.HasIndex("EmployeeId");
-
                     b.ToTable("EmployeeHoursCollection");
-                });
-
-            modelBuilder.Entity("BranchOfficeBackend.EmployeeHours", b =>
-                {
-                    b.HasOne("BranchOfficeBackend.Employee", "Employee")
-                        .WithMany()
-                        .HasForeignKey("EmployeeId");
                 });
 #pragma warning restore 612, 618
         }

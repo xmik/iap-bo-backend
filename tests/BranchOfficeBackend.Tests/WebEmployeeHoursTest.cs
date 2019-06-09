@@ -8,12 +8,9 @@ namespace BranchOfficeBackend.Tests
         [Fact]
         public void TransformationTest()
         {
-            var emp = new Employee();
-            emp.Name = "Jan K";
-            emp.EmployeeId = 1;
             var eh = new EmployeeHours();
             eh.EmployeeHoursId = 99;
-            eh.Employee = emp;
+            eh.EmployeeId = 1;
             eh.Value = 600;
             eh.TimePeriod = "2019-1-20_2019-1-26";
 

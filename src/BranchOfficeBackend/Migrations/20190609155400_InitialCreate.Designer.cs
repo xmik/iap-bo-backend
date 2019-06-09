@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BranchOfficeBackend.Migrations
 {
     [DbContext(typeof(BranchOfficeDbContext))]
-    [Migration("20190609150702_InitialCreate")]
+    [Migration("20190609155400_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -44,7 +44,7 @@ namespace BranchOfficeBackend.Migrations
                     b.Property<int>("EmployeeHoursId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int?>("EmployeeId");
+                    b.Property<int>("EmployeeId");
 
                     b.Property<string>("TimePeriod");
 
@@ -52,16 +52,7 @@ namespace BranchOfficeBackend.Migrations
 
                     b.HasKey("EmployeeHoursId");
 
-                    b.HasIndex("EmployeeId");
-
                     b.ToTable("EmployeeHoursCollection");
-                });
-
-            modelBuilder.Entity("BranchOfficeBackend.EmployeeHours", b =>
-                {
-                    b.HasOne("BranchOfficeBackend.Employee", "Employee")
-                        .WithMany()
-                        .HasForeignKey("EmployeeId");
                 });
 #pragma warning restore 612, 618
         }

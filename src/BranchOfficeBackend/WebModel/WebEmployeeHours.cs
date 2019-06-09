@@ -16,7 +16,7 @@ namespace BranchOfficeBackend
             this.Value = e.Value;
             this.TimePeriod = e.TimePeriod.ToString();
             this.EmployeeHoursId = e.EmployeeHoursId;
-            this.EmployeeId = e.Employee.EmployeeId;
+            this.EmployeeId = e.EmployeeId;
         }
 
         public double Value { get; set; }

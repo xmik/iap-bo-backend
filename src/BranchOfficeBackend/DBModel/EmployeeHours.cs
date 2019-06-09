@@ -12,12 +12,12 @@ namespace BranchOfficeBackend
         public double Value { get; set; }
         public string TimePeriod { get; set; }
 
-        public Employee Employee { get; set; }
+        public int EmployeeId { get; set; }
 
         public override string ToString()
         {
             return String.Format("Id: {0}, Value: {1}, TimePeriod: {2}, EmployeeId {3}",
-                this.EmployeeHoursId, this.Value, this.TimePeriod, this.Employee.EmployeeId);
+                this.EmployeeHoursId, this.Value, this.TimePeriod, this.EmployeeId);
         }
     }
 }

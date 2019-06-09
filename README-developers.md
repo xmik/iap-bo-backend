@@ -31,6 +31,7 @@ When you change db schema (e.g. add a column to a table), destroy the current db
 
 then, create/update db schema:
 ```
+rm -rf Migrations-old
 mv src/BranchOfficeBackend/Migrations/ Migrations-old
 dotnet ef dbcontext info --startup-project=src/BranchOfficeBackend/ --project=src/BranchOfficeBackend/
 dotnet ef migrations add InitialCreate --startup-project=src/BranchOfficeBackend/ --project=src/BranchOfficeBackend/
