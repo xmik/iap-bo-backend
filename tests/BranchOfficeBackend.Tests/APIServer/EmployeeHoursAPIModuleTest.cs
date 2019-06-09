@@ -1,4 +1,7 @@
+using System;
 using System.Diagnostics;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using BranchOfficeBackend;
 using Newtonsoft.Json.Linq;
@@ -92,6 +95,41 @@ namespace BranchOfficeBackend.Tests
                 var response = await client.GetAsync("/api/employee_hours/1111111111111");
                 Assert.Equal(System.Net.HttpStatusCode.NotFound, response.StatusCode);
             }
+        }
+        [Fact]
+        public async Task PostOneEHObj_ShouldSucceed_UnitTest()
+        {
+            var mock = new Moq.Mock<IWebObjectService>();
+            mock.Setup(m => m.AddEmployeeHours(Moq.It.IsAny<WebEmployeeHours>()));
+            using(var testServer = new TestServerBuilder()
+                .WithMock<IWebObjectService>(typeof(IWebObjectService), mock)
+                .Build())
+            {
+                var client = testServer.CreateClient();
+                var myJson = "{ 'employeeId': 33 }";
+                HttpContent requestContent = new StringContent(myJson, Encoding.UTF8, "application/json");
+                var response = await client.PostAsync("/api/employee_hours", requestContent);
+                Assert.Equal(System.Net.HttpStatusCode.Created, response.StatusCode);   
+            }
+            mock.Verify(m => m.AddEmployeeHours(Moq.It.IsAny<WebEmployeeHours>() ), Moq.Times.Once);
+        }
+
+        [Fact]
+        public async Task PostOneEHObj_ShouldFail_WhenAddingToDBThrowsException()
+        {
+            var mockDB = new Moq.Mock<IDataAccessObjectService>();
+            mockDB.Setup(m => m.AddEmployeeHours(Moq.It.IsAny<EmployeeHours>() )).Throws<ArgumentException>();
+            using(var testServer = new TestServerBuilder()
+                .WithMock<IDataAccessObjectService>(typeof(IDataAccessObjectService), mockDB)
+                .Build())
+            {
+                var client = testServer.CreateClient();
+                var myJson = "{ 'employeeId': 33 }";
+                HttpContent requestContent = new StringContent(myJson, Encoding.UTF8, "application/json");
+                var response = await client.PostAsync("/api/employee_hours", requestContent);
+                Assert.Equal(System.Net.HttpStatusCode.BadRequest, response.StatusCode);   
+            }
+            mockDB.Verify(m => m.AddEmployeeHours(Moq.It.IsAny<EmployeeHours>() ), Moq.Times.Once);
         }
     }
 }
