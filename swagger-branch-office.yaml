@@ -425,11 +425,11 @@ definitions:
       Id:
         type: "integer"
         format: "int64"
-        default: 0
+        default: -1
       Value:
         type: "number"
         format: "float"
-        default: 0
+        default: -1
       TimePeriod:
         type: "string"
         format: "string"
@@ -437,11 +437,11 @@ definitions:
       EmployeeId:
         type: "integer"
         format: "int64"
-        default: 0
+        default: -1
       HoursCount:
         type: "integer"
         format: "int64"
-        default: 0
+        default: -1
   Salary:
     type: "object"
     properties:
