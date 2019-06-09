@@ -38,7 +38,6 @@ paths:
       description: "Invokes a synchronization with a HQ server and waits for it to be finished"
       operationId: "postSynchronize"
       produces:
-      - "application/xml"
       - "application/json"
       responses:
         200:
@@ -53,7 +52,6 @@ paths:
       description: "Gets a collection of Employees objects"
       operationId: "getEmployees"
       produces:
-      - "application/xml"
       - "application/json"
       responses:
         200:
@@ -71,9 +69,7 @@ paths:
       operationId: "getEmployee"
       consumes:
       - "application/json"
-      - "application/xml"
       produces:
-      - "application/xml"
       - "application/json"
       parameters:
       - name: "employeeId"
@@ -97,7 +93,6 @@ paths:
       description: "Gets a collection of EmployeeHours objects for an Employee"
       operationId: "findEmployeeHoursCollectionByEmployee"
       produces:
-      - "application/xml"
       - "application/json"
       parameters:
       - name: "employeeId"
@@ -124,9 +119,7 @@ paths:
       operationId: "addEmployeeHours"
       consumes:
       - "application/json"
-      - "application/xml"
       produces:
-      - "application/xml"
       - "application/json"
       parameters:
       - name: "employeeId"
@@ -167,9 +160,7 @@ paths:
       operationId: "getEmployeeHours"
       consumes:
       - "application/json"
-      - "application/xml"
       produces:
-      - "application/xml"
       - "application/json"
       parameters:
       - name: "employeeHoursId"
@@ -196,7 +187,6 @@ paths:
       description: ""
       operationId: "deleteEmployeeHours"
       produces:
-      - "application/xml"
       - "application/json"
       parameters:
       - name: "employeeHoursId"
@@ -222,9 +212,7 @@ paths:
       operationId: "updateEmployeeHours"
       consumes:
       - "application/json"
-      - "application/xml"
       produces:
-      - "application/xml"
       - "application/json"
       parameters:
       - name: "employeeHoursId"
@@ -258,7 +246,6 @@ paths:
       description: "Gets a collection of Salary objects for an Employee"
       operationId: "findSalaryCollectionByEmployee"
       produces:
-      - "application/xml"
       - "application/json"
       parameters:
       - name: "employeeId"
@@ -288,7 +275,6 @@ paths:
       description: "Creates a new user"
       operationId: "createUser"
       produces:
-      - "application/xml"
       - "application/json"
       parameters:
       - in: "path"
@@ -311,7 +297,6 @@ paths:
       description: ""
       operationId: "loginUser"
       produces:
-      - "application/xml"
       - "application/json"
       parameters:
       - name: "username"
@@ -348,7 +333,6 @@ paths:
       description: ""
       operationId: "logoutUser"
       produces:
-      - "application/xml"
       - "application/json"
       parameters: []
       responses:
@@ -366,7 +350,6 @@ paths:
       description: "This can only be done by the logged in user."
       operationId: "updateUser"
       produces:
-      - "application/xml"
       - "application/json"
       parameters:
       - name: "username"
@@ -399,7 +382,6 @@ paths:
       description: "This can only be done by the logged in user."
       operationId: "deleteUser"
       produces:
-      - "application/xml"
       - "application/json"
       parameters:
       - name: "username"
@@ -436,8 +418,6 @@ definitions:
       isManager:
         type: "boolean"
         default: false
-    xml:
-      name: "Employee"
   EmployeeHours:
     type: "object"
     properties:
@@ -457,8 +437,6 @@ definitions:
         type: "integer"
         format: "int64"
         default: 1
-    xml:
-      name: "EmployeeHours"
   Salary:
     type: "object"
     properties:
@@ -478,8 +456,6 @@ definitions:
         type: "integer"
         format: "int64"
         default: 1
-    xml:
-      name: "Employee"
   UserCreatedResponse:
     type: "object"
     properties:
