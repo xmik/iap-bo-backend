@@ -95,5 +95,114 @@ namespace BranchOfficeBackend.Tests
             var coll = dao.GetAllEmployeeHours(0);
             Assert.Single(coll);
         }
+
+        [Fact]
+        public async Task AddEmployeeHours_WhenNotEmptyTable()
+        {
+            await dbContext.Employees.AddAsync(new Employee{ Name = "Ola AAA", Email = "aaaa@gmail.com", EmployeeId = 4 });
+            await dbContext.EmployeeHoursCollection.AddAsync(
+                new EmployeeHours{ EmployeeHoursId = 100, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4});
+            await dbContext.SaveChangesAsync();
+
+            var eh = new EmployeeHours();
+            eh.EmployeeId = 4;
+            eh.HoursCount = 90;
+            eh.Value = 90;
+            eh.TimePeriod = "02.03.2019_08.03.2019";
+
+            var dao = new PostgresDataAccessObjectService(dbContext);
+            dao.AddEmployeeHours(eh);
+            
+            var coll = dao.GetAllEmployeeHours(4);
+            Assert.Equal(2, coll.Count);
+            Assert.Equal(100f, coll[0].Value);
+            Assert.Equal(90f, coll[1].Value);
+            Assert.Equal(100, coll[0].EmployeeHoursId);
+            Assert.Equal(101, coll[1].EmployeeHoursId);
+        }
+
+        [Fact]
+        public async Task AddEmployeeHours_WhenEmptyTable()
+        {
+            await dbContext.Employees.AddAsync(new Employee{ Name = "Ola AAA", Email = "aaaa@gmail.com", EmployeeId = 4 });
+            await dbContext.SaveChangesAsync();
+
+            var eh = new EmployeeHours();
+            eh.EmployeeId = 4;
+            eh.HoursCount = 90;
+            eh.Value = 90;
+            eh.TimePeriod = "02.03.2019_08.03.2019";
+
+            var dao = new PostgresDataAccessObjectService(dbContext);
+            dao.AddEmployeeHours(eh);
+            
+            var coll = dao.GetAllEmployeeHours(4);
+            Assert.Single(coll);
+            Assert.Equal(90f, coll[0].Value);
+            // apparently we must start from 1
+            Assert.Equal(1, coll[0].EmployeeHoursId);
+        }
+
+        [Fact]
+        public async Task AddEmployeeHours_WhenNoSuchEmployee()
+        {
+            await dbContext.Employees.AddAsync(new Employee{ Name = "Ola AAA", Email = "aaaa@gmail.com", EmployeeId = 9 });
+            await dbContext.SaveChangesAsync();
+
+            var eh = new EmployeeHours();
+            eh.EmployeeId = 4;
+            eh.HoursCount = 90;
+            eh.Value = 90;
+            eh.TimePeriod = "02.03.2019_08.03.2019";
+
+            var dao = new PostgresDataAccessObjectService(dbContext);
+            try {
+                dao.AddEmployeeHours(eh);
+            } catch (Exception e) {
+                Assert.Equal(typeof(ArgumentException), e.GetType());
+                Assert.Equal("Employee with Id: 4 not found", e.Message);
+            }
+        }
+
+        [Fact]
+        public async Task AddEmployeeHours_WhenEmployeeIdNotSet()
+        {
+            await dbContext.Employees.AddAsync(new Employee{ Name = "Ola AAA", Email = "aaaa@gmail.com", EmployeeId = 9 });
+            await dbContext.SaveChangesAsync();
+
+            var eh = new EmployeeHours();
+            eh.HoursCount = 90;
+            eh.Value = 90;
+            eh.TimePeriod = "02.03.2019_08.03.2019";
+
+            var dao = new PostgresDataAccessObjectService(dbContext);
+            try {
+                dao.AddEmployeeHours(eh);
+            } catch (Exception e) {
+                Assert.Equal(typeof(ArgumentException), e.GetType());
+                Assert.Equal("EmployeeId was not set", e.Message);
+            }
+        }
+
+        [Fact]
+        public async Task AddEmployeeHours_WhenHoursCountInvalid()
+        {
+            await dbContext.Employees.AddAsync(new Employee{ Name = "Ola AAA", Email = "aaaa@gmail.com", EmployeeId = 9 });
+            await dbContext.SaveChangesAsync();
+
+            var eh = new EmployeeHours();
+            eh.EmployeeId = 4;
+            eh.HoursCount = -90;
+            eh.Value = 90;
+            eh.TimePeriod = "02.03.2019_08.03.2019";
+
+            var dao = new PostgresDataAccessObjectService(dbContext);
+            try {
+                dao.AddEmployeeHours(eh);
+            } catch (Exception e) {
+                Assert.Equal(typeof(ArgumentException), e.GetType());
+                Assert.Equal("HoursCount < 0", e.Message);
+            }
+        }
     }
 }

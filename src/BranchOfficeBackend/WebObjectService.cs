@@ -44,5 +44,10 @@ namespace BranchOfficeBackend
             var weh = daoService.GetOneEmployeeHours(employeeHoursId);
             return new WebEmployeeHours(weh);
         }
+        public void AddEmployeeHours(WebEmployeeHours employeeHours)
+        {
+            var eh = new EmployeeHours(employeeHours);
+            daoService.AddEmployeeHours(eh);
+        }
     }
 }

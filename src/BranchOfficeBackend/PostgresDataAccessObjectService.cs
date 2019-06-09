@@ -46,5 +46,32 @@ namespace BranchOfficeBackend
             var selectedByEmployeeHoursId = all.Where(obj => obj.EmployeeHoursId == employeeHoursId);
             return selectedByEmployeeHoursId.ToList().First();
         }
+
+        public void AddEmployeeHours(EmployeeHours employeeHours)
+        {
+            int employeeId = employeeHours.EmployeeId;
+            if (employeeId == -1)
+                throw new ArgumentException("EmployeeId was not set");
+            if (employeeHours.HoursCount < 0)
+                throw new ArgumentException("HoursCount < 0");
+
+            var existingEmployees = this.GetAllEmployees();
+            var employeeWithId = existingEmployees.Where(e => e.EmployeeId == employeeId).ToList();
+            if (employeeWithId.Count() == 0)
+            {
+                throw new ArgumentException(String.Format("Employee with Id: {0} not found", employeeId));
+            }
+
+            var existingEH = this.GetAllEmployeeHours(employeeId);
+            int maxId = -1;
+            for (int i=0; i<existingEH.Count(); i++)
+            {
+                if (existingEH[i].EmployeeHoursId > maxId)
+                    maxId = existingEH[i].EmployeeHoursId;
+            }
+            var employeeHoursWithId = new EmployeeHours(employeeHours, maxId+1);
+            dbContext.EmployeeHoursCollection.Add(employeeHoursWithId);
+            dbContext.SaveChanges();
+        }
     }
 }
