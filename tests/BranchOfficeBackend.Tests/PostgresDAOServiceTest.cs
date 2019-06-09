@@ -31,7 +31,7 @@ namespace BranchOfficeBackend.Tests
         }
 
         [Fact]
-        public void ShouldReturnEmptyListWhenDBIsEmpty()
+        public void GetAllEmployees_ShouldReturnEmptyListWhenDBIsEmpty()
         {
             var dao = new PostgresDataAccessObjectService(dbContext);
             var employees = dao.GetAllEmployees();
@@ -39,7 +39,7 @@ namespace BranchOfficeBackend.Tests
         }
 
         [Fact]
-        public async Task ShouldReturnAllEmployeesWhenSomeInDB()
+        public async Task GetAllEmployees_ShouldReturnAllEmployeesWhenSomeInDB()
         {
             await dbContext.Employees.AddAsync(new Employee{ Name = "Ola Dwa", Email = "ola2@gmail.com" });
             await dbContext.SaveChangesAsync();
@@ -74,6 +74,26 @@ namespace BranchOfficeBackend.Tests
             var dao = new PostgresDataAccessObjectService(dbContext);
             var employee = dao.GetEmployee(55);
             Assert.Null(employee);
+        }
+
+        [Fact]
+        public void GetAllEmployeeHours_ShouldReturnEmptyListWhenDBIsEmpty()
+        {
+            var dao = new PostgresDataAccessObjectService(dbContext);
+            var coll = dao.GetAllEmployeeHours(0);
+            Assert.Empty(coll);
+        }
+
+        [Fact]
+        public async Task GetAllEmployeeHours_ShouldReturnAllEmployeesHoursWhenSomeInDB()
+        {
+            await dbContext.EmployeeHoursCollection.AddAsync(
+                new EmployeeHours{ EmployeeHoursId = 100, Value = 100, TimePeriod = "2019-1-2_2019-1-8", EmployeeId = 0});
+            await dbContext.SaveChangesAsync();
+
+            var dao = new PostgresDataAccessObjectService(dbContext);
+            var coll = dao.GetAllEmployeeHours(0);
+            Assert.Single(coll);
         }
     }
 }
