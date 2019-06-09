@@ -44,7 +44,7 @@ namespace BranchOfficeBackend
         {
             var all = dbContext.EmployeeHoursCollection.ToList();
             var selectedByEmployeeHoursId = all.Where(obj => obj.EmployeeHoursId == employeeHoursId);
-            return selectedByEmployeeHoursId.ToList().First();
+            return (EmployeeHours)(selectedByEmployeeHoursId.FirstOrDefault());
         }
 
         public void AddEmployeeHours(EmployeeHours employeeHours)
@@ -71,6 +71,17 @@ namespace BranchOfficeBackend
             }
             var employeeHoursWithId = new EmployeeHours(employeeHours, maxId+1);
             dbContext.EmployeeHoursCollection.Add(employeeHoursWithId);
+            dbContext.SaveChanges();
+        }
+
+        public void DeleteEmployeeHours(int employeeHoursId)
+        {
+            EmployeeHours eh = GetOneEmployeeHours(employeeHoursId);
+            if (eh == null)
+            {
+                return;
+            }
+            dbContext.EmployeeHoursCollection.Remove(eh);
             dbContext.SaveChanges();
         }
     }

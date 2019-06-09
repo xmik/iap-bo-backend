@@ -97,6 +97,35 @@ namespace BranchOfficeBackend.Tests
         }
 
         [Fact]
+        public async Task GetOneEmployeeHours_ShouldReturnNull_IfNoEmployeeHours()
+        {
+            await dbContext.EmployeeHoursCollection.AddAsync(
+                new EmployeeHours{ EmployeeHoursId = 101, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4});
+            await dbContext.EmployeeHoursCollection.AddAsync(
+                new EmployeeHours{ EmployeeHoursId = 102, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4});
+            await dbContext.SaveChangesAsync();
+
+            var dao = new PostgresDataAccessObjectService(dbContext);
+            var obj = dao.GetOneEmployeeHours(55);
+            Assert.Null(obj);
+        }
+
+        [Fact]
+        public async Task GetOneEmployeeHours_ShouldReturnObj_IfExists()
+        {
+            await dbContext.EmployeeHoursCollection.AddAsync(
+                new EmployeeHours{ EmployeeHoursId = 101, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4});
+            await dbContext.EmployeeHoursCollection.AddAsync(
+                new EmployeeHours{ EmployeeHoursId = 102, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4});
+            await dbContext.SaveChangesAsync();
+
+            var dao = new PostgresDataAccessObjectService(dbContext);
+            var obj = dao.GetOneEmployeeHours(101);
+            Assert.NotNull(obj);
+            Assert.Equal(101, obj.EmployeeHoursId);
+        }
+
+        [Fact]
         public async Task AddEmployeeHours_WhenNotEmptyTable()
         {
             await dbContext.Employees.AddAsync(new Employee{ Name = "Ola AAA", Email = "aaaa@gmail.com", EmployeeId = 4 });
@@ -204,5 +233,48 @@ namespace BranchOfficeBackend.Tests
                 Assert.Equal("HoursCount < 0", e.Message);
             }
         }
+
+        [Fact]
+        public async Task DeleteEmployeeHours_WhenExists()
+        {
+            await dbContext.EmployeeHoursCollection.AddAsync(
+                new EmployeeHours{ EmployeeHoursId = 100, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4});
+            await dbContext.EmployeeHoursCollection.AddAsync(
+                new EmployeeHours{ EmployeeHoursId = 101, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4});
+            await dbContext.EmployeeHoursCollection.AddAsync(
+                new EmployeeHours{ EmployeeHoursId = 102, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4});
+            await dbContext.SaveChangesAsync();
+
+            var dao = new PostgresDataAccessObjectService(dbContext);
+
+            var coll = dao.GetAllEmployeeHours(4);
+            Assert.Equal(3, coll.Count);
+            
+            dao.DeleteEmployeeHours(100);
+            
+            coll = dao.GetAllEmployeeHours(4);
+            Assert.Equal(2, coll.Count);
+        }
+
+        [Fact]
+        public async Task DeleteEmployeeHours_WhenNotExists()
+        {
+            await dbContext.EmployeeHoursCollection.AddAsync(
+                new EmployeeHours{ EmployeeHoursId = 101, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4});
+            await dbContext.EmployeeHoursCollection.AddAsync(
+                new EmployeeHours{ EmployeeHoursId = 102, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4});
+            await dbContext.SaveChangesAsync();
+
+            var dao = new PostgresDataAccessObjectService(dbContext);
+            
+            var coll = dao.GetAllEmployeeHours(4);
+            Assert.Equal(2, coll.Count);
+            
+            dao.DeleteEmployeeHours(100);
+            
+            coll = dao.GetAllEmployeeHours(4);
+            Assert.Equal(2, coll.Count);
+        }
+
     }
 }
