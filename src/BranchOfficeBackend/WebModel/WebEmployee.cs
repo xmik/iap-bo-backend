@@ -18,7 +18,6 @@ namespace BranchOfficeBackend
             this.Email = e.Email;
             this.ID = e.EmployeeId;
             this.IsManager = e.IsManager;
-            // TODo more fiels
         }
 
         public string Name { get; set; }
