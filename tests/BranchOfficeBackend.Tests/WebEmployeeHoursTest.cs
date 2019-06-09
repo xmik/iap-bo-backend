@@ -12,13 +12,13 @@ namespace BranchOfficeBackend.Tests
             eh.EmployeeHoursId = 99;
             eh.EmployeeId = 1;
             eh.Value = 600;
-            eh.TimePeriod = "2019-1-20_2019-1-26";
+            eh.TimePeriod = "20.1.2019-26.01.2019";
 
             var webEh = new WebEmployeeHours(eh);
             Assert.Equal(99, webEh.EmployeeHoursId);
             Assert.Equal(1, webEh.EmployeeId);
             Assert.Equal(600, webEh.Value);
-            Assert.Equal("2019-1-20_2019-1-26", webEh.TimePeriod);
+            Assert.Equal("20.1.2019-26.01.2019", webEh.TimePeriod);
         }
     }
 }

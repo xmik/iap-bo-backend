@@ -88,7 +88,7 @@ namespace BranchOfficeBackend.Tests
         public async Task GetAllEmployeeHours_ShouldReturnAllEmployeesHoursWhenSomeInDB()
         {
             await dbContext.EmployeeHoursCollection.AddAsync(
-                new EmployeeHours{ EmployeeHoursId = 100, Value = 100, TimePeriod = "2019-1-2_2019-1-8", EmployeeId = 0});
+                new EmployeeHours{ EmployeeHoursId = 100, Value = 100, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 0});
             await dbContext.SaveChangesAsync();
 
             var dao = new PostgresDataAccessObjectService(dbContext);
