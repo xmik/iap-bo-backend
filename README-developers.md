@@ -24,8 +24,14 @@ Run integration tests with [Bats](https://github.com/sstephenson/bats):
 
 ### DB
 When you change db schema (e.g. add a column to a table), destroy the current db
- docker container, start new, an then create/update db schema:
+ docker container, start new (exit from dojo and enter into new), an then:
 ```
+./tasks build
+```
+
+then, create/update db schema:
+```
+mv src/BranchOfficeBackend/Migrations/ Migrations-old
 dotnet ef dbcontext info --startup-project=src/BranchOfficeBackend/ --project=src/BranchOfficeBackend/
 dotnet ef migrations add InitialCreate --startup-project=src/BranchOfficeBackend/ --project=src/BranchOfficeBackend/
 dotnet ef database update --startup-project=src/BranchOfficeBackend/ --project=src/BranchOfficeBackend/
@@ -42,6 +48,14 @@ postgres=# \connect postgres
 postgres=# \dt
 # no tables
 ```
+
+After running the C# application:
+```
+./tasks build
+./tasks run
+```
+
+TODO: show some data afterwards
 
 ### Install Bats on Linux
 ```

@@ -44,7 +44,7 @@ namespace BranchOfficeBackend.Migrations
 
                     b.Property<int?>("EmployeeId");
 
-                    b.Property<TimeSpan>("TimePeriod");
+                    b.Property<string>("TimePeriod");
 
                     b.Property<double>("Value");
 

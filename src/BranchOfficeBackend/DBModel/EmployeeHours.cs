@@ -1,12 +1,16 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace BranchOfficeBackend
 {
      public class EmployeeHours
     {
+        // The entity type 'DateTimeRange' requires a primary key to be defined.
+        // https://stackoverflow.com/questions/48225989/the-entity-type-requires-a-primary-key-to-be-defined
+        [Key]
         public int EmployeeHoursId { get; set; }
         public double Value { get; set; }
-        public TimeSpan TimePeriod { get; set; }
+        public string TimePeriod { get; set; }
 
         public Employee Employee { get; set; }
 

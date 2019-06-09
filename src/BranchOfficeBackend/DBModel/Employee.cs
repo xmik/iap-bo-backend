@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace BranchOfficeBackend
 {
@@ -7,6 +8,8 @@ namespace BranchOfficeBackend
     /// </summary>
     public class Employee
     {
+        // https://stackoverflow.com/questions/48225989/the-entity-type-requires-a-primary-key-to-be-defined
+        [Key]
         public int EmployeeId { get; set; }
         public string Name { get; set; }
         // needed for authentication

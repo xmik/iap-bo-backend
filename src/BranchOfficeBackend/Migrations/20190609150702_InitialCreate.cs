@@ -31,7 +31,7 @@ namespace BranchOfficeBackend.Migrations
                     EmployeeHoursId = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     Value = table.Column<double>(nullable: false),
-                    TimePeriod = table.Column<TimeSpan>(nullable: false),
+                    TimePeriod = table.Column<string>(nullable: true),
                     EmployeeId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
