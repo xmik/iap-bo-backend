@@ -58,9 +58,15 @@ namespace BranchOfficeBackend
             dbContext.SaveChanges();
         }
 
-        public void RemoveEmployees(int id)
+        public void DeleteEmployee(int employeeId)
         {
-            throw new NotImplementedException();
+            Employee myobj = GetEmployee(employeeId);
+            if (myobj == null)
+            {
+                return;
+            }
+            dbContext.Employees.Remove(myobj);
+            dbContext.SaveChanges();
         }
 
         public List<EmployeeHours> GetAllEmployeeHours(int employeeId)

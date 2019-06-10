@@ -10,7 +10,7 @@ namespace BranchOfficeBackend
         List<Employee> GetAllEmployees();
         Employee GetEmployee(int id);
         void AddEmployee(Employee employee, bool keepId=false);
-        void RemoveEmployees(int id);
+        void DeleteEmployee(int employeeId);
 
         List<EmployeeHours> GetAllEmployeeHours(int employeeId);
         EmployeeHours GetOneEmployeeHours(int employeeHoursId);

@@ -427,5 +427,42 @@ namespace BranchOfficeBackend.Tests
             }
         }
 
+        [Fact]
+        public async Task DeleteEmployee_WhenExists()
+        {
+            await dbContext.Employees.AddAsync(new Employee{ Name = "Ola AAA", Email = "aaaa@gmail.com", EmployeeId = 4 });
+            await dbContext.Employees.AddAsync(new Employee{ Name = "Ola 2", Email = "22@gmail.com", EmployeeId = 5 });
+            await dbContext.SaveChangesAsync();
+
+            var dao = new PostgresDataAccessObjectService(dbContext);
+
+            var coll = dao.GetAllEmployees();
+            Assert.Equal(2, coll.Count);
+            
+            dao.DeleteEmployee(4);
+            
+            coll = dao.GetAllEmployees();
+            Assert.Equal(1, coll.Count);
+            Assert.Equal(5, coll[0].EmployeeId);
+        }
+
+        [Fact]
+        public async Task DeleteEmployee_WhenNotExists()
+        {
+            await dbContext.Employees.AddAsync(new Employee{ Name = "Ola AAA", Email = "aaaa@gmail.com", EmployeeId = 4 });
+            await dbContext.Employees.AddAsync(new Employee{ Name = "Ola 2", Email = "22@gmail.com", EmployeeId = 5 });
+            await dbContext.SaveChangesAsync();
+
+            var dao = new PostgresDataAccessObjectService(dbContext);
+
+            var coll = dao.GetAllEmployees();
+            Assert.Equal(2, coll.Count);
+            
+            dao.DeleteEmployee(477);
+            
+            coll = dao.GetAllEmployees();
+            Assert.Equal(2, coll.Count);
+        }
+
     }
 }
