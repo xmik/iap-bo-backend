@@ -155,5 +155,35 @@ namespace BranchOfficeBackend.Tests
                 Assert.Equal(System.Net.HttpStatusCode.NotFound, response.StatusCode);    
             }
         }
+
+        [Fact]
+        public async Task PostEmployee_EmailNotSet()
+        {
+            using(var testServer = new TestServerBuilder()
+                .Build())
+            {
+                var client = testServer.CreateClient();
+                var myJson = "{ 'employeeId': 33 }";
+                HttpContent requestContent = new StringContent(myJson, Encoding.UTF8, "application/json");
+                var response = await client.PostAsync("/api/employees", requestContent);
+                Assert.Equal(System.Net.HttpStatusCode.BadRequest, response.StatusCode);    
+                var jsonString = await response.Content.ReadAsStringAsync();
+                Assert.Equal("Problem when adding the object to database: Email was empty", jsonString);  
+            }
+        }
+
+        [Fact]
+        public async Task PostEmployee_Success()
+        {
+            using(var testServer = new TestServerBuilder()
+                .Build())
+            {
+                var client = testServer.CreateClient();
+                var myJson = "{ 'email': '123@gmail.com', 'name': 'ewa' }";
+                HttpContent requestContent = new StringContent(myJson, Encoding.UTF8, "application/json");
+                var response = await client.PostAsync("/api/employees", requestContent);
+                Assert.Equal(System.Net.HttpStatusCode.Created, response.StatusCode);    
+            }
+        }
     }
 }

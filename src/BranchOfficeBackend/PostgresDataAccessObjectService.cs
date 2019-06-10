@@ -31,9 +31,13 @@ namespace BranchOfficeBackend
 
         private void VerifyEmployee(Employee emp)
         {
-            if (emp.Email == "")
+            if (emp.Email == null || emp.Email == "")
             {
                 throw new ArgumentException("Email was empty");
+            }
+            if (emp.Name == null || emp.Name == "")
+            {
+                throw new ArgumentException("Name was empty");
             }
         }
         public void AddEmployee(Employee employee, bool keepId=false)

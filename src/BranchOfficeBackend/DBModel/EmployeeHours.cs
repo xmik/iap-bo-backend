@@ -43,7 +43,7 @@ namespace BranchOfficeBackend
 
         public override string ToString()
         {
-            return String.Format("Id: {0}, Value: {1}, TimePeriod: {2}, EmployeeId {3}",
+            return String.Format("Id: {0}, Value: {1}, TimePeriod: {2}, EmployeeId: {3}",
                 this.EmployeeHoursId, this.Value, this.TimePeriod, this.EmployeeId);
         }
     }

@@ -3,6 +3,7 @@ using Carter;
 using Carter.ModelBinding;
 using Carter.Request;
 using Carter.Response;
+using Microsoft.AspNetCore.Http;
 
 namespace BranchOfficeBackend
 {
@@ -36,6 +37,24 @@ namespace BranchOfficeBackend
                     // generates suitable response, by default in JSON
                     await res.Negotiate(emp);
                 }
+            });
+
+            Post("/api/employees", async(req, res, routeData) => {
+                _log.Debug("Received HTTP request: POST /api/employees");
+                var result = req.BindAndValidate<WebEmployee>();
+                _log.DebugFormat("Employee object parsed from user: {0}", result.Data);
+
+                try {
+                    service.AddEmployee(result.Data);
+                } catch (ArgumentException ex) {
+                    res.StatusCode = 400;
+                    await res.WriteAsync(String.Format("Problem when adding the object to database: {0}", ex.Message));
+                    return;
+                }
+                
+                res.StatusCode = 201;
+                await res.Negotiate(result.ValidationResult.GetFormattedErrors());
+                return;
             });
         }
     }

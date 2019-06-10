@@ -41,6 +41,7 @@ namespace BranchOfficeBackend
             Post("/api/employee_hours", async(req, res, routeData) => {
                 _log.Debug("Received HTTP request: POST /api/employee_hours");
                 var result = req.BindAndValidate<WebEmployeeHours>();
+                _log.DebugFormat("EmployeeHours object parsed from user: {0}", result.Data);
 
                 try {
                     service.AddEmployeeHours(result.Data);

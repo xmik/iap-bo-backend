@@ -1,3 +1,5 @@
+using System;
+
 namespace BranchOfficeBackend
 {
     /// <summary>
@@ -24,5 +26,11 @@ namespace BranchOfficeBackend
         public string Email { get; set; }
         public int ID { get; set; }
         public bool IsManager { get; set; }
+
+        public override string ToString()
+        {
+            return String.Format("Id: {0}, Name: {1}, Email: {2}, IsManager: {3}",
+                this.ID, this.Name, this.Email, this.IsManager);
+        }
     }
 }

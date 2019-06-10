@@ -85,6 +85,33 @@ paths:
             $ref: "#/definitions/Employee"
         404:
           description: "Employee not found"
+  /api/employees:
+    post:
+      tags:
+      - "employees"
+      summary: "Adds a new Employee object"
+      description: "Adds a new Employee object. To be used in integration tests"
+      operationId: "addEmployee"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Employee object"
+        required: true
+        schema:
+          $ref: "#/definitions/Employee"
+      responses:
+        201:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/ApiResponse"
+        400:
+          description: "Argument problem, e.g. email not set"
+      security:
+        - branch_office_auth: []
   /api/employee_hours/list/{employeeId}:
     get:
       tags:
@@ -222,7 +249,7 @@ paths:
           description: "EmployeeHours not found"
       security:
         - branch_office_auth: []
-  /api/salaries/list/{employeeId:int}:
+  /api/salaries/list/{employeeId}:
     get:
       tags:
       - "salaries"

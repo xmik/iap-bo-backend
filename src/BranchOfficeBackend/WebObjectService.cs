@@ -42,6 +42,11 @@ namespace BranchOfficeBackend
                 return null;
             return new WebEmployeeHours(weh);
         }
+        public void AddEmployee(WebEmployee employee)
+        {
+            var eh = new Employee(employee);
+            daoService.AddEmployee(eh);
+        }
         public void AddEmployeeHours(WebEmployeeHours employeeHours)
         {
             var eh = new EmployeeHours(employeeHours);

@@ -1,3 +1,5 @@
+using System;
+
 namespace BranchOfficeBackend
 {
     /// <summary>
@@ -21,5 +23,11 @@ namespace BranchOfficeBackend
         public string TimePeriod { get; set; }
         public int ID { get; set; }
         public int EmployeeId { get; set; }
+
+        public override string ToString()
+        {
+            return String.Format("Id: {0}, EmployeeId: {1}, Value: {2}, TimePeriod: {3}",
+                this.ID, this.EmployeeId, this.Value, this.TimePeriod);
+        }
     }
 }

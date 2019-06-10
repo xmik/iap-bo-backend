@@ -29,6 +29,14 @@ namespace BranchOfficeBackend
             this.EmployeeId = newId;
             this.IsManager = e.IsManager;
         }
+
+        public Employee(WebEmployee e)
+        {            
+            this.Name = e.Name;
+            this.Email = e.Email;
+            this.EmployeeId = e.ID;
+            this.IsManager = e.IsManager;
+        }
         public Employee(HQEmployee e)
         {
             this.Name = e.Name;
@@ -40,7 +48,7 @@ namespace BranchOfficeBackend
 
         public override string ToString()
         {
-            return String.Format("Id: {0}, Name: {1}, Email: {2}, DateOfBirth {3}, IsManager {4}",
+            return String.Format("Id: {0}, Name: {1}, Email: {2}, DateOfBirth {3}, IsManager: {4}",
                 this.EmployeeId, this.Name, this.Email, this.DateOfBirth, this.IsManager);
         }
     }

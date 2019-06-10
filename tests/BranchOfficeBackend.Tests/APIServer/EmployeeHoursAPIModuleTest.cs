@@ -126,10 +126,13 @@ namespace BranchOfficeBackend.Tests
                 var myJson = "{ 'employeeId': 33 }";
                 HttpContent requestContent = new StringContent(myJson, Encoding.UTF8, "application/json");
                 var response = await client.PostAsync("/api/employee_hours", requestContent);
-                Assert.Equal(System.Net.HttpStatusCode.BadRequest, response.StatusCode);   
+                Assert.Equal(System.Net.HttpStatusCode.BadRequest, response.StatusCode);  
+                var jsonString = await response.Content.ReadAsStringAsync();
+                Assert.Equal("Problem when adding the object to database: Value does not fall within the expected range.", jsonString);  
             }
             mockDB.Verify(m => m.AddEmployeeHours(Moq.It.IsAny<EmployeeHours>(),false ), Moq.Times.Once);
         }
+
         [Fact]
         public async Task DeleteOneEHObj_ShouldReturn404_WhenNotFound()
         {
