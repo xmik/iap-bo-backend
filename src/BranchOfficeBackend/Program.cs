@@ -15,6 +15,13 @@ namespace BranchOfficeBackend
     {
         private static CancellationTokenSource cts;
 
+        private static void SetupDB(){
+            using (var db = new BranchOfficeDbContext())
+            {
+                db.Database.Migrate();
+            }
+        }
+
         /// <summary>
         /// Generate test data and save into database
         /// </summary>
@@ -88,6 +95,8 @@ namespace BranchOfficeBackend
             if (shouldGenTestData != null && Boolean.Parse(shouldGenTestData))
             {
                 GenerateTestData();
+            } else {
+                SetupDB();
             }
 
             RunAPIServer();
