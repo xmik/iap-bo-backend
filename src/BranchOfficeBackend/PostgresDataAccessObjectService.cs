@@ -28,6 +28,36 @@ namespace BranchOfficeBackend
             return (Employee)(oneEmp.FirstOrDefault());
         }
 
+        public void AddEmployee(Employee employee, bool keepId=false)
+        {
+            var existingEmployees = this.GetAllEmployees();
+            var employeeWithEmail = existingEmployees.Where(e => e.Email == employee.Email).FirstOrDefault();
+            if (employeeWithEmail != null){
+                throw new ArgumentException(String.Format("Employee with email: {0} already exists", employee.Email));
+            }
+
+            Employee employeeWithId;
+            if (keepId) {
+                employeeWithId = new Employee(employee, employee.EmployeeId);
+            } else {
+                int maxId = -1;
+                for (int i=0; i<existingEmployees.Count(); i++)
+                {
+                    if (existingEmployees[i].EmployeeId > maxId)
+                        maxId = existingEmployees[i].EmployeeId;
+                }
+                employeeWithId = new Employee(employee, maxId+1);
+            }
+
+            var employeeWithIdExistng = existingEmployees.Where(e => e.EmployeeId == employeeWithId.EmployeeId).FirstOrDefault();
+            if (employeeWithIdExistng != null){
+                throw new ArgumentException(String.Format("Employee with EmployeeId: {0} already exists", employeeWithId.EmployeeId));
+            }
+
+            dbContext.Employees.Add(employeeWithId);
+            dbContext.SaveChanges();
+        }
+
         public void RemoveEmployees(int id)
         {
             throw new NotImplementedException();
@@ -55,8 +85,8 @@ namespace BranchOfficeBackend
                 throw new ArgumentException("HoursCount < 0");
 
             var existingEmployees = this.GetAllEmployees();
-            var employeeWithId = existingEmployees.Where(e => e.EmployeeId == employeeId).ToList();
-            if (employeeWithId.Count() == 0)
+            var employeeWithId = existingEmployees.Where(e => e.EmployeeId == employeeId).FirstOrDefault();
+            if (employeeWithId == null)
             {
                 throw new ArgumentException(String.Format("Employee with Id: {0} not found", employeeId));
             }
@@ -79,6 +109,13 @@ namespace BranchOfficeBackend
                 }
                 employeeHoursWithId = new EmployeeHours(employeeHours, maxId+1);
             }
+
+            var existingObjects = dbContext.EmployeeHoursCollection.ToList();
+            var objWithIdExistng = existingObjects.Where(e => e.EmployeeHoursId == employeeHoursWithId.EmployeeHoursId).FirstOrDefault();
+            if (objWithIdExistng != null){
+                throw new ArgumentException(String.Format("EmployeeHours with EmployeeHoursId: {0} already exists", employeeHoursWithId.EmployeeHoursId));
+            }
+
             dbContext.EmployeeHoursCollection.Add(employeeHoursWithId);
             dbContext.SaveChanges();
         }

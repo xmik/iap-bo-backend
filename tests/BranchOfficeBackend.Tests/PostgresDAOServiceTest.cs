@@ -235,6 +235,25 @@ namespace BranchOfficeBackend.Tests
         }
 
         [Fact]
+        public async Task AddEmployeeHours_WhenNotEmptyTable_KeepId_ConflictingKeyValues()
+        {
+            await dbContext.Employees.AddAsync(new Employee{ Name = "Ola AAA", Email = "aaaa@gmail.com", EmployeeId = 4 });
+            await dbContext.EmployeeHoursCollection.AddAsync(
+                new EmployeeHours{ EmployeeHoursId = 100, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4, HoursCount = 99});
+            await dbContext.SaveChangesAsync();
+
+            var emp = new EmployeeHours{ EmployeeHoursId = 100, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4, HoursCount = 99};
+
+            var dao = new PostgresDataAccessObjectService(dbContext);
+            try {
+                dao.AddEmployeeHours(emp,true);            
+            } catch(Exception ex) {
+                Assert.Equal(typeof(ArgumentException), ex.GetType());
+                Assert.Equal("EmployeeHours with EmployeeHoursId: 100 already exists", ex.Message);
+            }
+        }
+
+        [Fact]
         public async Task DeleteEmployeeHours_WhenExists()
         {
             await dbContext.EmployeeHoursCollection.AddAsync(
@@ -336,6 +355,75 @@ namespace BranchOfficeBackend.Tests
             } catch (Exception e) {
                 Assert.Equal(typeof(InvalidOperationException), e.GetType());
                 Assert.Equal("EmployeeHours object not found", e.Message);
+            }
+        }
+
+        [Fact]
+        public async Task AddEmployee_WhenNotEmptyTable()
+        {
+            await dbContext.Employees.AddAsync(new Employee{ Name = "Ola AAA", Email = "aaaa@gmail.com", EmployeeId = 4 });
+            await dbContext.SaveChangesAsync();
+
+            var emp = new Employee{ Name = "Ola 2", Email = "333@gmail.com", EmployeeId = 44 };
+
+            var dao = new PostgresDataAccessObjectService(dbContext);
+            dao.AddEmployee(emp);
+            
+            var coll = dao.GetAllEmployees();
+            Assert.Equal(2, coll.Count);
+            Assert.Equal("Ola AAA", coll[0].Name);
+            Assert.Equal("Ola 2", coll[1].Name);
+            Assert.Equal("aaaa@gmail.com", coll[0].Email);
+            Assert.Equal("333@gmail.com", coll[1].Email);
+            Assert.Equal(4, coll[0].EmployeeId);
+            Assert.Equal(5, coll[1].EmployeeId);
+        }
+
+        [Fact]
+        public async Task AddEmployee_WhenEmptyTable()
+        {
+            var emp = new Employee{ Name = "Ola 2", Email = "333@gmail.com", EmployeeId = 44 };
+
+            var dao = new PostgresDataAccessObjectService(dbContext);
+            dao.AddEmployee(emp);
+            
+            var coll = dao.GetAllEmployees();
+            Assert.Equal(1, coll.Count);
+            Assert.Equal("Ola 2", coll[0].Name);
+            Assert.Equal("333@gmail.com", coll[0].Email);
+            Assert.Equal(1, coll[0].EmployeeId);// apparently we must start from 1
+        }
+        [Fact]
+        public async Task AddEmployee_WhenEmployeeWithSameEmailExists()
+        {
+            await dbContext.Employees.AddAsync(new Employee{ Name = "Ola AAA", Email = "aaaa@gmail.com", EmployeeId = 4 });
+            await dbContext.SaveChangesAsync();
+
+            var emp = new Employee{ Name = "Ola 2", Email = "aaaa@gmail.com", EmployeeId = 44 };
+
+            var dao = new PostgresDataAccessObjectService(dbContext);
+            try {
+                dao.AddEmployee(emp);            
+            } catch(Exception ex) {
+                Assert.Equal(typeof(ArgumentException), ex.GetType());
+                Assert.Equal("Employee with email: aaaa@gmail.com already exists", ex.Message);
+            }
+        }
+
+        [Fact]
+        public async Task AddEmployee_WhenNotEmptyTable_KeepId_ConflictingKeyValues()
+        {
+            await dbContext.Employees.AddAsync(new Employee{ Name = "Ola AAA", Email = "aaaa@gmail.com", EmployeeId = 4 });
+            await dbContext.SaveChangesAsync();
+
+            var emp = new Employee{ Name = "Ola 2", Email = "333@gmail.com", EmployeeId = 4 };
+
+            var dao = new PostgresDataAccessObjectService(dbContext);
+            try {
+                dao.AddEmployee(emp,true);            
+            } catch(Exception ex) {
+                Assert.Equal(typeof(ArgumentException), ex.GetType());
+                Assert.Equal("Employee with EmployeeId: 4 already exists", ex.Message);
             }
         }
 

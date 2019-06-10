@@ -17,6 +17,19 @@ namespace BranchOfficeBackend
         public DateTime DateOfBirth { get; set; }
         public bool IsManager { get; set; }
 
+        public Employee()
+        {
+            
+        }
+        public Employee(Employee e, int newId)
+        {
+            this.Name = e.Name;
+            this.Email = e.Email;
+            this.DateOfBirth = e.DateOfBirth;
+            this.EmployeeId = newId;
+            this.IsManager = e.IsManager;
+        }
+
         public override string ToString()
         {
             return String.Format("Id: {0}, Name: {1}, Email: {2}, DateOfBirth {3}, IsManager {4}",
