@@ -85,8 +85,8 @@ namespace BranchOfficeBackend.Tests
 
             var emps = dao.GetAllEmployees();
             var eh = dao.GetAllEmployeeHours();
-            Assert.Equal(0,emps.Count);
-            Assert.Equal(0,eh.Count);
+            Assert.Empty(emps);
+            Assert.Empty(eh);
         }
 
         /// <summary>
@@ -132,7 +132,7 @@ namespace BranchOfficeBackend.Tests
             Assert.Equal(2,emps.Count);
             Assert.Equal("jank@gmail.com",emps[0].Email);
             Assert.Equal("elak@gmail.com",emps[1].Email);
-            Assert.Equal(0,eh.Count);
+            Assert.Empty(eh);
             Assert.Equal(2,salaries.Count);
         }
 
@@ -201,7 +201,7 @@ namespace BranchOfficeBackend.Tests
             Assert.Equal(2,emps.Count);
             Assert.Equal("jank@gmail.com",emps[1].Email);
             Assert.Equal("elak@gmail.com",emps[0].Email);
-            Assert.Equal(1,eh.Count);
+            Assert.Single(eh);
             Assert.Equal(105,eh[0].EmployeeHoursId);
             Assert.Equal(3,salaries.Count);
         }
@@ -253,7 +253,7 @@ namespace BranchOfficeBackend.Tests
             Assert.Equal(2,emps.Count);
             Assert.Equal("jank@gmail.com",emps[1].Email);
             Assert.Equal("elak@gmail.com",emps[0].Email);
-            Assert.Equal(0,eh.Count);
+            Assert.Empty(eh);
             Assert.Equal(2,salaries.Count);
         }
 

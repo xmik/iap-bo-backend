@@ -711,7 +711,7 @@ namespace BranchOfficeBackend.Tests
             dao.DeleteSalary(1);
             
             coll = dao.GetAllSalaries();
-            Assert.Equal(1, coll.Count);
+            Assert.Single(coll);
             Assert.Equal(2, coll[0].SalaryId);
         }
 
@@ -721,12 +721,12 @@ namespace BranchOfficeBackend.Tests
             var dao = new PostgresDataAccessObjectService(dbContext);
 
             var coll = dao.GetAllSalaries();
-            Assert.Equal(0, coll.Count);
+            Assert.Empty(coll);
             
             dao.DeleteSalary(1);
             
             coll = dao.GetAllSalaries();
-            Assert.Equal(0, coll.Count);
+            Assert.Empty(coll);
         }
 
     }

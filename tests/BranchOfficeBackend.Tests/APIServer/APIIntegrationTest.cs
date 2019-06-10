@@ -15,7 +15,7 @@ namespace BranchOfficeBackend.Tests
     /// No mocks
     /// </summary>
     [Collection("do-not-run-in-parallel")]
-    public class APIIntegrationTest
+    public class APIIntegrationTest : IDisposable
     {
         private BranchOfficeDbContext dbContext;
 
@@ -48,7 +48,7 @@ namespace BranchOfficeBackend.Tests
                 Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);    
                 var jsonString = await response.Content.ReadAsStringAsync();
                 var items = JArray.Parse(jsonString);
-                Assert.Equal(0, items.Count);                     
+                Assert.Empty(items);                     
             }
         }
 
