@@ -24,6 +24,7 @@ Run integration tests with [Bats](https://github.com/sstephenson/bats):
 
 Run the C# server:
 ```
+IAP_BO_GENERATE_TEST_DATA=true
 ./tasks run
 ```
 

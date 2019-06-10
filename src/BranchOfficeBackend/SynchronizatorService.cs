@@ -96,7 +96,7 @@ namespace BranchOfficeBackend
                         }
                         synchronizing = true;
                     }
-                    _log.Info("Starting synchronization");
+                    _log.Debug("Starting synchronization");
 
                     List<HQEmployee> hqEmployees = await hqApiClient.ListEmployees(
                         this.confService.GetBranchOfficeId());
@@ -162,7 +162,7 @@ namespace BranchOfficeBackend
                     _log.Info("Synchronization was successful");
                     this.daoService.InformOnDBContents();
                 } catch (System.Net.Http.HttpRequestException ex) {
-                    _log.Error("Synchronizing with HQ failed (is the HQ server running?).", ex);
+                    _log.WarnFormat("Synchronizing with HQ failed (is the HQ server running?). Ex: {0}", ex.Message);
                 } finally {
                     synchronizing = false;
                 }

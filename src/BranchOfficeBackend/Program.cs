@@ -85,7 +85,7 @@ namespace BranchOfficeBackend
             Console.CancelKeyPress += Console_CancelKeyPress;
 
             string shouldGenTestData = Environment.GetEnvironmentVariable("IAP_BO_GENERATE_TEST_DATA");
-            if (Boolean.Parse(shouldGenTestData))
+            if (shouldGenTestData != null && Boolean.Parse(shouldGenTestData))
             {
                 GenerateTestData();
             }

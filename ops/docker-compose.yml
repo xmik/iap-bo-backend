@@ -12,6 +12,8 @@ services:
   bo:
     init: true
     image: iap-bo-backend:0.1.0
+    environment:
+      - IAP_BO_SYNCHRONIZATION_FREQUENCY=60
     ports:
       - 8080:8080
     links:
