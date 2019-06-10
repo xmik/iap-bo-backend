@@ -11,9 +11,11 @@ using Carter.Response;
 namespace BranchOfficeBackend
 {
     public class UserModule : CarterModule {
+        private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(UserModule)); 
         public UserModule(IUserRepository userRepository) {
             this.Post("/api/user/{username}",  async(req, res, routeData) => {
                 string username = routeData.As<string>("username");
+                _log.Debug(String.Format("Received HTTP request: POST /api/user/{0}", username));
                 try {
                     string pass = await userRepository.CreateUser(username);
                     await res.Negotiate(new UserCreatedResponse() {
@@ -40,6 +42,7 @@ namespace BranchOfficeBackend
             
             this.Delete("/api/user/{username}",  async(req, res, routeData) => {
                 string username = routeData.As<string>("username");
+                _log.Debug(String.Format("Received HTTP request: DELETE /api/user/{0}", username));
                 try {
                     var context = req.HttpContext;
                     var authenticated = context?.User?.Identity != null && context.User.Identity.IsAuthenticated;
