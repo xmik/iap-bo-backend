@@ -1,0 +1,19 @@
+version: '2.2'
+services:
+  # Branch office database
+  bodb:
+    init: true
+    image: postgres:11.2-alpine
+    #network_mode: host
+    environment:
+      - POSTGRES_PASSWORD=my_pw
+      - POSTGRES_DB=mydb
+  # Branch office backend
+  bo:
+    init: true
+    image: iap-bo-backend:0.1.0
+    ports:
+      - 8080:8080
+    links:
+      # the container bodb is known inside bo as: db
+      - bodb:db

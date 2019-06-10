@@ -10,6 +10,7 @@ case "${command}" in
   docker_build)
       rm -rf docker/binaries
       cp -r src/BranchOfficeBackend/bin/Release/netcoreapp2.1 docker/binaries
+      cp -r log4net.xml docker/binaries
       cd docker
       docker build -t iap-bo-backend:0.1.0 .
       # run the docker image interactively:

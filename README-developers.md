@@ -22,6 +22,11 @@ Run integration tests with [Bats](https://github.com/sstephenson/bats):
 ./tasks itest
 ```
 
+Run the C# server:
+```
+./tasks run
+```
+
 ### DB
 When you change db schema (e.g. add a column to a table), destroy the current db
  docker container, start new (exit from dojo and enter into new), an then:
@@ -133,3 +138,9 @@ dotnet add tests/BranchOfficeBackend.Tests/ package RichardSzalay.MockHttp --ver
 ## nice docs
 * https://www.newtonsoft.com/json/help/html/DeepEquals.htm
 * https://mindbyte.nl/http-apis/2018/09/21/Use-Carter-to-create-a-simple-HTTP-API.html
+* dotnet-sdk-2.1, [here](https://dotnet.microsoft.com/learn/dotnet/hello-world-tutorial/install) are instructions how to install or use [Dojo](https://github.com/ai-traders/dojo).
+* https://docs.microsoft.com/en-us/ef/#pivot=entityfmwk&panel=entityfmwk1 (as a Nuget package)
+* https://docs.microsoft.com/en-us/ef/core/get-started/netcore/new-db-sqlite - tutorial
+* http://www.npgsql.org/efcore/mapping/general.html
+* https://www.postgresql.org/docs/current/app-psql.html
+* http://www.entityframeworktutorial.net/efcore/entity-framework-core-console-application.aspx

@@ -9,9 +9,23 @@ Compile code (this will also install all the dependencies):
 ./tasks build
 ```
 
-Run the C# server:
+Build docker image:
 ```
-./tasks run
+./tasks docker_build
+```
+
+## Demo - Features presentation
+
+Here we run the server (BO Backend + postgresql db) interactively, so that all the messages are printed onto terminal:
+```
+IAP_BO_GENERATE_TEST_DATA=true
+docker-compose -f ./ops/docker-compose.yml up
+```
+
+Stopping and removing the containers:
+```
+# press Ctrl+C and then:
+docker-compose -f ./ops/docker-compose.yml down
 ```
 
 ## API Server endpoints
@@ -22,13 +36,9 @@ curl -i  localhost:8080/api/employees/list
 ```
 
 The API Server specification is kept in files: `swagger-branch-office.yaml` and `swagger-headquarters.yaml`.
-In order to render it as a pretty http website, copy each of those files output onto: https://editor.swagger.io/
+In order to render it as a pretty http website, copy each of those files contents onto: https://editor.swagger.io/
 
 
-## Dependencies and docs
-* dotnet-sdk-2.1, [here](https://dotnet.microsoft.com/learn/dotnet/hello-world-tutorial/install) are instructions how to install or use [Dojo](https://github.com/ai-traders/dojo).
-* https://docs.microsoft.com/en-us/ef/#pivot=entityfmwk&panel=entityfmwk1 (as a Nuget package)
-* https://docs.microsoft.com/en-us/ef/core/get-started/netcore/new-db-sqlite - tutorial
-* http://www.npgsql.org/efcore/mapping/general.html
-* https://www.postgresql.org/docs/current/app-psql.html
-* http://www.entityframeworktutorial.net/efcore/entity-framework-core-console-application.aspx
+## Dependencies
+* docker
+* docker-compose

@@ -84,8 +84,11 @@ namespace BranchOfficeBackend
             cts = new CancellationTokenSource();
             Console.CancelKeyPress += Console_CancelKeyPress;
 
-            // TODO: run this only if testing. In production, synchronize wih HeadQuarters.
-            GenerateTestData();
+            string shouldGenTestData = Environment.GetEnvironmentVariable("IAP_BO_GENERATE_TEST_DATA");
+            if (Boolean.Parse(shouldGenTestData))
+            {
+                GenerateTestData();
+            }
 
             RunAPIServer();
 

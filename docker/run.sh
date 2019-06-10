@@ -1,3 +1,4 @@
 #!/bin/bash
 
-dotnet /opt/iap-bo-backend/BranchOfficeBackend.dll 
+cd /opt/iap-bo-backend
+dotnet ./BranchOfficeBackend.dll 
