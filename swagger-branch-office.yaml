@@ -222,7 +222,7 @@ paths:
           description: "EmployeeHours not found"
       security:
         - branch_office_auth: []
-  /api/salaries/list:
+  /api/salaries/list/{employeeId:int}:
     get:
       tags:
       - "salaries"

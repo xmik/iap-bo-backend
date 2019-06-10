@@ -23,7 +23,7 @@ namespace BranchOfficeBackend
                 int id = routeData.As<int>("employeeId");
                 _log.Debug(String.Format("Received HTTP request: GET /api/salaries/list/{0}",id));
                 var obj = service.GetSalariesForAnEmployee(id);
-                if (obj == null) {
+                if (obj == null || obj.Count == 0) {
                     res.StatusCode = 404;
                 } else {
                     res.StatusCode = 200;

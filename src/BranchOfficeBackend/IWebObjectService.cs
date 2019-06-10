@@ -18,18 +18,6 @@ namespace BranchOfficeBackend
 
         WebEmployee GetEmployee(int employeeId);
 
-        /// <summary>
-        /// Adds employee if the employee object is valid, throws exception otherwise.
-        /// </summary>
-        /// <param name="employee"></param>
-        void AddEmployee(WebEmployee employee);
-
-        /// <summary>
-        /// Deletes employee if it exists, throws exception otherwise.
-        /// </summary>
-        /// <param name="employeeId"></param>
-        void DeleteEmployee(int employeeId);
-
         List<WebEmployeeHours> GetEmployeeHoursForAnEmployee(int employeeId);
         WebEmployeeHours GetOneEmployeeHours(int employeeHoursId);
         void AddEmployeeHours(WebEmployeeHours employeeHours);
