@@ -75,16 +75,24 @@ namespace BranchOfficeBackend
             }
             return false;
         }
+        private bool VerifySalaryInCollection(List<Salary> salariesColl, Salary oneSalary)
+        {
+            var result = salariesColl.Where(
+                x => (x.TimePeriod == oneSalary.TimePeriod && x.EmployeeId == oneSalary.EmployeeId)).FirstOrDefault();
+            if (result != null) {
+                return true;
+            }
+            return false;
+        }
 
 // TODO: itest that this can be invoked many times in one moment
 // TODO: test how many times a method was invoked
-// TODO: test db state
 
         /// <summary>
         /// Get information from HQ about: employees and salaries.
         /// Then, ensure that BO db contains only those employees and salaries that also
         /// exist in HQ.
-        /// Then, delete any employeeHours which are connected to a deleted employee. 
+        /// Then, delete any employeeHours and salaries which are connected to a deleted employee. 
         /// </summary>
         /// <returns></returns>
         public async Task Synchronize() 
@@ -94,7 +102,7 @@ namespace BranchOfficeBackend
                 try {
                     lock (this.locker) {
                         if (synchronizing) {
-                            _log.Warn("Already synchronizing in this moment. Synchronization skipped");
+                            _log.Warn("Synchronization skipped, because it is already running");
                             return;
                         }
                         synchronizing = true;
@@ -109,14 +117,33 @@ namespace BranchOfficeBackend
                         // add all the employes from HQ into BO
                         for (int i=0; i< hqEmployees.Count; i++)
                         {
-                            var hqAsBoEmployee = new Employee(hqEmployees[i]);
+                            var hqEmp = hqEmployees[i];
+                            int hqEmpId = hqEmp.ID;
+
+                            var hqAsBoEmployee = new Employee(hqEmp);
                             bool empPresent = VerifyEmployeeInCollection(boEmployees, hqAsBoEmployee);
                             if (!empPresent) {
                                 daoService.AddEmployee(hqAsBoEmployee);
                             }
+                            // now, if the employee was just added, it will most surely have different Id
+                            // We need to know this Id, so that we can assign later a salary
+                            // to an employee in BO.
+                            int boEmployeeId = daoService.GetEmployeeIdByMail(hqAsBoEmployee.Email);
 
-                            List<HQSalary> salaries = await hqApiClient.ListSalariesForEmployee(i);
-                            // TODO; replace bo db contents with the above salaries
+                            var boSalaries = daoService.GetSalariesForAnEmployee(boEmployeeId);
+                            // add all the salaries from HQ into BO
+                            List<HQSalary> hqSalaries = await hqApiClient.ListSalariesForEmployee(hqEmpId);
+                            if (hqSalaries != null) {
+                                for (int s=0; s< hqSalaries.Count; s++)
+                                {
+                                    var hqAsBoSalary = new Salary(hqSalaries[s]);
+                                    hqAsBoSalary.EmployeeId = boEmployeeId;
+                                    bool salaryPresent = VerifySalaryInCollection(boSalaries, hqAsBoSalary);
+                                    if (!salaryPresent) {
+                                        daoService.AddSalary(hqAsBoSalary);
+                                    }
+                                }
+                            }
                         }
 
                         // remove all the employees in BO that are not present in HQ
@@ -126,11 +153,19 @@ namespace BranchOfficeBackend
                             var boEmp = boEmployees[i];
                             bool empPresent = VerifyEmployeeInCollection(hqEmployees, boEmp);
                             if (!empPresent) {
+                                _log.InfoFormat("Deleting Employee {0} together with its related EmployeeHours and Salaries", boEmp.EmployeeId);
                                 daoService.DeleteEmployee(boEmp.EmployeeId);
+                                // remove all the employeesHours for the deleted employee
                                 var employeeHoursColl = daoService.GetEmployeeHoursForAnEmployee(boEmp.EmployeeId);
                                 for (int j=0; j< employeeHoursColl.Count; j++)
                                 {
                                     daoService.DeleteEmployeeHours(employeeHoursColl[j].EmployeeHoursId);
+                                }
+                                // remove all the salaries for the deleted employee
+                                var salariesColl = daoService.GetSalariesForAnEmployee(boEmp.EmployeeId);
+                                for (int j=0; j< salariesColl.Count; j++)
+                                {
+                                    daoService.DeleteSalary(salariesColl[j].SalaryId);
                                 }
                             }
                         }

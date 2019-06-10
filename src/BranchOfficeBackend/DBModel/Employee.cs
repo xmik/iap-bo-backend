@@ -33,6 +33,7 @@ namespace BranchOfficeBackend
         {
             this.Name = e.Name;
             this.Email = e.Email;
+            // do not preserve this, we'll add our own
             this.EmployeeId = -1;
             this.IsManager = e.IsManager;
         }

@@ -26,6 +26,14 @@ namespace BranchOfficeBackend
             this.Value = other.Value;
             this.TimePeriod = other.TimePeriod;
         }
+        public Salary(HQSalary other)
+        {
+            this.EmployeeId = other.EmployeeID;
+            this.Value = other.Value;
+            // do not preserve this, we'll add our own
+            this.SalaryId = -1;
+            this.TimePeriod = other.TimePeriod;
+        }
 
         public override string ToString()
         {

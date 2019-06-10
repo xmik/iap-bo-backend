@@ -280,5 +280,12 @@ namespace BranchOfficeBackend
             dbContext.SaveChanges();
             _log.Info(String.Format("Salary deleted from db: {0}", existingObj));
         }
+
+        public int GetEmployeeIdByMail(string email)
+        {
+            var employees = this.GetAllEmployees();
+            var oneEmp = employees.Where(obj => obj.Email == email);
+            return ((Employee)(oneEmp.FirstOrDefault())).EmployeeId;
+        }
     }
 }

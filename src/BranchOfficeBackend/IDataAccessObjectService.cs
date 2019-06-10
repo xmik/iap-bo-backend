@@ -13,6 +13,8 @@ namespace BranchOfficeBackend
         void DeleteEmployee(int employeeId);
         void EditEmployee(Employee emp);
 
+        int GetEmployeeIdByMail(string mail);
+
         List<EmployeeHours> GetEmployeeHoursForAnEmployee(int employeeId);
         EmployeeHours GetOneEmployeeHours(int employeeHoursId);
         void AddEmployeeHours(EmployeeHours employeeHours, bool keepId=false);
