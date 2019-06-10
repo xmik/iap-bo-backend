@@ -105,7 +105,7 @@ namespace BranchOfficeBackend.Tests
                 Assert.Equal(123, employee.ID);
                 Assert.Equal("Jan Kow", employee.Name);
                 Assert.Equal("jank@gmail.com", employee.Email);
-                Assert.Equal(false, employee.IsManager);
+                Assert.False(employee.IsManager);
             }
         }
 
@@ -135,8 +135,8 @@ namespace BranchOfficeBackend.Tests
                 Assert.Equal(2, employees.Count);
                 Assert.Equal(1, employees[0].ID);
                 Assert.Equal(123, employees[1].ID);
-                Assert.Equal(false, employees[0].IsManager);
-                Assert.Equal(true, employees[1].IsManager);
+                Assert.False(employees[0].IsManager);
+                Assert.True(employees[1].IsManager);
             }
         }
 

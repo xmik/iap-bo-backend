@@ -9,7 +9,6 @@ namespace BranchOfficeBackend
 {
     public class HQAPIClient : IHQAPIClient, IDisposable
     {
-        // TODO: maybe make it static https://docs.microsoft.com/en-us/aspnet/web-api/overview/advanced/calling-a-web-api-from-a-net-client#create-and-initialize-httpclient
         private HttpClient _client;
         private IConfigurationService _confServ;
         private string _baseUrl;

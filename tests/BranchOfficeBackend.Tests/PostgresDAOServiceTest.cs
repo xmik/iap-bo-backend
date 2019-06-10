@@ -380,7 +380,7 @@ namespace BranchOfficeBackend.Tests
         }
 
         [Fact]
-        public async Task AddEmployee_WhenEmptyTable()
+        public void AddEmployee_WhenEmptyTable()
         {
             var emp = new Employee{ Name = "Ola 2", Email = "333@gmail.com", EmployeeId = 44 };
 
@@ -388,7 +388,7 @@ namespace BranchOfficeBackend.Tests
             dao.AddEmployee(emp);
             
             var coll = dao.GetAllEmployees();
-            Assert.Equal(1, coll.Count);
+            Assert.Single(coll);
             Assert.Equal("Ola 2", coll[0].Name);
             Assert.Equal("333@gmail.com", coll[0].Email);
             Assert.Equal(1, coll[0].EmployeeId);// apparently we must start from 1
@@ -442,7 +442,7 @@ namespace BranchOfficeBackend.Tests
             dao.DeleteEmployee(4);
             
             coll = dao.GetAllEmployees();
-            Assert.Equal(1, coll.Count);
+            Assert.Single(coll);
             Assert.Equal(5, coll[0].EmployeeId);
         }
 
