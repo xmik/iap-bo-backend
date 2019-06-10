@@ -19,6 +19,14 @@ namespace BranchOfficeBackend
             Value = -1;
         }
 
+        public Salary(Salary other, int v)
+        {
+            this.SalaryId = v;
+            this.EmployeeId = other.EmployeeId;
+            this.Value = other.Value;
+            this.TimePeriod = other.TimePeriod;
+        }
+
         public override string ToString()
         {
             return String.Format("SalaryId: {0}, Value: {1}, TimePeriod: {2}, EmployeeId {3}",

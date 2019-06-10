@@ -22,6 +22,7 @@ namespace BranchOfficeBackend
         List<Salary> GetAllSalaries();
         List<Salary> GetSalariesForAnEmployee(int employeeId);
         Salary GetOneSalary(int id);
+        void AddSalary(Salary salary, bool keepId=false);
 
         void InformOnDBContents();
     }

@@ -594,5 +594,94 @@ namespace BranchOfficeBackend.Tests
             Assert.Equal(300, obj.Value);
         }
 
+        [Fact]
+        public async Task AddSalary_WhenNotEmptyTable()
+        {
+            await dbContext.Employees.AddAsync(new Employee{ Name = "Ola AAA", Email = "aaaa@gmail.com", EmployeeId = 2 });
+            await dbContext.Salaries.AddAsync(new Salary{ SalaryId = 1, Value = 100, TimePeriod = "some", EmployeeId = 1 });
+            await dbContext.Salaries.AddAsync(new Salary{ SalaryId = 2, Value = 200, TimePeriod = "some2", EmployeeId = 1 });
+            await dbContext.SaveChangesAsync();
+
+            var objToBeAdded = new Salary{ SalaryId = 3, Value = 300, TimePeriod = "some2", EmployeeId = 2 };
+
+            var dao = new PostgresDataAccessObjectService(dbContext);
+            dao.AddSalary(objToBeAdded);
+            
+            var coll = dao.GetAllSalaries();
+            Assert.Equal(3, coll.Count);
+            Assert.Equal(100f, coll[0].Value);
+            Assert.Equal(200f, coll[1].Value);
+            Assert.Equal(1, coll[0].EmployeeId);
+            Assert.Equal(1, coll[1].EmployeeId);
+            Assert.Equal(2, coll[2].EmployeeId);
+        }
+
+        [Fact]
+        public async Task AddSalary_WhenEmptyTable()
+        {
+            await dbContext.Employees.AddAsync(new Employee{ Name = "Ola AAA", Email = "aaaa@gmail.com", EmployeeId = 4 });
+            await dbContext.SaveChangesAsync();
+
+            var objToBeAdded = new Salary{ SalaryId = 3, Value = 300, TimePeriod = "some2", EmployeeId = 4 };
+            var dao = new PostgresDataAccessObjectService(dbContext);
+            dao.AddSalary(objToBeAdded);
+            
+            var coll = dao.GetAllSalaries();
+            Assert.Single(coll);
+            Assert.Equal(4, coll[0].EmployeeId);
+        }
+
+        [Fact]
+        public async Task AddSalary_WhenNoSuchEmployee()
+        {
+            await dbContext.Employees.AddAsync(new Employee{ Name = "Ola AAA", Email = "aaaa@gmail.com", EmployeeId = 9 });
+            await dbContext.SaveChangesAsync();
+
+            var objToBeAdded = new Salary{ SalaryId = 3, Value = 300, TimePeriod = "some2", EmployeeId = 4 };
+            var dao = new PostgresDataAccessObjectService(dbContext);
+
+            try {
+                dao.AddSalary(objToBeAdded);
+            } catch (Exception e) {
+                Assert.Equal(typeof(ArgumentException), e.GetType());
+                Assert.Equal("Employee with Id: 4 not found", e.Message);
+            }
+        }
+
+        [Fact]
+        public async Task AddSalary_WhenEmployeeIdNotSet()
+        {
+            await dbContext.Employees.AddAsync(new Employee{ Name = "Ola AAA", Email = "aaaa@gmail.com", EmployeeId = 9 });
+            await dbContext.SaveChangesAsync();
+
+            var objToBeAdded = new Salary{ SalaryId = 3, Value = 300, TimePeriod = "some2" };
+            var dao = new PostgresDataAccessObjectService(dbContext);
+
+            try {
+                dao.AddSalary(objToBeAdded);
+            } catch (Exception e) {
+                Assert.Equal(typeof(ArgumentException), e.GetType());
+                Assert.Equal("EmployeeId was not set", e.Message);
+            }
+        }
+
+        [Fact]
+        public async Task AddSalary_WhenNotEmptyTable_KeepId_ConflictingKeyValues()
+        {
+            await dbContext.Employees.AddAsync(new Employee{ Name = "Ola AAA", Email = "aaaa@gmail.com", EmployeeId = 4 });
+            await dbContext.Salaries.AddAsync(new Salary{ SalaryId = 1, Value = 100, TimePeriod = "some", EmployeeId = 1 });
+            await dbContext.SaveChangesAsync();
+
+            var objToBeAdded = new Salary{ SalaryId = 1, Value = 300, TimePeriod = "some2", EmployeeId = 4 };
+
+            var dao = new PostgresDataAccessObjectService(dbContext);
+            try {
+                dao.AddSalary(objToBeAdded, true);       
+            } catch(Exception ex) {
+                Assert.Equal(typeof(ArgumentException), ex.GetType());
+                Assert.Equal("Salary with SalaryId: 1 already exists", ex.Message);
+            }
+        }
+
     }
 }

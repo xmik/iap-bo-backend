@@ -40,8 +40,8 @@ namespace BranchOfficeBackend
         {
             VerifyEmployee(employee);
 
-            var existingEmployees = this.GetAllEmployees();
-            var employeeWithEmail = existingEmployees.Where(e => e.Email == employee.Email).FirstOrDefault();
+            var existingObjects = this.GetAllEmployees();
+            var employeeWithEmail = existingObjects.Where(e => e.Email == employee.Email).FirstOrDefault();
             if (employeeWithEmail != null){
                 throw new ArgumentException(String.Format("Employee with email: {0} already exists", employee.Email));
             }
@@ -51,15 +51,15 @@ namespace BranchOfficeBackend
                 employeeWithId = new Employee(employee, employee.EmployeeId);
             } else {
                 int maxId = 0;
-                for (int i=0; i<existingEmployees.Count(); i++)
+                for (int i=0; i<existingObjects.Count(); i++)
                 {
-                    if (existingEmployees[i].EmployeeId > maxId)
-                        maxId = existingEmployees[i].EmployeeId;
+                    if (existingObjects[i].EmployeeId > maxId)
+                        maxId = existingObjects[i].EmployeeId;
                 }
                 employeeWithId = new Employee(employee, maxId+1);
             }
 
-            var employeeWithIdExistng = existingEmployees.Where(e => e.EmployeeId == employeeWithId.EmployeeId).FirstOrDefault();
+            var employeeWithIdExistng = existingObjects.Where(e => e.EmployeeId == employeeWithId.EmployeeId).FirstOrDefault();
             if (employeeWithIdExistng != null){
                 throw new ArgumentException(String.Format("Employee with EmployeeId: {0} already exists", employeeWithId.EmployeeId));
             }
@@ -136,22 +136,22 @@ namespace BranchOfficeBackend
             VerifyEmployeeHours(employeeHours);
             EmployeeHours employeeHoursWithId;
 
+            // the IDs for employeeHours are common for all employes, thus use this.GetAllEmployeeHours()
+            // instead of this.GetAllEmployeeHours(employeeHours.employeeId)
+            var existingObjects = this.GetAllEmployeeHours();
+
             if (keepId) {
                 employeeHoursWithId = new EmployeeHours(employeeHours, employeeHours.EmployeeHoursId);
             } else {
-                // the IDs for employeeHours are common for all employes, thus use this.GetAllEmployeeHours()
-                // instead of this.GetAllEmployeeHours(employeeHours.employeeId)
-                var existingEH = this.GetAllEmployeeHours();
                 int maxId = 0;
-                for (int i=0; i<existingEH.Count(); i++)
+                for (int i=0; i<existingObjects.Count(); i++)
                 {
-                    if (existingEH[i].EmployeeHoursId > maxId)
-                        maxId = existingEH[i].EmployeeHoursId;
+                    if (existingObjects[i].EmployeeHoursId > maxId)
+                        maxId = existingObjects[i].EmployeeHoursId;
                 }
                 employeeHoursWithId = new EmployeeHours(employeeHours, maxId+1);
             }
 
-            var existingObjects = dbContext.EmployeeHoursCollection.ToList();
             var objWithIdExistng = existingObjects.Where(e => e.EmployeeHoursId == employeeHoursWithId.EmployeeHoursId).FirstOrDefault();
             if (objWithIdExistng != null){
                 throw new ArgumentException(String.Format("EmployeeHours with EmployeeHoursId: {0} already exists", employeeHoursWithId.EmployeeHoursId));
@@ -217,6 +217,50 @@ namespace BranchOfficeBackend
             var objs = this.GetAllSalaries();
             var selected = objs.Where(obj => obj.SalaryId == id);
             return (Salary)(selected.FirstOrDefault());
+        }
+
+        private void VerifySalary(Salary salary)
+        {
+            int employeeId = salary.EmployeeId;
+            if (employeeId == -1)
+                throw new ArgumentException("EmployeeId was not set");
+            if (salary.Value < 0)
+                throw new ArgumentException("Value < 0");
+
+            var existingEmployees = this.GetAllEmployees();
+            var employeeWithId = existingEmployees.Where(e => e.EmployeeId == employeeId).FirstOrDefault();
+            if (employeeWithId == null)
+            {
+                throw new ArgumentException(String.Format("Employee with Id: {0} not found", employeeId));
+            }
+        }
+
+        public void AddSalary(Salary salary, bool keepId=false)
+        {
+            VerifySalary(salary);
+            Salary salaryWithId;
+            var existingObjects = this.GetAllSalaries();
+
+            if (keepId) {
+                salaryWithId = new Salary(salary, salary.SalaryId);
+            } else {
+                int maxId = 0;
+                for (int i=0; i<existingObjects.Count(); i++)
+                {
+                    if (existingObjects[i].SalaryId > maxId)
+                        maxId = existingObjects[i].SalaryId;
+                }
+                salaryWithId = new Salary(salary, maxId+1);
+            }
+
+            var objWithIdExistng = existingObjects.Where(e => e.SalaryId == salaryWithId.SalaryId).FirstOrDefault();
+            if (objWithIdExistng != null){
+                throw new ArgumentException(String.Format("Salary with SalaryId: {0} already exists", salaryWithId.SalaryId));
+            }
+
+            dbContext.Salaries.Add(salaryWithId);
+            dbContext.SaveChanges();
+            _log.Info(String.Format("Salary added to db: {0}", salaryWithId));
         }
     }
 }
