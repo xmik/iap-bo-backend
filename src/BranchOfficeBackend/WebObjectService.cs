@@ -60,5 +60,16 @@ namespace BranchOfficeBackend
             var eh = new EmployeeHours(employeeHours);
             daoService.EditEmployeeHours(eh);
         }
+
+        public List<WebSalary> GetAllSalaries()
+        {
+            var coll = daoService.GetAllSalaries();
+            return coll.Select(e => new WebSalary(e)).ToList();
+        }
+        public List<WebSalary> GetSalariesForAnEmployee(int employeeId)
+        {            
+            var coll = daoService.GetSalariesForAnEmployee(employeeId);
+            return coll.Select(e => new WebSalary(e)).ToList();
+        }
     }
 }

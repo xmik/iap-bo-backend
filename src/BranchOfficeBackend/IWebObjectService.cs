@@ -36,5 +36,8 @@ namespace BranchOfficeBackend
         void DeleteEmployeeHours(int employeeHoursId);
         void EditEmployeeHours(WebEmployeeHours employeeHours);
 
+        List<WebSalary> GetAllSalaries();
+        List<WebSalary> GetSalariesForAnEmployee(int employeeId);
+
     }
 }
