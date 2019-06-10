@@ -9,6 +9,7 @@ namespace BranchOfficeBackend
     /// </summary>
     public class PostgresDataAccessObjectService : IDataAccessObjectService
     {
+        private static readonly log4net.ILog _log = log4net.LogManager.GetLogger(typeof(PostgresDataAccessObjectService)); 
         private readonly BranchOfficeDbContext dbContext;
 
         public PostgresDataAccessObjectService(BranchOfficeDbContext dbContext)
@@ -65,6 +66,7 @@ namespace BranchOfficeBackend
 
             dbContext.Employees.Add(employeeWithId);
             dbContext.SaveChanges();
+            _log.Info(String.Format("Employee added to db: {0}", employeeWithId));
         }
 
         public void DeleteEmployee(int employeeId)
@@ -76,6 +78,7 @@ namespace BranchOfficeBackend
             }
             dbContext.Employees.Remove(myobj);
             dbContext.SaveChanges();
+            _log.Info(String.Format("Employee deleted from db: {0}", myobj));
         }
 
         public void EditEmployee(Employee emp)
@@ -91,6 +94,7 @@ namespace BranchOfficeBackend
             dbContext.SaveChanges();
             this.AddEmployee(emp,true);
             dbContext.SaveChanges();
+            _log.Info(String.Format("Employee edited in db: {0}", emp));
         }
 
         public List<EmployeeHours> GetAllEmployeeHours(int employeeId)
@@ -148,6 +152,7 @@ namespace BranchOfficeBackend
 
             dbContext.EmployeeHoursCollection.Add(employeeHoursWithId);
             dbContext.SaveChanges();
+            _log.Info(String.Format("EmployeeHours added to db: {0}", employeeHoursWithId));
         }
 
         public void DeleteEmployeeHours(int employeeHoursId)
@@ -159,6 +164,7 @@ namespace BranchOfficeBackend
             }
             dbContext.EmployeeHoursCollection.Remove(eh);
             dbContext.SaveChanges();
+            _log.Info(String.Format("EmployeeHours deleted from db: {0}", eh));
         }
 
         public void EditEmployeeHours(EmployeeHours employeeHours)
@@ -174,6 +180,7 @@ namespace BranchOfficeBackend
             dbContext.SaveChanges();
             this.AddEmployeeHours(employeeHours,true);
             dbContext.SaveChanges();
+            _log.Info(String.Format("EmployeeHours edited in db: {0}", employeeHours));
         }
     }
 }
