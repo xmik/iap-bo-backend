@@ -41,11 +41,11 @@ namespace BranchOfficeBackend
 
             Post("/api/employees", async(req, res, routeData) => {
                 _log.Debug("Received HTTP request: POST /api/employees");
-                var result = req.BindAndValidate<WebEmployee>();
-                _log.DebugFormat("Employee object parsed from user: {0}", result.Data);
+                var result = req.Bind<WebEmployee>();
+                _log.DebugFormat("Employee object parsed from user: {0}", result);
 
                 try {
-                    service.AddEmployee(result.Data);
+                    service.AddEmployee(result);
                 } catch (ArgumentException ex) {
                     res.StatusCode = 400;
                     await res.WriteAsync(String.Format("Problem when adding the object to database: {0}", ex.Message));
@@ -53,7 +53,7 @@ namespace BranchOfficeBackend
                 }
                 
                 res.StatusCode = 201;
-                await res.Negotiate(result.ValidationResult.GetFormattedErrors());
+                await res.WriteAsync(String.Format("Employee was correctly added!"));
                 return;
             });
         }

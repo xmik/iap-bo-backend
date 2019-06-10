@@ -40,11 +40,11 @@ namespace BranchOfficeBackend
 
             Post("/api/employee_hours", async(req, res, routeData) => {
                 _log.Debug("Received HTTP request: POST /api/employee_hours");
-                var result = req.BindAndValidate<WebEmployeeHours>();
-                _log.DebugFormat("EmployeeHours object parsed from user: {0}", result.Data);
+                var result = req.Bind<WebEmployeeHours>();
+                _log.DebugFormat("EmployeeHours object parsed from user: {0}", result);
 
                 try {
-                    service.AddEmployeeHours(result.Data);
+                    service.AddEmployeeHours(result);
                 } catch (ArgumentException ex) {
                     res.StatusCode = 400;
                     await res.WriteAsync(String.Format("Problem when adding the object to database: {0}", ex.Message));
@@ -52,7 +52,7 @@ namespace BranchOfficeBackend
                 }
                 
                 res.StatusCode = 201;
-                await res.Negotiate(result.ValidationResult.GetFormattedErrors());
+                await res.WriteAsync(String.Format("EmployeeHours was correctly added!"));
                 return;
             });
 
