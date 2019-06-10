@@ -29,6 +29,13 @@ namespace BranchOfficeBackend
             this.EmployeeId = newId;
             this.IsManager = e.IsManager;
         }
+        public Employee(HQEmployee e)
+        {
+            this.Name = e.Name;
+            this.Email = e.Email;
+            this.EmployeeId = -1;
+            this.IsManager = e.IsManager;
+        }
 
         public override string ToString()
         {

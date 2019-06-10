@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -51,9 +52,41 @@ namespace BranchOfficeBackend
             }
         }
 
+        private bool VerifyEmployeeInCollection(List<Employee> employeesColl, Employee oneEmployee)
+        {
+            var result = employeesColl.Where(x => x.Email == oneEmployee.Email).FirstOrDefault();
+            if (result != null) {
+                return true;
+            }
+            // for (int j=0; j< boEmployees.Count; j++)
+            // {
+            //     if (boEmployees[j].Email == hqAsBoEmployee.Email) {
+            //         // employee from HQ already exists in our DB
+            //         return true;
+            //     }
+            // }
+            return false;
+        }
+        private bool VerifyEmployeeInCollection(List<HQEmployee> employeesColl, Employee oneEmployee)
+        {
+            var result = employeesColl.Where(x => x.Email == oneEmployee.Email).FirstOrDefault();
+            if (result != null) {
+                return true;
+            }
+            return false;
+        }
+
 // TODO: itest that this can be invoked many times in one moment
 // TODO: test how many times a method was invoked
 // TODO: test db state
+
+        /// <summary>
+        /// Get information from HQ about: employees and salaries.
+        /// Then, ensure that BO db contains only those employees and salaries that also
+        /// exist in HQ.
+        /// Then, delete any employeeHours which are connected to a deleted employee. 
+        /// </summary>
+        /// <returns></returns>
         public async Task Synchronize() 
         {
             if (hqApiClient != null)
@@ -68,16 +101,42 @@ namespace BranchOfficeBackend
                     }
                     _log.Info("Starting synchronization");
 
-                    List<HQEmployee> employees = await hqApiClient.ListEmployees(
+                    List<HQEmployee> hqEmployees = await hqApiClient.ListEmployees(
                         this.confService.GetBranchOfficeId());
-                    if (employees != null) {
-                        // TODO; replace bo db contents with the above employees
-                        for (int i=0; i< employees.Count; i++)
+                    if (hqEmployees != null) {
+                        var boEmployees = daoService.GetAllEmployees();
+
+                        // add all the employes from HQ into BO
+                        for (int i=0; i< hqEmployees.Count; i++)
                         {
+                            var hqAsBoEmployee = new Employee(hqEmployees[i]);
+                            bool empPresent = VerifyEmployeeInCollection(boEmployees, hqAsBoEmployee);
+                            if (!empPresent) {
+                                daoService.AddEmployee(hqAsBoEmployee);
+                            }
+
                             List<HQSalary> salaries = await hqApiClient.ListSalariesForEmployee(i);
                             // TODO; replace bo db contents with the above salaries
                         }
+
+                        // remove all the employees in BO that are not present in HQ
+                        boEmployees = daoService.GetAllEmployees();
+                        for (int i=0; i< boEmployees.Count; i++)
+                        {
+                            var boEmp = boEmployees[i];
+                            bool empPresent = VerifyEmployeeInCollection(hqEmployees, boEmp);
+                            if (!empPresent) {
+                                daoService.DeleteEmployee(boEmp.EmployeeId);
+                                var employeeHoursColl = daoService.GetAllEmployeeHours(boEmp.EmployeeId);
+                                for (int j=0; j< employeeHoursColl.Count; j++)
+                                {
+                                    daoService.DeleteEmployeeHours(employeeHoursColl[j].EmployeeHoursId);
+                                }
+                            }
+                        }
                     }
+                    _log.Info("Synchronization was successful");
+                    this.daoService.InformOnDBContents();
                 } catch (System.Net.Http.HttpRequestException ex) {
                     _log.Error("Synchronizing with HQ failed (is the HQ server running?).", ex);
                 } finally {
