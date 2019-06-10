@@ -53,6 +53,23 @@ Add one employee:
 $ curl -i -X POST localhost:8080/api/employees -d '{"email": "123@gmail.com", "name": "Alex Nowy"}' -H 'Content-Type: text/json; charset=utf-8'
 ```
 
+Add one employee_hours object (employee with id: 1 must have been already created):
+```
+$ curl -i -X POST localhost:8080/api/employee_hours -d '{"value": "100", "employeeId": "1", "timePeriod": "not important" }' -H 'Content-Type: text/json; charset=utf-8'
+```
+
+Get one employee_hours object:
+```
+$ curl -i  localhost:8080/api/employee_hours/1
+{"value":100.0,"timePeriod":"not important","id":1,"employeeId":1}
+```
+
+Get a collection of employee_hours objects for employee with id: 1
+```
+$ curl -i  localhost:8080/api/employee_hours/1
+[{"value":100.0,"timePeriod":"not important","id":1,"employeeId":1}]
+```
+
 Invoke synchronization:
 ```
 $ curl -i -X POST localhost:8080/api/synchronize -d ''

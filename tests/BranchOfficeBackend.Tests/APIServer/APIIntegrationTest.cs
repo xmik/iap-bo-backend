@@ -121,6 +121,26 @@ namespace BranchOfficeBackend.Tests
         }
 
         [Fact]
+        public async Task GetEHColl_WhenSomeData()
+        {
+            await dbContext.EmployeeHoursCollection.AddAsync(
+                new EmployeeHours{ EmployeeHoursId = 100, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 33});
+            await dbContext.EmployeeHoursCollection.AddAsync(
+                new EmployeeHours{ EmployeeHoursId = 102, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 33});
+            await dbContext.SaveChangesAsync();
+            using(var testServer = new TestServerBuilder()
+                .Build())
+            {
+                var client = testServer.CreateClient();
+                var response = await client.GetAsync("/api/employee_hours/list/33");
+                Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);    
+                var jsonString = await response.Content.ReadAsStringAsync();
+                var items = JArray.Parse(jsonString);
+                Assert.Equal(2, items.Count);                       
+            }
+        }
+
+        [Fact]
         public async Task GetEH_WhenNoData()
         {
             using(var testServer = new TestServerBuilder()
