@@ -684,6 +684,25 @@ namespace BranchOfficeBackend.Tests
         }
 
         [Fact]
+        public async Task AddSalary_Duplicate()
+        {
+            await dbContext.Employees.AddAsync(new Employee{ Name = "Ola AAA", Email = "aaaa@gmail.com", EmployeeId = 1 });
+            await dbContext.Salaries.AddAsync(new Salary{ SalaryId = 1, Value = 100, TimePeriod = "some", EmployeeId = 1 });
+            await dbContext.Salaries.AddAsync(new Salary{ SalaryId = 2, Value = 200, TimePeriod = "some2", EmployeeId = 1 });
+            await dbContext.SaveChangesAsync();
+
+            var objToBeAdded = new Salary{ SalaryId = 3, Value = 300, TimePeriod = "some2", EmployeeId = 1 };
+
+            var dao = new PostgresDataAccessObjectService(dbContext);
+            try {
+                dao.AddSalary(objToBeAdded);       
+            } catch(Exception ex) {
+                Assert.Equal(typeof(ArgumentException), ex.GetType());
+                Assert.Equal("Salary with TimePeriod: some2 for Employee: 1 already exists", ex.Message);
+            }
+        }
+
+        [Fact]
         public async Task DeleteSalary_WhenExists()
         {
             await dbContext.Salaries.AddAsync(new Salary{ SalaryId = 1, Value = 100, TimePeriod = "some", EmployeeId = 1 });

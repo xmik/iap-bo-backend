@@ -235,11 +235,19 @@ namespace BranchOfficeBackend
             }
         }
 
+        // no 2 salaries for 1 employee can have the same time period
         public void AddSalary(Salary salary, bool keepId=false)
         {
             VerifySalary(salary);
             Salary salaryWithId;
             var existingObjects = this.GetAllSalaries();
+
+            var objWithExistingTimePeriod = existingObjects.Where(
+                e => (e.EmployeeId == salary.EmployeeId && e.TimePeriod == salary.TimePeriod)).FirstOrDefault();
+            if (objWithExistingTimePeriod != null){
+                throw new ArgumentException(String.Format(
+                    "Salary with TimePeriod: {0} for Employee: {1} already exists", salary.TimePeriod, salary.EmployeeId));
+            }
 
             if (keepId) {
                 salaryWithId = new Salary(salary, salary.SalaryId);
