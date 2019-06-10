@@ -34,6 +34,7 @@ namespace BranchOfficeBackend
         WebEmployeeHours GetOneEmployeeHours(int employeeHoursId);
         void AddEmployeeHours(WebEmployeeHours employeeHours);
         void DeleteEmployeeHours(int employeeHoursId);
+        void EditEmployeeHours(WebEmployeeHours employeeHours);
 
     }
 }

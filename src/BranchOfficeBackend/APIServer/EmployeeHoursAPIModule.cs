@@ -63,6 +63,25 @@ namespace BranchOfficeBackend
                     await res.Negotiate(weh);
                 }
             });
+
+            Put("/api/employee_hours", async(req, res, routeData) => {
+                var result = req.BindAndValidate<WebEmployeeHours>();
+                var weh = service.GetOneEmployeeHours(result.Data.Id);
+                if (weh == null)
+                {
+                    res.StatusCode = 404;
+                } else {
+                    try {
+                    service.EditEmployeeHours(result.Data);
+                    } catch (ArgumentException ex) {
+                        res.StatusCode = 400;
+                        await res.WriteAsync(String.Format("Problem when editing the object in database: {0}", ex.Message));
+                        return;
+                    }
+                    res.StatusCode = 202;
+                    await res.Negotiate(result.ValidationResult.GetFormattedErrors());
+                }                
+            });
         }
     }
 }

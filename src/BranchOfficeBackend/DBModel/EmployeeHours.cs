@@ -33,8 +33,7 @@ namespace BranchOfficeBackend
             this.Value = webEmployeeHours.Value;
             this.TimePeriod = webEmployeeHours.TimePeriod;
             this.EmployeeId = webEmployeeHours.EmployeeId;
-            // this will be set by db
-            this.EmployeeHoursId = -1;
+            this.EmployeeHoursId = webEmployeeHours.Id;
         }
 
         public EmployeeHours(EmployeeHours employeeHours, int v)
