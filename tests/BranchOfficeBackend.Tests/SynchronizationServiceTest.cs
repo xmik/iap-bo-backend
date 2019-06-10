@@ -7,6 +7,7 @@ using Xunit.Abstractions;
 
 namespace BranchOfficeBackend.Tests
 {
+    [Collection("do-not-run-in-parallel")]
     public class SynchronizationServiceTest: IDisposable
     {
         private BranchOfficeDbContext dbContext;
