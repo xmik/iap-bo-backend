@@ -28,8 +28,17 @@ namespace BranchOfficeBackend
             return (Employee)(oneEmp.FirstOrDefault());
         }
 
+        private void VerifyEmployee(Employee emp)
+        {
+            if (emp.Email == "")
+            {
+                throw new ArgumentException("Email was empty");
+            }
+        }
         public void AddEmployee(Employee employee, bool keepId=false)
         {
+            VerifyEmployee(employee);
+
             var existingEmployees = this.GetAllEmployees();
             var employeeWithEmail = existingEmployees.Where(e => e.Email == employee.Email).FirstOrDefault();
             if (employeeWithEmail != null){
@@ -66,6 +75,21 @@ namespace BranchOfficeBackend
                 return;
             }
             dbContext.Employees.Remove(myobj);
+            dbContext.SaveChanges();
+        }
+
+        public void EditEmployee(Employee emp)
+        {
+            Employee myobj = GetEmployee(emp.EmployeeId);
+            if (myobj == null)
+            {
+                throw new InvalidOperationException("Employee object not found");
+            }
+            VerifyEmployee(emp);
+
+            this.DeleteEmployee(emp.EmployeeId);
+            dbContext.SaveChanges();
+            this.AddEmployee(emp,true);
             dbContext.SaveChanges();
         }
 

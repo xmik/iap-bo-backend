@@ -11,6 +11,7 @@ namespace BranchOfficeBackend
         Employee GetEmployee(int id);
         void AddEmployee(Employee employee, bool keepId=false);
         void DeleteEmployee(int employeeId);
+        void EditEmployee(Employee emp);
 
         List<EmployeeHours> GetAllEmployeeHours(int employeeId);
         EmployeeHours GetOneEmployeeHours(int employeeHoursId);

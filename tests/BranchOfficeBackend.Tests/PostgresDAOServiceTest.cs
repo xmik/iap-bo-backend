@@ -464,5 +464,38 @@ namespace BranchOfficeBackend.Tests
             Assert.Equal(2, coll.Count);
         }
 
+        [Fact]
+        public async Task EditEmployee_WhenNotExists()
+        {
+            await dbContext.Employees.AddAsync(new Employee{ Name = "Ola AAA", Email = "aaaa@gmail.com", EmployeeId = 4 });
+            await dbContext.SaveChangesAsync();
+
+            var dao = new PostgresDataAccessObjectService(dbContext);            
+            var newEH = new Employee{ Name = "Ola 2", Email = "22@gmail.com", EmployeeId = 5 };
+
+            try {
+                dao.EditEmployee(newEH);
+            } catch (Exception e) {
+                Assert.Equal(typeof(InvalidOperationException), e.GetType());
+                Assert.Equal("Employee object not found", e.Message);
+            }
+        }
+
+        [Fact]
+        public async Task EditEmployee_WhenExists()
+        {
+            await dbContext.Employees.AddAsync(new Employee{ Name = "Ola AAA", Email = "aaaa@gmail.com", EmployeeId = 5 });
+            await dbContext.SaveChangesAsync();
+
+            var dao = new PostgresDataAccessObjectService(dbContext);            
+            var newEH = new Employee{ Name = "Ola 2", Email = "22@gmail.com", EmployeeId = 5 };
+
+            dao.EditEmployee(newEH);
+            var returned = dao.GetEmployee(5);
+            Assert.Equal(returned.EmployeeId, newEH.EmployeeId);
+            Assert.Equal(returned.Name, newEH.Name);
+            Assert.Equal(returned.Email, newEH.Email);
+        }
+
     }
 }
