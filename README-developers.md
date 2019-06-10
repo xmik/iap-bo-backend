@@ -41,6 +41,7 @@ dotnet ef database update --startup-project=src/BranchOfficeBackend/ --project=s
 or instead just add a new migration:
 ```
 dotnet ef migrations add TODOChangeName --startup-project=src/BranchOfficeBackend/ --project=src/BranchOfficeBackend/
+dotnet ef database update --startup-project=src/BranchOfficeBackend/ --project=src/BranchOfficeBackend/
 ```
 
 Login into the postgres container and check current state of tables:

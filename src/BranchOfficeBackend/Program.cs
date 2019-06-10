@@ -27,13 +27,13 @@ namespace BranchOfficeBackend
 
             List<EmployeeHours> employeeHours = new List<EmployeeHours>();
                 employeeHours.Add(new EmployeeHours { 
-                    Value = 15, TimePeriod = "20.1.2019-26.01.2019", EmployeeId = 1, HoursCount = 100, EmployeeHoursId = 1});
+                    Value = 15, TimePeriod = "20.1.2019-26.01.2019", EmployeeId = 1, EmployeeHoursId = 1});
                 employeeHours.Add(new EmployeeHours { 
-                    Value = 10, TimePeriod = "27.01.2019-02.02.2019", EmployeeId = 1, HoursCount = 24, EmployeeHoursId = 2 });
+                    Value = 10, TimePeriod = "27.01.2019-02.02.2019", EmployeeId = 1, EmployeeHoursId = 2 });
                 employeeHours.Add(new EmployeeHours { 
-                    Value = 12, TimePeriod = "03.02.2019-09.02.2019", EmployeeId = 1, HoursCount = 66, EmployeeHoursId = 3 });
+                    Value = 12, TimePeriod = "03.02.2019-09.02.2019", EmployeeId = 1, EmployeeHoursId = 3 });
                 employeeHours.Add(new EmployeeHours { 
-                    Value = 2, TimePeriod = "20.1.2019-26.01.2019", EmployeeId = 2, HoursCount = 100, EmployeeHoursId = 4 });
+                    Value = 2, TimePeriod = "20.1.2019-26.01.2019", EmployeeId = 2, EmployeeHoursId = 4 });
 
             Console.WriteLine("Updating database!");
 

@@ -173,10 +173,10 @@ namespace BranchOfficeBackend.Tests
             var boEmp2 = new Employee{ Name = "Ela K", Email = "elak@gmail.com", EmployeeId = 5, IsManager = true };
             dao.AddEmployee(boEmp1,true);
             dao.AddEmployee(boEmp2,true);
-            var eh1 = new EmployeeHours{ EmployeeHoursId = 102, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4, HoursCount = 10}; // will be deleted
-            var eh2 = new EmployeeHours{ EmployeeHoursId = 103, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4, HoursCount = 10}; // will be deleted
-            var eh3 = new EmployeeHours{ EmployeeHoursId = 104, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4, HoursCount = 10}; // will be deleted
-            var eh4 = new EmployeeHours{ EmployeeHoursId = 105, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 5, HoursCount = 10};
+            var eh1 = new EmployeeHours{ EmployeeHoursId = 102, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4}; // will be deleted
+            var eh2 = new EmployeeHours{ EmployeeHoursId = 103, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4}; // will be deleted
+            var eh3 = new EmployeeHours{ EmployeeHoursId = 104, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4}; // will be deleted
+            var eh4 = new EmployeeHours{ EmployeeHoursId = 105, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 5};
             dao.AddEmployeeHours(eh1,true);
             dao.AddEmployeeHours(eh2,true);
             dao.AddEmployeeHours(eh3,true);
@@ -258,24 +258,7 @@ namespace BranchOfficeBackend.Tests
         }
 
 
-// test with already added emp and salary
+        // TODO: how to test that only 1 synchronizing happens in 1 time 
 
-
-        // [Fact(Timeout = 500)]
-        // public void SynchronizeDoesNotThrowExceptionWhenNoHQServer_ManyTimesParallely()
-        // {
-        //     var cs = CommonHelpers.MockConfServ(false);
-        //     var hqApiClient = new Moq.Mock<IHQAPIClient>();            
-        //     var dao = new Moq.Mock<IDataAccessObjectService>();
-        //     var ss = new SynchronizatorService(hqApiClient.Object, cs, dao.Object);
-        //     ss.Synchronize();
-        //     ss.Synchronize();
-        //     ss.Synchronize();
-        //     ss.Synchronize();
-        //     hqApiClient.Verify(m => m.ListEmployees(0), Moq.Times.Exactly(1));
-        //     // ListEmployees did not suceed, so no new http requests are handled
-        //     hqApiClient.Verify(m => m.ListSalariesForEmployee(0), Moq.Times.Never);
-        //     ss.Dispose();
-        // }
     }
 }

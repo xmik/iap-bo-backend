@@ -74,8 +74,7 @@ namespace BranchOfficeBackend.Tests
                     {"value", 15.0 },
                     {"id", 77 },
                     {"timePeriod", "20.1.2019-26.01.2019" },
-                    {"employeeId", 0 },
-                    {"hoursCount", 0}
+                    {"employeeId", 0 }
                 }; 
                 Assert.True(JToken.DeepEquals(expected, actual));                    
             }
@@ -172,7 +171,7 @@ namespace BranchOfficeBackend.Tests
             var mock = new Moq.Mock<IDataAccessObjectService>();
             mock.Setup(m => m.DeleteEmployeeHours(77));
             mock.Setup(m => m.GetOneEmployeeHours(77)).Returns(
-                    new EmployeeHours{EmployeeId = 1, EmployeeHoursId = 77, HoursCount = 12, TimePeriod = "aa", Value = 100});
+                    new EmployeeHours{EmployeeId = 1, EmployeeHoursId = 77, TimePeriod = "aa", Value = 100});
             using(var testServer = new TestServerBuilder()
                 .WithMock<IDataAccessObjectService>(typeof(IDataAccessObjectService), mock)
                 .Build())

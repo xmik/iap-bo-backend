@@ -122,24 +122,12 @@ paths:
       produces:
       - "application/json"
       parameters:
-      - name: "employeeId"
-        in: "path"
-        description: "Employee ID"
+      - in: "body"
+        name: "body"
+        description: "EmployeeHours object"
         required: true
-        type: "integer"
-        format: "int64"
-      - name: "hoursCount"
-        in: "path"
-        description: "Number of hours worked"
-        required: true
-        type: "number"
-        format: "float"
-      - name: "timePeriod"
-        in: "path"
-        description: "Date time range"
-        required: true
-        type: "string"
-        format: "string"
+        schema:
+          $ref: "#/definitions/EmployeeHours"
       responses:
         201:
           description: "successful operation"
@@ -431,10 +419,6 @@ definitions:
         format: "string"
         default: ""
       EmployeeId:
-        type: "integer"
-        format: "int64"
-        default: -1
-      HoursCount:
         type: "integer"
         format: "int64"
         default: -1

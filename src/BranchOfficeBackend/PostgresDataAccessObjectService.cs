@@ -120,8 +120,8 @@ namespace BranchOfficeBackend
             int employeeId = employeeHours.EmployeeId;
             if (employeeId == -1)
                 throw new ArgumentException("EmployeeId was not set");
-            if (employeeHours.HoursCount < 0)
-                throw new ArgumentException("HoursCount < 0");
+            if (employeeHours.Value < 0)
+                throw new ArgumentException("Value < 0");
 
             var existingEmployees = this.GetAllEmployees();
             var employeeWithId = existingEmployees.Where(e => e.EmployeeId == employeeId).FirstOrDefault();

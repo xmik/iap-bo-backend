@@ -31,7 +31,6 @@ namespace BranchOfficeBackend
             }
         }
 
-// TODO: test frequency
         public async Task SynchronizationLoopTimer()
         {
             int frequency_seconds = this.confService.GetSynchronizationFrequency();
@@ -58,13 +57,6 @@ namespace BranchOfficeBackend
             if (result != null) {
                 return true;
             }
-            // for (int j=0; j< boEmployees.Count; j++)
-            // {
-            //     if (boEmployees[j].Email == hqAsBoEmployee.Email) {
-            //         // employee from HQ already exists in our DB
-            //         return true;
-            //     }
-            // }
             return false;
         }
         private bool VerifyEmployeeInCollection(List<HQEmployee> employeesColl, Employee oneEmployee)
@@ -84,9 +76,6 @@ namespace BranchOfficeBackend
             }
             return false;
         }
-
-// TODO: itest that this can be invoked many times in one moment
-// TODO: test how many times a method was invoked
 
         /// <summary>
         /// Get information from HQ about: employees and salaries.
@@ -179,7 +168,6 @@ namespace BranchOfficeBackend
                 }
             }
         }
-
 
         public void Dispose()
         {

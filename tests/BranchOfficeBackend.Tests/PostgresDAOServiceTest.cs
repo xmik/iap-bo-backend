@@ -137,7 +137,6 @@ namespace BranchOfficeBackend.Tests
 
             var eh = new EmployeeHours();
             eh.EmployeeId = 4;
-            eh.HoursCount = 90;
             eh.Value = 90;
             eh.TimePeriod = "02.03.2019_08.03.2019";
 
@@ -158,20 +157,20 @@ namespace BranchOfficeBackend.Tests
             await dbContext.Employees.AddAsync(new Employee{ Name = "Ola AAA", Email = "aaaa@gmail.com", EmployeeId = 4 });
             await dbContext.Employees.AddAsync(new Employee{ Name = "Ola 2", Email = "aaaa2@gmail.com", EmployeeId = 5 });
             await dbContext.EmployeeHoursCollection.AddAsync(
-                new EmployeeHours{ EmployeeHoursId = 100, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4, HoursCount = 11});
+                new EmployeeHours{ EmployeeHoursId = 100, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4});
             await dbContext.EmployeeHoursCollection.AddAsync(
-                new EmployeeHours{ EmployeeHoursId = 101, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4, HoursCount = 11});
+                new EmployeeHours{ EmployeeHoursId = 101, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4});
             await dbContext.EmployeeHoursCollection.AddAsync(
-                new EmployeeHours{ EmployeeHoursId = 102, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 5, HoursCount = 11});
+                new EmployeeHours{ EmployeeHoursId = 102, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 5});
             await dbContext.SaveChangesAsync();
 
             var dao = new PostgresDataAccessObjectService(dbContext);
             dao.AddEmployeeHours(
-                new EmployeeHours{ EmployeeHoursId = 100, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4, HoursCount = 11});
+                new EmployeeHours{ EmployeeHoursId = 100, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4});
             dao.AddEmployeeHours(
-                new EmployeeHours{ EmployeeHoursId = 100, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4, HoursCount = 11});
+                new EmployeeHours{ EmployeeHoursId = 100, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4});
             dao.AddEmployeeHours(
-                new EmployeeHours{ EmployeeHoursId = 100, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 5, HoursCount = 11});
+                new EmployeeHours{ EmployeeHoursId = 100, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 5});
             
             var coll = dao.GetEmployeeHoursForAnEmployee(4);
             Assert.Equal(4, coll.Count);
@@ -185,7 +184,6 @@ namespace BranchOfficeBackend.Tests
 
             var eh = new EmployeeHours();
             eh.EmployeeId = 4;
-            eh.HoursCount = 90;
             eh.Value = 90;
             eh.TimePeriod = "02.03.2019_08.03.2019";
 
@@ -207,7 +205,6 @@ namespace BranchOfficeBackend.Tests
 
             var eh = new EmployeeHours();
             eh.EmployeeId = 4;
-            eh.HoursCount = 90;
             eh.Value = 90;
             eh.TimePeriod = "02.03.2019_08.03.2019";
 
@@ -227,7 +224,6 @@ namespace BranchOfficeBackend.Tests
             await dbContext.SaveChangesAsync();
 
             var eh = new EmployeeHours();
-            eh.HoursCount = 90;
             eh.Value = 90;
             eh.TimePeriod = "02.03.2019_08.03.2019";
 
@@ -241,15 +237,14 @@ namespace BranchOfficeBackend.Tests
         }
 
         [Fact]
-        public async Task AddEmployeeHours_WhenHoursCountInvalid()
+        public async Task AddEmployeeHours_WhenValueInvalid()
         {
             await dbContext.Employees.AddAsync(new Employee{ Name = "Ola AAA", Email = "aaaa@gmail.com", EmployeeId = 9 });
             await dbContext.SaveChangesAsync();
 
             var eh = new EmployeeHours();
             eh.EmployeeId = 4;
-            eh.HoursCount = -90;
-            eh.Value = 90;
+            eh.Value = -90;
             eh.TimePeriod = "02.03.2019_08.03.2019";
 
             var dao = new PostgresDataAccessObjectService(dbContext);
@@ -257,7 +252,7 @@ namespace BranchOfficeBackend.Tests
                 dao.AddEmployeeHours(eh);
             } catch (Exception e) {
                 Assert.Equal(typeof(ArgumentException), e.GetType());
-                Assert.Equal("HoursCount < 0", e.Message);
+                Assert.Equal("Value < 0", e.Message);
             }
         }
 
@@ -266,10 +261,10 @@ namespace BranchOfficeBackend.Tests
         {
             await dbContext.Employees.AddAsync(new Employee{ Name = "Ola AAA", Email = "aaaa@gmail.com", EmployeeId = 4 });
             await dbContext.EmployeeHoursCollection.AddAsync(
-                new EmployeeHours{ EmployeeHoursId = 100, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4, HoursCount = 99});
+                new EmployeeHours{ EmployeeHoursId = 100, Value = 100, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4});
             await dbContext.SaveChangesAsync();
 
-            var emp = new EmployeeHours{ EmployeeHoursId = 100, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4, HoursCount = 99};
+            var emp = new EmployeeHours{ EmployeeHoursId = 100, Value = 100, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4};
 
             var dao = new PostgresDataAccessObjectService(dbContext);
             try {
@@ -334,7 +329,7 @@ namespace BranchOfficeBackend.Tests
 
             var dao = new PostgresDataAccessObjectService(dbContext);
             
-            var newEH = new EmployeeHours{ EmployeeHoursId = 101, Value = 777f, TimePeriod = "02.01.2019_08.01.2022", EmployeeId = 4, HoursCount = 999};            
+            var newEH = new EmployeeHours{ EmployeeHoursId = 101, Value = 777f, TimePeriod = "02.01.2019_08.01.2022", EmployeeId = 4};            
             dao.EditEmployeeHours(newEH);
             var obj = dao.GetOneEmployeeHours(101);
             Assert.NotNull(obj);
@@ -342,7 +337,6 @@ namespace BranchOfficeBackend.Tests
             Assert.Equal(777f, obj.Value);
             Assert.Equal("02.01.2019_08.01.2022", obj.TimePeriod);
             Assert.Equal(4, obj.EmployeeId);
-            Assert.Equal(999, obj.HoursCount);
         }
 
         [Fact]
@@ -355,7 +349,7 @@ namespace BranchOfficeBackend.Tests
             await dbContext.SaveChangesAsync();
 
             var dao = new PostgresDataAccessObjectService(dbContext);            
-            var newEH = new EmployeeHours{ EmployeeHoursId = 101, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4, HoursCount = 9};
+            var newEH = new EmployeeHours{ EmployeeHoursId = 101, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4};
 
             try {
                 dao.EditEmployeeHours(newEH);
