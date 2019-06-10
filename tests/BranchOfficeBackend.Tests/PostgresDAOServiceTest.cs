@@ -683,5 +683,38 @@ namespace BranchOfficeBackend.Tests
             }
         }
 
+        [Fact]
+        public async Task DeleteSalary_WhenExists()
+        {
+            await dbContext.Salaries.AddAsync(new Salary{ SalaryId = 1, Value = 100, TimePeriod = "some", EmployeeId = 1 });
+            await dbContext.Salaries.AddAsync(new Salary{ SalaryId = 2, Value = 200, TimePeriod = "some2", EmployeeId = 1 });
+            await dbContext.SaveChangesAsync();
+
+            var dao = new PostgresDataAccessObjectService(dbContext);
+
+            var coll = dao.GetAllSalaries();
+            Assert.Equal(2, coll.Count);
+            
+            dao.DeleteSalary(1);
+            
+            coll = dao.GetAllSalaries();
+            Assert.Equal(1, coll.Count);
+            Assert.Equal(2, coll[0].SalaryId);
+        }
+
+        [Fact]
+        public void DeleteSalary_WhenNotExists()
+        {
+            var dao = new PostgresDataAccessObjectService(dbContext);
+
+            var coll = dao.GetAllSalaries();
+            Assert.Equal(0, coll.Count);
+            
+            dao.DeleteSalary(1);
+            
+            coll = dao.GetAllSalaries();
+            Assert.Equal(0, coll.Count);
+        }
+
     }
 }

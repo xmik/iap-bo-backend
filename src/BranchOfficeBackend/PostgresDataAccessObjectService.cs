@@ -262,5 +262,15 @@ namespace BranchOfficeBackend
             dbContext.SaveChanges();
             _log.Info(String.Format("Salary added to db: {0}", salaryWithId));
         }
+        public void DeleteSalary(int salaryId) {
+            var existingObj = GetOneSalary(salaryId);
+            if (existingObj == null)
+            {
+                return;
+            }
+            dbContext.Salaries.Remove(existingObj);
+            dbContext.SaveChanges();
+            _log.Info(String.Format("Salary deleted from db: {0}", existingObj));
+        }
     }
 }
