@@ -13,7 +13,7 @@ namespace BranchOfficeBackend
         void DeleteEmployee(int employeeId);
         void EditEmployee(Employee emp);
 
-        List<EmployeeHours> GetAllEmployeeHours(int employeeId);
+        List<EmployeeHours> GetEmployeeHoursForAnEmployee(int employeeId);
         EmployeeHours GetOneEmployeeHours(int employeeHoursId);
         void AddEmployeeHours(EmployeeHours employeeHours, bool keepId=false);
         void DeleteEmployeeHours(int employeeHoursId);

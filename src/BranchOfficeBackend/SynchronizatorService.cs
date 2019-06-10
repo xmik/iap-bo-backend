@@ -127,7 +127,7 @@ namespace BranchOfficeBackend
                             bool empPresent = VerifyEmployeeInCollection(hqEmployees, boEmp);
                             if (!empPresent) {
                                 daoService.DeleteEmployee(boEmp.EmployeeId);
-                                var employeeHoursColl = daoService.GetAllEmployeeHours(boEmp.EmployeeId);
+                                var employeeHoursColl = daoService.GetEmployeeHoursForAnEmployee(boEmp.EmployeeId);
                                 for (int j=0; j< employeeHoursColl.Count; j++)
                                 {
                                     daoService.DeleteEmployeeHours(employeeHoursColl[j].EmployeeHoursId);

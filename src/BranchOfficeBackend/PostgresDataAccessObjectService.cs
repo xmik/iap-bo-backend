@@ -97,7 +97,7 @@ namespace BranchOfficeBackend
             _log.Info(String.Format("Employee edited in db: {0}", emp));
         }
 
-        public List<EmployeeHours> GetAllEmployeeHours(int employeeId)
+        public List<EmployeeHours> GetEmployeeHoursForAnEmployee(int employeeId)
         {
             var all = dbContext.EmployeeHoursCollection.ToList();
             var selectedByEmployeeId = all.Where(obj => obj.EmployeeId == employeeId);

@@ -79,22 +79,22 @@ namespace BranchOfficeBackend.Tests
         }
 
         [Fact]
-        public void GetAllEmployeeHours_ShouldReturnEmptyListWhenDBIsEmpty()
+        public void GetEmployeeHoursForAnEmployee_ShouldReturnEmptyListWhenDBIsEmpty()
         {
             var dao = new PostgresDataAccessObjectService(dbContext);
-            var coll = dao.GetAllEmployeeHours(0);
+            var coll = dao.GetEmployeeHoursForAnEmployee(0);
             Assert.Empty(coll);
         }
 
         [Fact]
-        public async Task GetAllEmployeeHours_ShouldReturnAllEmployeesHoursWhenSomeInDB()
+        public async Task GetEmployeeHoursForAnEmployee_ShouldReturnAllEmployeesHoursWhenSomeInDB()
         {
             await dbContext.EmployeeHoursCollection.AddAsync(
                 new EmployeeHours{ EmployeeHoursId = 100, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 0});
             await dbContext.SaveChangesAsync();
 
             var dao = new PostgresDataAccessObjectService(dbContext);
-            var coll = dao.GetAllEmployeeHours(0);
+            var coll = dao.GetEmployeeHoursForAnEmployee(0);
             Assert.Single(coll);
         }
 
@@ -144,7 +144,7 @@ namespace BranchOfficeBackend.Tests
             var dao = new PostgresDataAccessObjectService(dbContext);
             dao.AddEmployeeHours(eh);
             
-            var coll = dao.GetAllEmployeeHours(4);
+            var coll = dao.GetEmployeeHoursForAnEmployee(4);
             Assert.Equal(2, coll.Count);
             Assert.Equal(100f, coll[0].Value);
             Assert.Equal(90f, coll[1].Value);
@@ -173,7 +173,7 @@ namespace BranchOfficeBackend.Tests
             dao.AddEmployeeHours(
                 new EmployeeHours{ EmployeeHoursId = 100, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 5, HoursCount = 11});
             
-            var coll = dao.GetAllEmployeeHours(4);
+            var coll = dao.GetEmployeeHoursForAnEmployee(4);
             Assert.Equal(4, coll.Count);
         }
 
@@ -192,7 +192,7 @@ namespace BranchOfficeBackend.Tests
             var dao = new PostgresDataAccessObjectService(dbContext);
             dao.AddEmployeeHours(eh);
             
-            var coll = dao.GetAllEmployeeHours(4);
+            var coll = dao.GetEmployeeHoursForAnEmployee(4);
             Assert.Single(coll);
             Assert.Equal(90f, coll[0].Value);
             // apparently we must start from 1
@@ -293,12 +293,12 @@ namespace BranchOfficeBackend.Tests
 
             var dao = new PostgresDataAccessObjectService(dbContext);
 
-            var coll = dao.GetAllEmployeeHours(4);
+            var coll = dao.GetEmployeeHoursForAnEmployee(4);
             Assert.Equal(3, coll.Count);
             
             dao.DeleteEmployeeHours(100);
             
-            coll = dao.GetAllEmployeeHours(4);
+            coll = dao.GetEmployeeHoursForAnEmployee(4);
             Assert.Equal(2, coll.Count);
         }
 
@@ -313,12 +313,12 @@ namespace BranchOfficeBackend.Tests
 
             var dao = new PostgresDataAccessObjectService(dbContext);
             
-            var coll = dao.GetAllEmployeeHours(4);
+            var coll = dao.GetEmployeeHoursForAnEmployee(4);
             Assert.Equal(2, coll.Count);
             
             dao.DeleteEmployeeHours(100);
             
-            coll = dao.GetAllEmployeeHours(4);
+            coll = dao.GetEmployeeHoursForAnEmployee(4);
             Assert.Equal(2, coll.Count);
         }
 
