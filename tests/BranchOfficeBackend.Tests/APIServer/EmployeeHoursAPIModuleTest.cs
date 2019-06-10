@@ -19,7 +19,7 @@ namespace BranchOfficeBackend.Tests
         public async Task GetCollectionOfEHObj_ShouldReturnJsonList_WhenFound()
         {
             var mock = new Moq.Mock<IWebObjectService>();
-            mock.Setup(m => m.GetAllEmployeeHours(0)).Returns(new System.Collections.Generic.List<WebEmployeeHours>() {
+            mock.Setup(m => m.GetEmployeeHoursForAnEmployee(0)).Returns(new System.Collections.Generic.List<WebEmployeeHours>() {
                 new WebEmployeeHours() { Value = 15f, TimePeriod = "20.1.2019-26.01.2019", EmployeeId = 0, Id = 0 },
                 new WebEmployeeHours() { Value = 10f, TimePeriod = "27.01.2019-02.02.2019", EmployeeId = 0, Id = 1 }
             });
@@ -40,7 +40,7 @@ namespace BranchOfficeBackend.Tests
         public async Task GetCollectionOfEHObj_ShouldReturn404_WhenNotFound()
         {
             var mock = new Moq.Mock<IWebObjectService>();
-            mock.Setup(m => m.GetAllEmployeeHours(0)).Returns(new System.Collections.Generic.List<WebEmployeeHours>() {
+            mock.Setup(m => m.GetEmployeeHoursForAnEmployee(0)).Returns(new System.Collections.Generic.List<WebEmployeeHours>() {
                 new WebEmployeeHours() { Value = 15f, TimePeriod = "20.1.2019-26.01.2019", EmployeeId = 0, Id = 0 },
                 new WebEmployeeHours() { Value = 10f, TimePeriod = "27.01.2019-02.02.2019", EmployeeId = 0, Id = 1 }
             });

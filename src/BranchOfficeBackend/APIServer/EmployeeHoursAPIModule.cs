@@ -15,7 +15,7 @@ namespace BranchOfficeBackend
             Get("/api/employee_hours/list/{employeeId:int}", async(req, res, routeData) => {
                 int id = routeData.As<int>("employeeId");
                 _log.Debug(String.Format("Received HTTP request: GET /api/employee_hours/list/{0}",id));
-                var list = service.GetAllEmployeeHours(id);
+                var list = service.GetEmployeeHoursForAnEmployee(id);
                 if (list == null || list.Count == 0)
                 {
                     res.StatusCode = 404;
