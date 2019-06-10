@@ -29,7 +29,7 @@ namespace BranchOfficeBackend
 
         public WebEmployee GetEmployee(int employeeId)
         {
-            var dbEmployee = daoService.GetEmployee(employeeId);
+            var dbEmployee = daoService.GetOneEmployee(employeeId);
             return new WebEmployee(dbEmployee);
         }
 

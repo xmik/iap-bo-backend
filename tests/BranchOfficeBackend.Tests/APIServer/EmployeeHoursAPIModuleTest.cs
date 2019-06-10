@@ -225,7 +225,7 @@ namespace BranchOfficeBackend.Tests
             var mockDB = new Moq.Mock<IDataAccessObjectService>();
             mockDB.Setup(m => m.GetOneEmployeeHours(77)).
                 Returns(new EmployeeHours{ EmployeeHoursId = 77, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4});
-            mockDB.Setup(m => m.GetEmployee(33)).
+            mockDB.Setup(m => m.GetOneEmployee(33)).
                 Returns((Employee)null);
             mockDB.Setup(m => m.EditEmployeeHours(Moq.It.IsAny<EmployeeHours>() )).Throws<ArgumentException>();
             using(var testServer = new TestServerBuilder()

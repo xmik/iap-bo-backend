@@ -22,7 +22,7 @@ namespace BranchOfficeBackend
             return dbContext.Employees.ToList();
         }
 
-        public Employee GetEmployee(int id)
+        public Employee GetOneEmployee(int id)
         {
             var employees = dbContext.Employees.ToList();
             var oneEmp = employees.Where(obj => obj.EmployeeId == id);
@@ -71,7 +71,7 @@ namespace BranchOfficeBackend
 
         public void DeleteEmployee(int employeeId)
         {
-            Employee myobj = GetEmployee(employeeId);
+            Employee myobj = GetOneEmployee(employeeId);
             if (myobj == null)
             {
                 return;
@@ -83,7 +83,7 @@ namespace BranchOfficeBackend
 
         public void EditEmployee(Employee emp)
         {
-            Employee myobj = GetEmployee(emp.EmployeeId);
+            Employee myobj = GetOneEmployee(emp.EmployeeId);
             if (myobj == null)
             {
                 throw new InvalidOperationException("Employee object not found");

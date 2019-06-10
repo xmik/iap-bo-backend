@@ -52,14 +52,14 @@ namespace BranchOfficeBackend.Tests
         }
 
         [Fact]
-        public async Task GetEmployee_ShouldReturnSpecifiedEmployee_IfExists()
+        public async Task GetOneEmployee_ShouldReturnSpecifiedEmployee_IfExists()
         {
             await dbContext.Employees.AddAsync(new Employee{ Name = "Ola Dwa", Email = "ola2@gmail.com", EmployeeId = 0 });
             await dbContext.Employees.AddAsync(new Employee{ Name = "Ola AAA", Email = "aaaa@gmail.com", EmployeeId = 4 });
             await dbContext.SaveChangesAsync();
 
             var dao = new PostgresDataAccessObjectService(dbContext);
-            var employee = dao.GetEmployee(4);
+            var employee = dao.GetOneEmployee(4);
             Assert.NotNull(employee);
             Assert.Equal("Ola AAA", employee.Name);
             Assert.Equal(4, employee.EmployeeId);
@@ -67,14 +67,14 @@ namespace BranchOfficeBackend.Tests
         }
 
         [Fact]
-        public async Task GetEmployee_ShouldReturnNull_IfNoEmployee()
+        public async Task GetOneEmployee_ShouldReturnNull_IfNoEmployee()
         {
             await dbContext.Employees.AddAsync(new Employee{ Name = "Ola Dwa", Email = "ola2@gmail.com", EmployeeId = 0 });
             await dbContext.Employees.AddAsync(new Employee{ Name = "Ola AAA", Email = "aaaa@gmail.com", EmployeeId = 4 });
             await dbContext.SaveChangesAsync();
 
             var dao = new PostgresDataAccessObjectService(dbContext);
-            var employee = dao.GetEmployee(55);
+            var employee = dao.GetOneEmployee(55);
             Assert.Null(employee);
         }
 
@@ -518,7 +518,7 @@ namespace BranchOfficeBackend.Tests
             var newEH = new Employee{ Name = "Ola 2", Email = "22@gmail.com", EmployeeId = 5 };
 
             dao.EditEmployee(newEH);
-            var returned = dao.GetEmployee(5);
+            var returned = dao.GetOneEmployee(5);
             Assert.Equal(returned.EmployeeId, newEH.EmployeeId);
             Assert.Equal(returned.Name, newEH.Name);
             Assert.Equal(returned.Email, newEH.Email);

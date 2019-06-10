@@ -8,7 +8,7 @@ namespace BranchOfficeBackend
     public interface IDataAccessObjectService
     {
         List<Employee> GetAllEmployees();
-        Employee GetEmployee(int id);
+        Employee GetOneEmployee(int id);
         void AddEmployee(Employee employee, bool keepId=false);
         void DeleteEmployee(int employeeId);
         void EditEmployee(Employee emp);
