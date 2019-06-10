@@ -50,7 +50,7 @@ namespace BranchOfficeBackend
             if (keepId) {
                 employeeWithId = new Employee(employee, employee.EmployeeId);
             } else {
-                int maxId = -1;
+                int maxId = 0;
                 for (int i=0; i<existingEmployees.Count(); i++)
                 {
                     if (existingEmployees[i].EmployeeId > maxId)
@@ -103,6 +103,11 @@ namespace BranchOfficeBackend
             var selectedByEmployeeId = all.Where(obj => obj.EmployeeId == employeeId);
             return selectedByEmployeeId.ToList();
         }
+        public List<EmployeeHours> GetAllEmployeeHours()
+        {
+            return dbContext.EmployeeHoursCollection.ToList();
+        }
+        
 
         public EmployeeHours GetOneEmployeeHours(int employeeHoursId)
         {
@@ -134,8 +139,10 @@ namespace BranchOfficeBackend
             if (keepId) {
                 employeeHoursWithId = new EmployeeHours(employeeHours, employeeHours.EmployeeHoursId);
             } else {
-                var existingEH = this.GetAllEmployeeHours(employeeHours.EmployeeId);
-                int maxId = -1;
+                // the IDs for employeeHours are common for all employes, thus use this.GetAllEmployeeHours()
+                // instead of this.GetAllEmployeeHours(employeeHours.employeeId)
+                var existingEH = this.GetAllEmployeeHours();
+                int maxId = 0;
                 for (int i=0; i<existingEH.Count(); i++)
                 {
                     if (existingEH[i].EmployeeHoursId > maxId)
@@ -150,6 +157,7 @@ namespace BranchOfficeBackend
                 throw new ArgumentException(String.Format("EmployeeHours with EmployeeHoursId: {0} already exists", employeeHoursWithId.EmployeeHoursId));
             }
 
+            _log.Debug(String.Format("Adding employeeHours to db: {0}", employeeHoursWithId));
             dbContext.EmployeeHoursCollection.Add(employeeHoursWithId);
             dbContext.SaveChanges();
             _log.Info(String.Format("EmployeeHours added to db: {0}", employeeHoursWithId));
@@ -181,6 +189,13 @@ namespace BranchOfficeBackend
             this.AddEmployeeHours(employeeHours,true);
             dbContext.SaveChanges();
             _log.Info(String.Format("EmployeeHours edited in db: {0}", employeeHours));
+        }
+
+        public void InformOnDBContents()
+        {
+            var employees = this.GetAllEmployees();
+            var eh = dbContext.EmployeeHoursCollection.ToList();
+            _log.InfoFormat("There are {0} Employees and {1} EmployeeHours in db", employees.Count, eh.Count);
         }
     }
 }

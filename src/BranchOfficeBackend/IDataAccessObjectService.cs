@@ -18,5 +18,7 @@ namespace BranchOfficeBackend
         void AddEmployeeHours(EmployeeHours employeeHours, bool keepId=false);
         void DeleteEmployeeHours(int employeeHoursId);
         void EditEmployeeHours(EmployeeHours employeeHours);
+
+        void InformOnDBContents();
     }
 }

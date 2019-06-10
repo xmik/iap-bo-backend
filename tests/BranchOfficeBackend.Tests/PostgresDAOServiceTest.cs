@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace BranchOfficeBackend.Tests
 {
@@ -13,8 +14,9 @@ namespace BranchOfficeBackend.Tests
     {
         private BranchOfficeDbContext dbContext;
 
-        public PostgresDAOServiceTest()
+        public PostgresDAOServiceTest(ITestOutputHelper testOutputHelper)
         {
+            LoggingHelpers.Configure(testOutputHelper);
             dbContext = new BranchOfficeDbContext();
             dbContext.Database.EnsureDeleted();
             dbContext.Database.Migrate();
@@ -148,6 +150,31 @@ namespace BranchOfficeBackend.Tests
             Assert.Equal(90f, coll[1].Value);
             Assert.Equal(100, coll[0].EmployeeHoursId);
             Assert.Equal(101, coll[1].EmployeeHoursId);
+        }
+
+        [Fact]
+        public async Task AddEmployeeHours_WhenNotEmptyTable_Many()
+        {
+            await dbContext.Employees.AddAsync(new Employee{ Name = "Ola AAA", Email = "aaaa@gmail.com", EmployeeId = 4 });
+            await dbContext.Employees.AddAsync(new Employee{ Name = "Ola 2", Email = "aaaa2@gmail.com", EmployeeId = 5 });
+            await dbContext.EmployeeHoursCollection.AddAsync(
+                new EmployeeHours{ EmployeeHoursId = 100, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4, HoursCount = 11});
+            await dbContext.EmployeeHoursCollection.AddAsync(
+                new EmployeeHours{ EmployeeHoursId = 101, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4, HoursCount = 11});
+            await dbContext.EmployeeHoursCollection.AddAsync(
+                new EmployeeHours{ EmployeeHoursId = 102, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 5, HoursCount = 11});
+            await dbContext.SaveChangesAsync();
+
+            var dao = new PostgresDataAccessObjectService(dbContext);
+            dao.AddEmployeeHours(
+                new EmployeeHours{ EmployeeHoursId = 100, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4, HoursCount = 11});
+            dao.AddEmployeeHours(
+                new EmployeeHours{ EmployeeHoursId = 100, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4, HoursCount = 11});
+            dao.AddEmployeeHours(
+                new EmployeeHours{ EmployeeHoursId = 100, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 5, HoursCount = 11});
+            
+            var coll = dao.GetAllEmployeeHours(4);
+            Assert.Equal(4, coll.Count);
         }
 
         [Fact]
