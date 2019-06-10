@@ -29,13 +29,18 @@ When you change db schema (e.g. add a column to a table), destroy the current db
 ./tasks build
 ```
 
-then, create/update db schema:
+then, either recreate db schema:
 ```
 rm -rf Migrations-old
 mv src/BranchOfficeBackend/Migrations/ Migrations-old
 dotnet ef dbcontext info --startup-project=src/BranchOfficeBackend/ --project=src/BranchOfficeBackend/
 dotnet ef migrations add InitialCreate --startup-project=src/BranchOfficeBackend/ --project=src/BranchOfficeBackend/
 dotnet ef database update --startup-project=src/BranchOfficeBackend/ --project=src/BranchOfficeBackend/
+```
+
+or instead just add a new migration:
+```
+dotnet ef migrations add TODOChangeName --startup-project=src/BranchOfficeBackend/ --project=src/BranchOfficeBackend/
 ```
 
 Login into the postgres container and check current state of tables:

@@ -19,6 +19,10 @@ namespace BranchOfficeBackend
         void DeleteEmployeeHours(int employeeHoursId);
         void EditEmployeeHours(EmployeeHours employeeHours);
 
+        List<Salary> GetAllSalaries();
+        List<Salary> GetSalariesForAnEmployee(int employeeId);
+        Salary GetOneSalary(int id);
+
         void InformOnDBContents();
     }
 }

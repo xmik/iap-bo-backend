@@ -524,5 +524,75 @@ namespace BranchOfficeBackend.Tests
             Assert.Equal(returned.Email, newEH.Email);
         }
 
+        [Fact]
+        public void GetAllSalaries_ShouldReturnEmptyListWhenDBIsEmpty()
+        {
+            var dao = new PostgresDataAccessObjectService(dbContext);
+            var objects = dao.GetAllSalaries();
+            Assert.Empty(objects);
+        }
+
+        [Fact]
+        public async Task GetAllSalaries_ShouldReturnListWhenSomeInDB()
+        {
+            await dbContext.Salaries.AddAsync(new Salary{ SalaryId = 1, Value = 100, TimePeriod = "some", EmployeeId = 1 });
+            await dbContext.Salaries.AddAsync(new Salary{ SalaryId = 2, Value = 200, TimePeriod = "some2", EmployeeId = 1 });
+            await dbContext.SaveChangesAsync();
+
+            var dao = new PostgresDataAccessObjectService(dbContext);
+            var objects = dao.GetAllSalaries();
+            Assert.Equal(2, objects.Count);
+            Assert.Equal(200, objects[1].Value);
+        }
+
+        [Fact]
+        public void GetSalariesForAnEmployee_ShouldReturnNull_IfNoMatching()
+        {
+            var dao = new PostgresDataAccessObjectService(dbContext);
+            var obj = dao.GetSalariesForAnEmployee(55);
+            Assert.Empty(obj);
+        }
+
+        [Fact]
+        public async Task GetSalariesForAnEmployee_ShouldReturnObj_IfExists()
+        {
+            await dbContext.Salaries.AddAsync(new Salary{ SalaryId = 1, Value = 100, TimePeriod = "some", EmployeeId = 1 });
+            await dbContext.Salaries.AddAsync(new Salary{ SalaryId = 2, Value = 200, TimePeriod = "some2", EmployeeId = 1 });
+            await dbContext.Salaries.AddAsync(new Salary{ SalaryId = 3, Value = 300, TimePeriod = "some2", EmployeeId = 2 });
+            await dbContext.SaveChangesAsync();
+
+            var dao = new PostgresDataAccessObjectService(dbContext);
+            var objects = dao.GetSalariesForAnEmployee(1);
+            Assert.Equal(2, objects.Count);
+            Assert.Equal(200, objects[1].Value);
+        }
+
+        [Fact]
+        public async Task GetOneSalary_ShouldReturnNull_IfNoMatch()
+        {
+            await dbContext.Salaries.AddAsync(new Salary{ SalaryId = 1, Value = 100, TimePeriod = "some", EmployeeId = 1 });
+            await dbContext.Salaries.AddAsync(new Salary{ SalaryId = 2, Value = 200, TimePeriod = "some2", EmployeeId = 1 });
+            await dbContext.Salaries.AddAsync(new Salary{ SalaryId = 3, Value = 300, TimePeriod = "some2", EmployeeId = 2 });
+            await dbContext.SaveChangesAsync();
+
+            var dao = new PostgresDataAccessObjectService(dbContext);
+            var obj = dao.GetOneSalary(11);
+            Assert.Null(obj);
+        }
+
+        [Fact]
+        public async Task GetOneSalary_ShouldReturnObj_IfExists()
+        {
+            await dbContext.Salaries.AddAsync(new Salary{ SalaryId = 1, Value = 100, TimePeriod = "some", EmployeeId = 1 });
+            await dbContext.Salaries.AddAsync(new Salary{ SalaryId = 2, Value = 200, TimePeriod = "some2", EmployeeId = 1 });
+            await dbContext.Salaries.AddAsync(new Salary{ SalaryId = 3, Value = 300, TimePeriod = "some2", EmployeeId = 2 });
+            await dbContext.SaveChangesAsync();
+
+            var dao = new PostgresDataAccessObjectService(dbContext);
+            var obj = dao.GetOneSalary(3);
+            Assert.NotNull(obj);
+            Assert.Equal(300, obj.Value);
+        }
+
     }
 }

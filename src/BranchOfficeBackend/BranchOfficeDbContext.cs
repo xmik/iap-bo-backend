@@ -21,6 +21,9 @@ namespace BranchOfficeBackend
         // db table: Employees
         public DbSet<Employee> Employees { get; set; }
 
+        // db table: Salaries
+        public DbSet<Salary> Salaries { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             // do not use the postgresql database named: postgres, because we cannot delete the database that

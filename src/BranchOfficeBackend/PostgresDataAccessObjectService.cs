@@ -194,8 +194,29 @@ namespace BranchOfficeBackend
         public void InformOnDBContents()
         {
             var employees = this.GetAllEmployees();
-            var eh = dbContext.EmployeeHoursCollection.ToList();
-            _log.InfoFormat("There are {0} Employees and {1} EmployeeHours in db", employees.Count, eh.Count);
+            var eh = this.GetAllEmployeeHours();
+            var ss = this.GetAllSalaries();
+            _log.InfoFormat("There are {0} Employees, {1} EmployeeHours and {2} Salaries in db",
+                 employees.Count, eh.Count, ss.Count);
+        }
+
+        public List<Salary> GetAllSalaries()
+        {
+            return dbContext.Salaries.ToList();
+        }
+
+        public List<Salary> GetSalariesForAnEmployee(int employeeId)
+        {
+            var objs = this.GetAllSalaries();
+            var selected = objs.Where(obj => obj.EmployeeId == employeeId);
+            return selected.ToList();
+        }
+
+        public Salary GetOneSalary(int id)
+        {
+            var objs = this.GetAllSalaries();
+            var selected = objs.Where(obj => obj.SalaryId == id);
+            return (Salary)(selected.FirstOrDefault());
         }
     }
 }
