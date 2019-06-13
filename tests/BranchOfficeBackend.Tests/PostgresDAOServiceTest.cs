@@ -152,6 +152,27 @@ namespace BranchOfficeBackend.Tests
         }
 
         [Fact]
+        public async Task AddEmployeeHours_Fails_WhenAddedAlreadyWithTheSameTimePeriodEndEmployeeId()
+        {
+            await dbContext.Employees.AddAsync(new Employee{ Name = "Ola AAA", Email = "aaaa@gmail.com", EmployeeId = 4 });
+            await dbContext.EmployeeHoursCollection.AddAsync(
+                new EmployeeHours{ EmployeeHoursId = 100, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4});
+            await dbContext.SaveChangesAsync();
+
+            var eh = new EmployeeHours{ EmployeeHoursId = 101, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4};
+
+            var dao = new PostgresDataAccessObjectService(dbContext);
+            try {
+                dao.AddEmployeeHours(eh);
+            } catch (Exception e) {
+                Assert.Equal(typeof(ArgumentException), e.GetType());
+                Assert.Equal("EmployeeHours with EmployeeId: 4 and TimePeriod 02.01.2019_08.01.2019 already exists", e.Message);
+            }
+            var coll = dao.GetEmployeeHoursForAnEmployee(4);
+            Assert.Single(coll);
+        }
+
+        [Fact]
         public async Task AddEmployeeHours_WhenNotEmptyTable_Many()
         {
             await dbContext.Employees.AddAsync(new Employee{ Name = "Ola AAA", Email = "aaaa@gmail.com", EmployeeId = 4 });
@@ -165,12 +186,13 @@ namespace BranchOfficeBackend.Tests
             await dbContext.SaveChangesAsync();
 
             var dao = new PostgresDataAccessObjectService(dbContext);
+            // the EmployeeHoursId is generated anyways
             dao.AddEmployeeHours(
-                new EmployeeHours{ EmployeeHoursId = 100, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4});
+                new EmployeeHours{ EmployeeHoursId = 100, Value = 100f, TimePeriod = "01.01.2019_02.01.2019", EmployeeId = 4});
             dao.AddEmployeeHours(
-                new EmployeeHours{ EmployeeHoursId = 100, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4});
+                new EmployeeHours{ EmployeeHoursId = 100, Value = 100f, TimePeriod = "09.01.2019_13.01.2019", EmployeeId = 4});
             dao.AddEmployeeHours(
-                new EmployeeHours{ EmployeeHoursId = 100, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 5});
+                new EmployeeHours{ EmployeeHoursId = 100, Value = 100f, TimePeriod = "01.01.2019_02.01.2019", EmployeeId = 5});
             
             var coll = dao.GetEmployeeHoursForAnEmployee(4);
             Assert.Equal(4, coll.Count);

@@ -173,9 +173,9 @@ namespace BranchOfficeBackend.Tests
             var boEmp2 = new Employee{ Name = "Ela K", Email = "elak@gmail.com", EmployeeId = 5, IsManager = true };
             dao.AddEmployee(boEmp1,true);
             dao.AddEmployee(boEmp2,true);
-            var eh1 = new EmployeeHours{ EmployeeHoursId = 102, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4}; // will be deleted
-            var eh2 = new EmployeeHours{ EmployeeHoursId = 103, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4}; // will be deleted
-            var eh3 = new EmployeeHours{ EmployeeHoursId = 104, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4}; // will be deleted
+            var eh1 = new EmployeeHours{ EmployeeHoursId = 102, Value = 100f, TimePeriod = "01.01.2019_01.01.2019", EmployeeId = 4}; // will be deleted
+            var eh2 = new EmployeeHours{ EmployeeHoursId = 103, Value = 100f, TimePeriod = "02.01.2019_02.01.2019", EmployeeId = 4}; // will be deleted
+            var eh3 = new EmployeeHours{ EmployeeHoursId = 104, Value = 100f, TimePeriod = "03.01.2019_03.01.2019", EmployeeId = 4}; // will be deleted
             var eh4 = new EmployeeHours{ EmployeeHoursId = 105, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 5};
             dao.AddEmployeeHours(eh1,true);
             dao.AddEmployeeHours(eh2,true);

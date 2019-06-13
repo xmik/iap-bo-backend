@@ -156,9 +156,17 @@ namespace BranchOfficeBackend
                 employeeHoursWithId = new EmployeeHours(employeeHours, maxId+1);
             }
 
-            var objWithIdExistng = existingObjects.Where(e => e.EmployeeHoursId == employeeHoursWithId.EmployeeHoursId).FirstOrDefault();
+            var objWithIdExistng = existingObjects.Where(
+                e => e.EmployeeHoursId == employeeHoursWithId.EmployeeHoursId).FirstOrDefault();
             if (objWithIdExistng != null){
                 throw new ArgumentException(String.Format("EmployeeHours with EmployeeHoursId: {0} already exists", employeeHoursWithId.EmployeeHoursId));
+            }
+
+            var objWithTimePeriodAndEmployeeIdExistng = existingObjects.Where(
+                e => (e.TimePeriod == employeeHoursWithId.TimePeriod && e.EmployeeId == employeeHoursWithId.EmployeeId)).FirstOrDefault();
+            if (objWithTimePeriodAndEmployeeIdExistng != null){
+                throw new ArgumentException(String.Format("EmployeeHours with EmployeeId: {0} and TimePeriod {1} already exists",
+                 objWithTimePeriodAndEmployeeIdExistng.EmployeeId, objWithTimePeriodAndEmployeeIdExistng.TimePeriod));
             }
 
             _log.Debug(String.Format("Adding employeeHours to db: {0}", employeeHoursWithId));
