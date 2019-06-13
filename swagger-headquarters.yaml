@@ -42,7 +42,7 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/BranchOffice"
-  /api/employees/list:
+  /api/employees/list/{branchOfficeId}:
     get:
       tags:
       - "employees"
