@@ -162,7 +162,9 @@ namespace BranchOfficeBackend.Tests
             var eh = new EmployeeHours{ EmployeeHoursId = 101, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4};
 
             var dao = new PostgresDataAccessObjectService(dbContext);
+            bool exThrown = false;
             try {
+                exThrown = true;
                 dao.AddEmployeeHours(eh);
             } catch (Exception e) {
                 Assert.Equal(typeof(ArgumentException), e.GetType());
@@ -170,6 +172,7 @@ namespace BranchOfficeBackend.Tests
             }
             var coll = dao.GetEmployeeHoursForAnEmployee(4);
             Assert.Single(coll);
+            Assert.True(exThrown);
         }
 
         [Fact]
@@ -231,12 +234,15 @@ namespace BranchOfficeBackend.Tests
             eh.TimePeriod = "02.03.2019_08.03.2019";
 
             var dao = new PostgresDataAccessObjectService(dbContext);
+            bool exThrown = false;
             try {
+                exThrown = true;
                 dao.AddEmployeeHours(eh);
             } catch (Exception e) {
                 Assert.Equal(typeof(ArgumentException), e.GetType());
                 Assert.Equal("Employee with Id: 4 not found", e.Message);
             }
+            Assert.True(exThrown);
         }
 
         [Fact]
@@ -250,12 +256,15 @@ namespace BranchOfficeBackend.Tests
             eh.TimePeriod = "02.03.2019_08.03.2019";
 
             var dao = new PostgresDataAccessObjectService(dbContext);
+            bool exThrown = false;
             try {
+                exThrown = true;
                 dao.AddEmployeeHours(eh);
             } catch (Exception e) {
                 Assert.Equal(typeof(ArgumentException), e.GetType());
                 Assert.Equal("EmployeeId was not set", e.Message);
             }
+            Assert.True(exThrown);
         }
 
         [Fact]
@@ -270,12 +279,15 @@ namespace BranchOfficeBackend.Tests
             eh.TimePeriod = "02.03.2019_08.03.2019";
 
             var dao = new PostgresDataAccessObjectService(dbContext);
+            bool exThrown = false;
             try {
+                exThrown = true;
                 dao.AddEmployeeHours(eh);
             } catch (Exception e) {
                 Assert.Equal(typeof(ArgumentException), e.GetType());
                 Assert.Equal("Value < 0", e.Message);
             }
+            Assert.True(exThrown);
         }
 
         [Fact]
@@ -289,12 +301,15 @@ namespace BranchOfficeBackend.Tests
             var emp = new EmployeeHours{ EmployeeHoursId = 100, Value = 100, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4};
 
             var dao = new PostgresDataAccessObjectService(dbContext);
+            bool exThrown = false;
             try {
+                exThrown = true;
                 dao.AddEmployeeHours(emp,true);            
             } catch(Exception ex) {
                 Assert.Equal(typeof(ArgumentException), ex.GetType());
                 Assert.Equal("EmployeeHours with EmployeeHoursId: 100 already exists", ex.Message);
             }
+            Assert.True(exThrown);
         }
 
         [Fact]
@@ -373,12 +388,15 @@ namespace BranchOfficeBackend.Tests
             var dao = new PostgresDataAccessObjectService(dbContext);            
             var newEH = new EmployeeHours{ EmployeeHoursId = 101, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4};
 
+            bool exThrown = false;
             try {
+                exThrown = true;
                 dao.EditEmployeeHours(newEH);
             } catch (Exception e) {
                 Assert.Equal(typeof(ArgumentException), e.GetType());
                 Assert.Equal("Employee with Id: 4 not found", e.Message);
             }
+            Assert.True(exThrown);
         }
 
         [Fact]
@@ -393,12 +411,15 @@ namespace BranchOfficeBackend.Tests
             var dao = new PostgresDataAccessObjectService(dbContext);            
             var newEH = new EmployeeHours{ EmployeeHoursId = 666, Value = 100f, TimePeriod = "02.01.2019_08.01.2019", EmployeeId = 4};
 
+            bool exThrown = false;
             try {
+                exThrown = true;
                 dao.EditEmployeeHours(newEH);
             } catch (Exception e) {
                 Assert.Equal(typeof(InvalidOperationException), e.GetType());
                 Assert.Equal("EmployeeHours object not found", e.Message);
             }
+            Assert.True(exThrown);
         }
 
         [Fact]
@@ -445,12 +466,15 @@ namespace BranchOfficeBackend.Tests
             var emp = new Employee{ Name = "Ola 2", Email = "aaaa@gmail.com", EmployeeId = 44 };
 
             var dao = new PostgresDataAccessObjectService(dbContext);
+            bool exThrown = false;
             try {
+                exThrown = true;
                 dao.AddEmployee(emp);            
             } catch(Exception ex) {
                 Assert.Equal(typeof(ArgumentException), ex.GetType());
                 Assert.Equal("Employee with email: aaaa@gmail.com already exists", ex.Message);
             }
+            Assert.True(exThrown);
         }
 
         [Fact]
@@ -462,12 +486,15 @@ namespace BranchOfficeBackend.Tests
             var emp = new Employee{ Name = "Ola 2", Email = "333@gmail.com", EmployeeId = 4 };
 
             var dao = new PostgresDataAccessObjectService(dbContext);
+            bool exThrown = false;
             try {
+                exThrown = true;
                 dao.AddEmployee(emp,true);            
             } catch(Exception ex) {
                 Assert.Equal(typeof(ArgumentException), ex.GetType());
                 Assert.Equal("Employee with EmployeeId: 4 already exists", ex.Message);
             }
+            Assert.True(exThrown);
         }
 
         [Fact]
@@ -516,12 +543,15 @@ namespace BranchOfficeBackend.Tests
             var dao = new PostgresDataAccessObjectService(dbContext);            
             var newEH = new Employee{ Name = "Ola 2", Email = "22@gmail.com", EmployeeId = 5 };
 
+            bool exThrown = false;
             try {
+                exThrown = true;
                 dao.EditEmployee(newEH);
             } catch (Exception e) {
                 Assert.Equal(typeof(InvalidOperationException), e.GetType());
                 Assert.Equal("Employee object not found", e.Message);
             }
+            Assert.True(exThrown);
         }
 
         [Fact]
@@ -656,12 +686,15 @@ namespace BranchOfficeBackend.Tests
             var objToBeAdded = new Salary{ SalaryId = 3, Value = 300, TimePeriod = "some2", EmployeeId = 4 };
             var dao = new PostgresDataAccessObjectService(dbContext);
 
+            bool exThrown = false;
             try {
+                exThrown = true;
                 dao.AddSalary(objToBeAdded);
             } catch (Exception e) {
                 Assert.Equal(typeof(ArgumentException), e.GetType());
                 Assert.Equal("Employee with Id: 4 not found", e.Message);
             }
+            Assert.True(exThrown);
         }
 
         [Fact]
@@ -673,12 +706,15 @@ namespace BranchOfficeBackend.Tests
             var objToBeAdded = new Salary{ SalaryId = 3, Value = 300, TimePeriod = "some2" };
             var dao = new PostgresDataAccessObjectService(dbContext);
 
+            bool exThrown = false;
             try {
+                exThrown = true;
                 dao.AddSalary(objToBeAdded);
             } catch (Exception e) {
                 Assert.Equal(typeof(ArgumentException), e.GetType());
                 Assert.Equal("EmployeeId was not set", e.Message);
             }
+            Assert.True(exThrown);
         }
 
         [Fact]
@@ -691,12 +727,15 @@ namespace BranchOfficeBackend.Tests
             var objToBeAdded = new Salary{ SalaryId = 1, Value = 300, TimePeriod = "some2", EmployeeId = 4 };
 
             var dao = new PostgresDataAccessObjectService(dbContext);
+            bool exThrown = false;
             try {
+                exThrown = true;
                 dao.AddSalary(objToBeAdded, true);       
             } catch(Exception ex) {
                 Assert.Equal(typeof(ArgumentException), ex.GetType());
                 Assert.Equal("Salary with SalaryId: 1 already exists", ex.Message);
             }
+            Assert.True(exThrown);
         }
 
         [Fact]
@@ -710,12 +749,15 @@ namespace BranchOfficeBackend.Tests
             var objToBeAdded = new Salary{ SalaryId = 3, Value = 300, TimePeriod = "some2", EmployeeId = 1 };
 
             var dao = new PostgresDataAccessObjectService(dbContext);
+            bool exThrown = false;
             try {
+                exThrown = true;
                 dao.AddSalary(objToBeAdded);       
             } catch(Exception ex) {
                 Assert.Equal(typeof(ArgumentException), ex.GetType());
                 Assert.Equal("Salary with TimePeriod: some2 for Employee: 1 already exists", ex.Message);
             }
+            Assert.True(exThrown);
         }
 
         [Fact]
