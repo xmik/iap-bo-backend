@@ -34,6 +34,13 @@ namespace BranchOfficeBackend
                 return null;
             return coll.Select(e => new WebEmployeeHours(e)).ToList();
         }
+        public List<WebEmployeeHours> GetAllEmployeeHours()
+        {
+            var coll = daoService.GetAllEmployeeHours();
+            if (coll == null)
+                return null;
+            return coll.Select(e => new WebEmployeeHours(e)).ToList();
+        }
 
         public WebEmployeeHours GetOneEmployeeHours(int employeeHoursId)
         {

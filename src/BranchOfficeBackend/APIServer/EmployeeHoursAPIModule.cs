@@ -24,6 +24,12 @@ namespace BranchOfficeBackend
                     await res.Negotiate(list);
                 }
             });
+            Get("/api/employee_hours/list_all", async(req, res, routeData) => {
+                _log.Debug(String.Format("Received HTTP request: GET /api/employee_hours/list_all"));
+                var weh = service.GetAllEmployeeHours();
+                res.StatusCode = 200;
+                await res.Negotiate(weh);
+            });
 
             Get("/api/employee_hours/{employeeHoursId:int}", async(req, res, routeData) => {
                 int id = routeData.As<int>("employeeHoursId");

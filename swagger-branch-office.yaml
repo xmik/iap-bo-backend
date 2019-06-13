@@ -112,6 +112,22 @@ paths:
           description: "Argument problem, e.g. email not set"
       security:
         - branch_office_auth: []
+  /api/employee_hours/list_all:
+    get:
+      tags:
+      - "employee_hours"
+      summary: "Gets a collection of EmployeeHours objects for all employees"
+      description: "Gets a collection of EmployeeHours objects for all employees"
+      operationId: "findEmployeeHoursCollection"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/EmployeeHours"
   /api/employee_hours/list/{employeeId}:
     get:
       tags:

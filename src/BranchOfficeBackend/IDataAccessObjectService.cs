@@ -16,6 +16,7 @@ namespace BranchOfficeBackend
         int GetEmployeeIdByMail(string mail);
 
         List<EmployeeHours> GetEmployeeHoursForAnEmployee(int employeeId);
+        List<EmployeeHours> GetAllEmployeeHours();
         EmployeeHours GetOneEmployeeHours(int employeeHoursId);
         void AddEmployeeHours(EmployeeHours employeeHours, bool keepId=false);
         void DeleteEmployeeHours(int employeeHoursId);
