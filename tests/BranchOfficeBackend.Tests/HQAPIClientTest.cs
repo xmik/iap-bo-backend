@@ -50,6 +50,28 @@ namespace BranchOfficeBackend.Tests
             }
         }
 
+        [Fact]
+        public async Task ListBranchOffices_ShouldReturnEmptyListOfBranchOffices_WhenNoBO()
+        {
+            // https://github.com/richardszalay/mockhttp
+            var mockHttp = new MockHttpMessageHandler();
+            // Setup a respond for the user api (including a wildcard in the URL)
+            var mockedRequest = mockHttp.When(CommonHelpers.baseUrl + "/api/branch_offices")
+                    .Respond("application/json",
+                    "[]"); // Respond with JSON
+
+            // Inject the handler or client into your application code
+            var client = mockHttp.ToHttpClient();
+            using (var hqClient = new HQAPIClient(CommonHelpers.MockConfServ(), client)) 
+            {
+                var branchOffices = await hqClient.ListBranchOffices();
+                // GetMatchCount will return the number of times a mocked request (returned by When / Expect) was called
+                // https://github.com/richardszalay/mockhttp#verifying-matches
+                Assert.Equal(1, mockHttp.GetMatchCount(mockedRequest));
+                Assert.Empty(branchOffices);
+            }
+        }
+
         /// <summary>
         /// Test that API server returns a list of branch offices
         /// </summary>
