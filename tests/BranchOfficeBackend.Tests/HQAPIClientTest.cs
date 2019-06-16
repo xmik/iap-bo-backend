@@ -109,6 +109,29 @@ namespace BranchOfficeBackend.Tests
             }
         }
 
+        [Fact]
+        public async Task ListEmployees_ShouldReturnEmptyListOfEmployees_WhenNoEmployees()
+        {
+            // https://github.com/richardszalay/mockhttp
+            var mockHttp = new MockHttpMessageHandler();
+            // Setup a respond for the user api (including a wildcard in the URL)
+            var mockedRequest = mockHttp.When(CommonHelpers.baseUrl + "/api/employees/list/*")
+                    .Respond("application/json",
+                    "[]"); // Respond with JSON
+
+            // Inject the handler or client into your application code
+            var client = mockHttp.ToHttpClient();
+            using (var hqClient = new HQAPIClient(CommonHelpers.MockConfServ(), client)) 
+            {
+                var employees = await hqClient.ListEmployees(100);
+                Assert.NotNull(employees);
+                // GetMatchCount will return the number of times a mocked request (returned by When / Expect) was called
+                // https://github.com/richardszalay/mockhttp#verifying-matches
+                Assert.Equal(1, mockHttp.GetMatchCount(mockedRequest));
+                Assert.Empty(employees);
+            }
+        }
+
         /// <summary>
         /// Test that API server returns a list of employees
         /// </summary>

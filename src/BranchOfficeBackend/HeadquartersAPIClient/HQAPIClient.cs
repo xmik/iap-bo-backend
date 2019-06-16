@@ -102,6 +102,8 @@ namespace BranchOfficeBackend
         {
             string url = this.BuildUrl("/api/employees/list/" + branchOfficeId);
             string json = await commonRequestOperation(url);
+            if (json == "[]")
+                return new List<HQEmployee>();
             // deserialize the json response into C# objects
             Dictionary<string, List<HQEmployee>> result = Newtonsoft.Json.JsonConvert.DeserializeObject<
                     Dictionary<string, List<HQEmployee>>>(json);

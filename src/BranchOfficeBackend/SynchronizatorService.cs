@@ -100,7 +100,7 @@ namespace BranchOfficeBackend
 
                     List<HQEmployee> hqEmployees = await hqApiClient.ListEmployees(
                         this.confService.GetBranchOfficeId());
-                    if (hqEmployees != null) {
+                    if (hqEmployees != null && hqEmployees.Count != 0) {
                         var boEmployees = daoService.GetAllEmployees();
 
                         // add all the employes from HQ into BO
@@ -122,7 +122,7 @@ namespace BranchOfficeBackend
                             var boSalaries = daoService.GetSalariesForAnEmployee(boEmployeeId);
                             // add all the salaries from HQ into BO
                             List<HQSalary> hqSalaries = await hqApiClient.ListSalariesForEmployee(hqEmpId);
-                            if (hqSalaries != null) {
+                            if (hqSalaries != null && hqSalaries.Count != 0) {
                                 for (int s=0; s< hqSalaries.Count; s++)
                                 {
                                     var hqAsBoSalary = new Salary(hqSalaries[s]);
@@ -158,6 +158,9 @@ namespace BranchOfficeBackend
                                 }
                             }
                         }
+                    }
+                    else {
+                        _log.Info("No employees found in headquarters");
                     }
                     _log.Info("Synchronization was successful");
                     this.daoService.InformOnDBContents();
