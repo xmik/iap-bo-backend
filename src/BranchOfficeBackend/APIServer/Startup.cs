@@ -12,6 +12,7 @@ using Bazinga.AspNetCore.Authentication.Basic;
 using Carter;
 using FluentValidation;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -39,6 +40,7 @@ namespace BranchOfficeBackend
             this.Configuration = builder.Build();
         }
 
+        public static readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
         public IContainer ApplicationContainer { get; private set; }
         public IConfigurationRoot Configuration { get; private set; }
 
@@ -47,6 +49,21 @@ namespace BranchOfficeBackend
             // Add services to the collection. Don't build or return
             // any IServiceProvider or the ConfigureContainer method
             // won't get called.
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(MyAllowSpecificOrigins,
+                builder =>
+                {
+                    builder.WithOrigins("http://localhost:8000",
+                                        "https://localhost:8000",
+                                        "http://bo:8000",
+                                        "https://bo:8000")
+                                        .AllowAnyHeader()
+                                        .AllowAnyMethod();
+                });
+            });
+
             // This registration of assembly with carter modules is necessary for tests to work.
             // see https://github.com/CarterCommunity/Carter/pull/88
             services.AddCarter(new MyAssemblyCatalog());
@@ -68,6 +85,7 @@ namespace BranchOfficeBackend
         // here if you need to resolve things from the container.
         public static void Configure(IApplicationBuilder app)
         {
+            app.UseCors(MyAllowSpecificOrigins); 
             app.UseCarter(new CarterOptions(ctx => AuthenticateBeforeHook(ctx, 
                 app.ApplicationServices.GetService<IUserRepository>())));
         }
