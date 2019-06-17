@@ -20,12 +20,14 @@ namespace BranchOfficeBackend
             this.Email = e.Email;
             this.ID = e.EmployeeId;
             this.IsManager = e.IsManager;
+            this.DateOfBirth = e.DateOfBirth;
         }
 
         public string Name { get; set; }
         public string Email { get; set; }
         public int ID { get; set; }
         public bool IsManager { get; set; }
+        public DateTime DateOfBirth { get; set; }
 
         public override string ToString()
         {
