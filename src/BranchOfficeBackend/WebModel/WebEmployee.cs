@@ -20,19 +20,19 @@ namespace BranchOfficeBackend
             this.Email = e.Email;
             this.ID = e.EmployeeId;
             this.IsManager = e.IsManager;
-            this.DateOfBirth = e.DateOfBirth;
+            this.DateOfBirth = e.DateOfBirth.ToString("yyyy-MM-dd");
         }
 
         public string Name { get; set; }
         public string Email { get; set; }
         public int ID { get; set; }
         public bool IsManager { get; set; }
-        public DateTime DateOfBirth { get; set; }
+        public string DateOfBirth { get; set; }
 
         public override string ToString()
         {
-            return String.Format("Id: {0}, Name: {1}, Email: {2}, IsManager: {3}",
-                this.ID, this.Name, this.Email, this.IsManager);
+            return String.Format("Id: {0}, Name: {1}, Email: {2}, IsManager: {3}, DateOfBirth: {4}",
+                this.ID, this.Name, this.Email, this.IsManager, this.DateOfBirth);
         }
     }
 }

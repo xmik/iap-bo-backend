@@ -36,7 +36,9 @@ namespace BranchOfficeBackend
             this.Email = e.Email;
             this.EmployeeId = e.ID;
             this.IsManager = e.IsManager;
-            this.DateOfBirth = e.DateOfBirth;
+            if (e.DateOfBirth != null) {
+                this.DateOfBirth = DateTime.Parse(e.DateOfBirth);
+            }
         }
         public Employee(HQEmployee e)
         {
@@ -45,7 +47,9 @@ namespace BranchOfficeBackend
             // do not preserve this, we'll add our own
             this.EmployeeId = -1;
             this.IsManager = e.IsManager;
-            this.DateOfBirth = DateTime.Parse(e.DateOfBirth);
+            if (e.DateOfBirth != null) {
+                this.DateOfBirth = DateTime.Parse(e.DateOfBirth);
+            }
         }
 
         public override string ToString()

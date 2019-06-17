@@ -85,7 +85,7 @@ namespace BranchOfficeBackend.Tests
         [Fact]
         public async Task GetEmployee_WhenSomeData()
         {
-            await dbContext.Employees.AddAsync(new Employee{ Name = "Ola Dwa", Email = "ola2@gmail.com" });
+            await dbContext.Employees.AddAsync(new Employee{ Name = "Ola Dwa", Email = "ola2@gmail.com", DateOfBirth = new DateTime(2000,1,29) });
             await dbContext.Employees.AddAsync(new Employee{ Name = "Ola Trzy", Email = "ola3@gmail.com" });
             await dbContext.SaveChangesAsync();
             using(var testServer = new TestServerBuilder()
@@ -95,16 +95,17 @@ namespace BranchOfficeBackend.Tests
                 var response = await client.GetAsync("/api/employees/1");
                 Assert.Equal(System.Net.HttpStatusCode.OK, response.StatusCode);   
                 var jsonString = await response.Content.ReadAsStringAsync();
+
                 var actual = JObject.Parse(jsonString);
                 Debug.WriteLine(actual);
                 var expected = new JObject{
                     {"name", "Ola Dwa"},
                     {"id", 1 },
                     {"isManager", false },
-                    {"email", "ola2@gmail.com" }
+                    {"email", "ola2@gmail.com" },
+                    {"dateOfBirth", "2000-01-29" }
                 }; 
-                Debug.WriteLine(actual);
-                Assert.True(JToken.DeepEquals(expected, actual));             
+                Assert.True(JToken.DeepEquals(expected, actual));           
             }
         }
 

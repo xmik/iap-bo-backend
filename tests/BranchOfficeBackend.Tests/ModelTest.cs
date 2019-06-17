@@ -22,7 +22,7 @@ namespace BranchOfficeBackend.Tests
             Assert.Equal(-1, obj.EmployeeId);
             Assert.Equal("Ola Dwa", obj.Name);
             Assert.Equal("ola2@gmail.com", obj.Email);
-            Assert.Equal(true, obj.IsManager);
+            Assert.True(obj.IsManager);
             Assert.Equal(new DateTime(1996,1,25), obj.DateOfBirth);
         }
     
