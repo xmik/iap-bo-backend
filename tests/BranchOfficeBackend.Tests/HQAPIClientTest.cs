@@ -1,4 +1,6 @@
 using System;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using RichardSzalay.MockHttp;
@@ -196,6 +198,24 @@ namespace BranchOfficeBackend.Tests
         }
 
         [Fact]
+        public async Task ListSalariesForEmployee_ShouldNotThrowException()
+        {
+            // https://github.com/richardszalay/mockhttp
+            var mockHttp = new MockHttpMessageHandler();
+            // Setup a respond for the user api (including a wildcard in the URL)
+            var mockedRequest = mockHttp.When(CommonHelpers.baseUrl + "/api/salaries/list/*")
+                    .Respond(HttpStatusCode.NotFound);
+
+            // Inject the handler or client into your application code
+            var client = mockHttp.ToHttpClient();
+            using (var hqClient = new HQAPIClient(CommonHelpers.MockConfServ(), client)) 
+            {
+                var salaries = await hqClient.ListSalariesForEmployee(1);
+                Assert.Empty(salaries);
+            }
+        }
+
+        [Fact]
         public async Task ListSalariesForEmployee_ShouldReturnEmptyListOfSalaries_WhenNoSalaries()
         {
             // https://github.com/richardszalay/mockhttp
@@ -229,9 +249,9 @@ namespace BranchOfficeBackend.Tests
             // Setup a respond for the user api (including a wildcard in the URL)
             var mockedRequest = mockHttp.When(CommonHelpers.baseUrl + "/api/salaries/list/*")
                     .Respond("application/json",
-                    "{ 'salaries': [ {'id' : 98, 'timePeriod': '2019-Jun-15_2019-Jun-21', 'value': 300, 'employeeId': 1 }," +
+                    "[ {'id' : 98, 'timePeriod': '2019-Jun-15_2019-Jun-21', 'value': 300, 'employeeId': 1 }," +
                     "{'id' : 99, 'timePeriod': '2019-Jun-22_2019-Jun-28', 'value': 320, 'employeeId': 1}" +
-                    " ] }"); // Respond with JSON
+                    " ] "); // Respond with JSON
 
             // Inject the handler or client into your application code
             var client = mockHttp.ToHttpClient();
