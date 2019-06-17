@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using RichardSzalay.MockHttp;
@@ -114,7 +115,9 @@ namespace BranchOfficeBackend.Tests
             // Setup a respond for the user api (including a wildcard in the URL)
             var mockedRequest = mockHttp.When(CommonHelpers.baseUrl + "/api/employees/*")
                     .Respond("application/json",
-                    "{'name' : 'Jan Kow', 'id': 123, 'email': 'jank@gmail.com', 'isManager': false }"); // Respond with JSON
+                    "{'employee_id': 123, 'name' : 'Jan Kow', 'email': 'jank@gmail.com', 'date_of_birth': '1996-01-01', "+
+                    " 'isManager': false, 'pay': 30.0,  'branch_office_id': 2 }"); // Respond with JSON
+                    //"{'name' : 'Jan Kow', 'id': 123, 'email': 'jank@gmail.com', 'isManager': false }"); // Respond with JSON
 
             // Inject the handler or client into your application code
             var client = mockHttp.ToHttpClient();
@@ -127,6 +130,9 @@ namespace BranchOfficeBackend.Tests
                 Assert.Equal(123, employee.ID);
                 Assert.Equal("Jan Kow", employee.Name);
                 Assert.Equal("jank@gmail.com", employee.Email);
+                Assert.Equal("1996-01-01", employee.DateOfBirth);
+                Assert.Equal(2, employee.BranchOfficeID);
+                Assert.Equal(30.0, employee.Pay);
                 Assert.False(employee.IsManager);
             }
         }
@@ -166,8 +172,12 @@ namespace BranchOfficeBackend.Tests
             // Setup a respond for the user api (including a wildcard in the URL)
             var mockedRequest = mockHttp.When(CommonHelpers.baseUrl + "/api/employees/list/*")
                     .Respond("application/json",
-                    "{ 'employees': [ {'name' : 'Jan Kow', 'id': 1, 'email': 'jank@gmail.com', 'isManager': false },"+
-                    " {'name' : 'Teresa Kow', 'id': 123, 'email': 'teresak@gmail.com', 'isManager': true } ] }"); // Respond with JSON
+                    "["+
+                    "{'employee_id': 1, 'name' : 'Jan Kow', 'email': 'jank@gmail.com', 'date_of_birth': '1996-01-01', "+
+                    " 'isManager': false, 'pay': 30.0,  'branch_office_id': 2 }, "+
+                    "{'employee_id': 123, 'name' : 'Jan Kow2', 'email': 'jank2@gmail.com', 'date_of_birth': '1996-01-01', "+
+                    " 'isManager': true, 'pay': 30.0,  'branch_office_id': 1 }, "+
+                    "]"); // Respond with JSON
 
             // Inject the handler or client into your application code
             var client = mockHttp.ToHttpClient();

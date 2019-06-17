@@ -107,9 +107,9 @@ namespace BranchOfficeBackend
             if (json == "[]")
                 return new List<HQEmployee>();
             // deserialize the json response into C# objects
-            Dictionary<string, List<HQEmployee>> result = Newtonsoft.Json.JsonConvert.DeserializeObject<
-                    Dictionary<string, List<HQEmployee>>>(json);
-            return result["employees"];            
+            List<HQEmployee> result = Newtonsoft.Json.JsonConvert.DeserializeObject<
+                    List<HQEmployee>>(json);
+            return result;            
         }
 
         public async Task<List<HQSalary>> ListSalariesForEmployee(int employeeId)
