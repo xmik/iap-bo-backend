@@ -19,13 +19,13 @@ Build docker image:
 
 Here we run the server (BO Backend + postgresql db) interactively, so that all the messages are printed onto terminal:
 ```
-docker-compose -f ./ops/docker-compose.yml up
+./tasks up
 ```
 
 Stopping and removing the containers:
 ```
 # press Ctrl+C and then:
-docker-compose -f ./ops/docker-compose.yml down
+./tasks down
 ```
 
 ## API Server endpoints examples

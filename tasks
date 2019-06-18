@@ -19,6 +19,14 @@ case "${command}" in
       # docker run -d -p 8080:8080 iap-bo-backend:0.1.0
       exit $?
       ;;
+  up)
+      docker-compose -f ./ops/docker-compose.yml -p iap_bo up
+      exit $?
+      ;;
+  down)
+      docker-compose -f ./ops/docker-compose.yml -p iap_bo down
+      exit $?
+      ;;
   utest)
       dotnet test --configuration=Release --no-build ./tests/BranchOfficeBackend.Tests -v=normal
       exit $?
