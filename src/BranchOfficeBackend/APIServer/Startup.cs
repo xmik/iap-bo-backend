@@ -57,8 +57,12 @@ namespace BranchOfficeBackend
                 {
                     builder.WithOrigins("http://localhost:8000",
                                         "https://localhost:8000",
+                                        "http://localhost:3000",
+                                        "https://localhost:3000",
                                         "http://bo:8000",
-                                        "https://bo:8000")
+                                        "https://bo:8000",
+                                        "http://bo:3000",
+                                        "https://bo:3000")
                                         .AllowAnyHeader()
                                         .AllowAnyMethod();
                 });
