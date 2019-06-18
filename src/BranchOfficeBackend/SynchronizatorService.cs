@@ -100,8 +100,9 @@ namespace BranchOfficeBackend
 
                     List<HQEmployee> hqEmployees = await hqApiClient.ListEmployees(
                         this.confService.GetBranchOfficeId());
+                    List<Employee> boEmployees;
                     if (hqEmployees != null && hqEmployees.Count != 0) {
-                        var boEmployees = daoService.GetAllEmployees();
+                        boEmployees = daoService.GetAllEmployees();
 
                         // add all the employes from HQ into BO
                         for (int i=0; i< hqEmployees.Count; i++)
@@ -134,9 +135,15 @@ namespace BranchOfficeBackend
                                 }
                             }
                         }
+                    }
+                    else {
+                        _log.Info("No employees found in headquarters");
+                    }
 
-                        // remove all the employees in BO that are not present in HQ
-                        boEmployees = daoService.GetAllEmployees();
+                    // remove all the employees in BO that are not present in HQ
+                    boEmployees = daoService.GetAllEmployees();
+                    if (boEmployees != null) {
+                        _log.DebugFormat("BO Employees count: {0}", boEmployees.Count());
                         for (int i=0; i< boEmployees.Count; i++)
                         {
                             var boEmp = boEmployees[i];
@@ -156,12 +163,14 @@ namespace BranchOfficeBackend
                                 {
                                     daoService.DeleteSalary(salariesColl[j].SalaryId);
                                 }
+                            } else {
+                                _log.DebugFormat("Not deleting BO Employee, because it exists in HQ too: {0}", boEmp);
                             }
                         }
+                    } else {
+                        _log.DebugFormat("BO Employees count: 0");
                     }
-                    else {
-                        _log.Info("No employees found in headquarters");
-                    }
+                   
                     _log.Info("Synchronization was successful");
                     this.daoService.InformOnDBContents();
                 } catch (System.Net.Http.HttpRequestException ex) {
