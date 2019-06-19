@@ -59,10 +59,17 @@ $ curl -i -X POST localhost:8080/api/employee_hours -d '{"value": "45", "employe
 $ curl -i -X POST localhost:8080/api/employee_hours -d '{"value": "22", "employeeId": "2", "timePeriod": "17.06.2019-23.06.2019" }' -H 'Content-Type: text/json; charset=utf-8'
 ```
 
+
+
 Get one employee_hours object:
 ```
 $ curl -i  localhost:8080/api/employee_hours/1
 {"value":100.0,"timePeriod":"17.06.2019-23.06.2019","id":1,"employeeId":1}
+```
+
+Delete one employee_hours object:
+```
+curl -i -X DELETE localhost:8080/api/employee_hours/1
 ```
 
 Get a collection of employee_hours for one employee with id=1:

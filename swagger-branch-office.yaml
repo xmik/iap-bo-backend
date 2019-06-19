@@ -110,8 +110,6 @@ paths:
             $ref: "#/definitions/ApiResponse"
         400:
           description: "Argument problem, e.g. email not set"
-      security:
-        - branch_office_auth: []
   /api/employee_hours/list_all:
     get:
       tags:
@@ -180,38 +178,6 @@ paths:
           description: "Unauthorized"
         400:
           description: "Argument problem, e.g. no such employeeId"
-      security:
-        - branch_office_auth: []
-    put:
-      tags:
-      - "employee_hours"
-      summary: "Updates an existing EmployeeHours object"
-      description: "Updates an existing EmployeeHours object. This will never change the EmployeeHours id"
-      operationId: "updateEmployeeHours"
-      consumes:
-      - "application/json"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "body"
-        name: "body"
-        description: "EmployeeHours object"
-        required: true
-        schema:
-          $ref: "#/definitions/EmployeeHours"
-      responses:
-        202:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/ApiResponse"
-        400:
-          description: "Argument problem, e.g. no such employeeId"
-        401:
-          description: "Unauthorized"
-        404:
-          description: "EmployeeHours not found"
-      security:
-        - branch_office_auth: []
   /api/employee_hours/{employeeHoursId}:
     get:
       tags:
@@ -239,8 +205,6 @@ paths:
           description: "Unauthorized"
         404:
           description: "EmployeeHours not found"
-      security:
-        - branch_office_auth: []
     delete:
       tags:
       - "employee_hours"
@@ -263,8 +227,6 @@ paths:
           description: "Unauthorized"
         404:
           description: "EmployeeHours not found"
-      security:
-        - branch_office_auth: []
   /api/salaries/list/{employeeId}:
     get:
       tags:
@@ -292,143 +254,6 @@ paths:
           description: "Unauthorized"
         404:
           description: "Employee not found"
-      security:
-        - branch_office_auth: []
-  /api/user/login:
-    get:
-      tags:
-      - "user"
-      summary: "Logs user into the system"
-      description: ""
-      operationId: "loginUser"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "username"
-        in: "query"
-        description: "The user name for login"
-        required: true
-        type: "string"
-      - name: "password"
-        in: "query"
-        description: "The password for login in clear text"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            type: "string"
-          headers:
-            X-Rate-Limit:
-              type: "integer"
-              format: "int32"
-              description: "calls per hour allowed by the user"
-            X-Expires-After:
-              type: "string"
-              format: "date-time"
-              description: "date in UTC when token expires"
-        400:
-          description: "Invalid username/password supplied"
-  /api/user/logout:
-    get:
-      tags:
-      - "user"
-      summary: "Logs out current logged in user session"
-      description: ""
-      operationId: "logoutUser"
-      produces:
-      - "application/json"
-      parameters: []
-      responses:
-        200:
-          description: "successful operation"
-        401:
-          description: "Unauthorized"
-      security:
-        - branch_office_auth: []
-  /api/user/{username}:
-    post:
-      tags:
-      - "user"
-      summary: "Creates a new user"
-      description: "Creates a new user"
-      operationId: "createUser"
-      produces:
-      - "application/json"
-      parameters:
-      - in: "path"
-        name: "username"
-        description: "Username must be an employee Email"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/UserCreatedResponse"
-        404:
-          description: "Employee with a particular email not found"
-        409:
-          description: "User already with a particular login already exists"
-    put:
-      tags:
-      - "user"
-      summary: "Updates user"
-      description: "This can only be done by the logged in user."
-      operationId: "updateUser"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "username"
-        in: "path"
-        description: "name that need to be updated"
-        required: true
-        type: "string"
-      - in: "query"
-        name: "password"
-        description: "Updated user object"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/UserCreatedResponse"
-        400:
-          description: "Invalid username or password supplied"
-        401:
-          description: "Unauthorized"
-        404:
-          description: "User not found"
-      security:
-        - branch_office_auth: []
-    delete:
-      tags:
-      - "user"
-      summary: "Deletes user"
-      description: "This can only be done by the manager or current user."
-      operationId: "deleteUser"
-      produces:
-      - "application/json"
-      parameters:
-      - name: "username"
-        in: "path"
-        description: "The username of a user to be deleted"
-        required: true
-        type: "string"
-      responses:
-        200:
-          description: "successful operation"
-        401:
-          description: "Unauthorized"
-        404:
-          description: "User not found"
-      security:
-        - branch_office_auth: []
-securityDefinitions:
-  branch_office_auth:
-    type: "basic"
 definitions:
   Employee:
     type: "object"
