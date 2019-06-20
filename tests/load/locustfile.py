@@ -16,7 +16,7 @@ class MyTaskSet(TaskSet):
         response = self.client.get('/api/employees/list', catch_response=True)
         print("Response status code:", response.status_code)
         if response.status_code != 200:
-            response.failure("Got wrong status_code")
+            response.failure("Got wrong status_code: " + str(response.status_code))
         else:
             response.success()
 
@@ -25,7 +25,7 @@ class MyTaskSet(TaskSet):
         response = self.client.get('/api/employees/1', catch_response=True)
         print("Response status code:", response.status_code)
         if response.status_code != 200:
-            response.failure("Got wrong status_code")
+            response.failure("Got wrong status_code: " + str(response.status_code))
         else:
             response.success()
 
@@ -34,7 +34,7 @@ class MyTaskSet(TaskSet):
         response = self.client.get('/api/employees/999', catch_response=True)
         print("Response status code:", response.status_code)
         if response.status_code != 404:
-            response.failure("Got wrong status_code")
+            response.failure("Got wrong status_code: " + str(response.status_code))
         else:
             response.success()
 
