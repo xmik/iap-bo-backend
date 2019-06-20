@@ -51,7 +51,7 @@ case "${command}" in
   _load_test)
       cd tests/load
       sudo pip install -r requirements.txt
-      locust -f ./locustfile.py --host=http://example.com
+      locust -f ./locustfile.py --host=http://bo:8080
       # now visit http://localhost:8089/ in your browser
       exit $?
       ;;
@@ -64,7 +64,7 @@ case "${command}" in
       sudo pip install -r requirements.txt
       # --clients == Number of concurrent Locust users
       # --hatch-rate == The rate per second in which clients are spawned
-      locust -f ./locustfile.py --host=http://example.com --no-web --clients 10 --hatch-rate 100 --run-time 20s
+      locust -f ./locustfile.py --host=http://bo:8080 --no-web --clients 10 --hatch-rate 100 --run-time 20s
       # now visit http://localhost:8089/ in your browser
       exit $?
       ;;

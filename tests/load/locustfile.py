@@ -13,11 +13,11 @@ class MyTaskSet(TaskSet):
 
     @task(1)
     def get_employees(self):
-        response = self.client.get('/api/get_employees')
+        response = self.client.get('/api/employees/list')
         print("Response status code:", response.status_code)
         if response.status_code != 200:
             response.failure("Got wrong status_code")
-        assert response.status_code == 200
+        # assert response.status_code == 200
 
 
 class WebsiteUser(HttpLocust):
