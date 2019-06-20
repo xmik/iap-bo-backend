@@ -100,6 +100,18 @@ The API Server specification is kept in files: `swagger-branch-office.yaml` and 
 In order to render it as a pretty http website, copy each of those files contents onto: https://editor.swagger.io/
 
 
+## Load tests
+Run load tests interactively with:
+```
+./tasks load_test
+```
+and then visit localhost:8089 is your browser.
+
+Or run them notinteractively with:
+```
+./tasks load_test_notinteractive
+```
+
 ## Dependencies
 * docker
 * docker-compose
