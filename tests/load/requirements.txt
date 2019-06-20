@@ -1,0 +1,6 @@
+# locustio 0.10.0 and 0.11.0 show invalid requests failure rate:
+# https://github.com/locustio/locust/issues/1006
+# it should be 2 times larger
+locustio==0.11.0
+requests
+requests_toolbelt

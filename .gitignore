@@ -6,3 +6,4 @@ docker/binaries
 *.pdb
 *.exe
 /BranchOfficeBackend.debug.log
+__pycache__
